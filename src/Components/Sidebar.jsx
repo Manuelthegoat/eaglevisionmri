@@ -81,7 +81,7 @@ const Sidebar = () => {
               </a>
               <ul aria-expanded="false">
                 <li>
-                  <a href="">Overview</a>
+                  <a href="/savings">Overview</a>
                 </li>
                 <li>
                   <a href="">All Savings</a>
