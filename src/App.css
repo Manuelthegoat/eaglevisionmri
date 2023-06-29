@@ -1,3 +1,8 @@
 .logo-abbr{
     width: 3rem;
 }
+.rowed{
+    display: flex!important;
+    justify-content: space-between;
+    padding-right: 1rem;
+}

@@ -37,7 +37,7 @@ const Sidebar = () => {
                   <a href="/customers-list">Customers List</a>
                 </li>
                 <li>
-                  <a href="">Add Customer</a>
+                  <a href="/add-customer">Add Customer</a>
                 </li>
               </ul>
             </li>

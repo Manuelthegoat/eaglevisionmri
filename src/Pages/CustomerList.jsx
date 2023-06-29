@@ -91,11 +91,38 @@ const CustomerList = () => {
        */}
       <div class="col-xl-12 col-xxl-12">
         <div class="card">
+          <div class="card-header">
+            <h4 class="card-title">Customers List</h4>
+            <form class="d-flex align-items-center flex-wrap flex-sm-nowrap">
+              <div class="mb-3 mt-2 mx-sm-2">
+                <label class="sr-only">Search</label>
+                <input
+                  type="Search"
+                  class="form-control"
+                  placeholder="Search"
+                />
+              </div>
+              &nbsp;
+              <button type="submit" class="btn btn-primary mb-2">
+                Search
+              </button>
+              &nbsp;&nbsp;
+              <a href="Create" className="btn btn-primary mb-2">
+                Add New Member
+              </a>
+            </form>
+          </div>
           <div class="card-body p-0">
             <div class="table-responsive active-projects">
-              <div class="tbl-caption">
-                <h4 class="heading mb-0">Active Projects</h4>
+              <div className="rowed">
+                {/* <form class="d-flex align-items-center flex-wrap flex-sm-nowrap">
+                 
+                //   <button type="submit" class="btn btn-primary mb-2">
+                //     Search
+                //   </button>
+                // </form> */}
               </div>
+
               <table id="projects-tbl" class="table">
                 <thead>
                   <tr>
