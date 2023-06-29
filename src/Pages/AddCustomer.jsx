@@ -100,7 +100,7 @@ const AddCustomer = () => {
                 </div>
                 <div class="row">
                   <div class="mb-3 col-md-6">
-                    <label class="form-label">Marital Status</label>
+                    <label class="form-label">Means of Identification</label>
                     <select
                       id="inputState"
                       class="default-select form-control wide"

@@ -128,10 +128,10 @@ const Sidebar = () => {
               </a>
               <ul aria-expanded="false">
                 <li>
-                  <a href="">Overview</a>
+                  <a href="/loans">Overview</a>
                 </li>
                 <li>
-                  <a href="">New Application</a>
+                  <a href="/new-loan-applicant">New Application</a>
                 </li>
                 <li>
                   <a href="">Loan Applicants</a>
