@@ -31,10 +31,10 @@ const Sidebar = () => {
               </a>
               <ul aria-expanded="false">
                 <li>
-                  <a href="">Overview</a>
+                  <a href="/">Overview</a>
                 </li>
                 <li>
-                  <a href="">Customers List</a>
+                  <a href="/customers-list">Customers List</a>
                 </li>
                 <li>
                   <a href="">Add Customer</a>

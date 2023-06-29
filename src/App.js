@@ -3,9 +3,7 @@ import "./App.css";
 import Sidebar from "./Components/Sidebar";
 import Header from "./Components/Header";
 import NavHeader from "./Components/NavHeader";
-import HomeCards from "./Components/HomeCards";
-import FinancesCard from "./Components/FinancesCard";
-import Progress from "./Components/Progress";
+import Routing from "./Routes";
 
 function App() {
   return (
@@ -15,17 +13,8 @@ function App() {
       <Sidebar />
       <div class="content-body">
         <div class="container-fluid">
-          <div class="row">
-            <div class="col-xl-9 col-xxl-12">
-              <div class="row">
-               
-                    <HomeCards />
-                    <FinancesCard />
-                    <Progress />
-                 
-              </div>
-            </div>
-          </div>
+          {/* ========  START Route ========= */}
+          <Routing />
         </div>
       </div>
     </div>

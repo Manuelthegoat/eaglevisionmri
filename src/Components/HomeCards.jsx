@@ -374,14 +374,14 @@ const deposit = {
 const HomeCards = () => {
   return (
     <div>
-      <div class="col-xl-6">
+      <div class="col-xl-12">
         <div class="row">
-          <div class="col-xl-6 col-sm-6">
+          <div class="col-xl-4 col-sm-4">
             <div class="card bg-primary text-white">
               <div class="card-header border-0 flex-wrap">
                 <div class="revenue-date">
-                  <span>revenue</span>
-                  <h4 class="text-white">$310.435</h4>
+                  <span>New Customers</span>
+                  <h4 class="text-white">1327</h4>
                 </div>
                 <div class="avatar-list avatar-list-stacked me-2">
                   <img
@@ -402,8 +402,8 @@ const HomeCards = () => {
                 <ReactApexChart
                   options={chartData}
                   series={chartData.series}
-                  width={240}
-                  height={100}
+                  width={300}
+                  height={120}
                   class="chartBar"
                   type="bar"
                 />
@@ -443,12 +443,12 @@ const HomeCards = () => {
               </div>
             </div>
           </div>
-          <div class="col-xl-6 col-sm-6">
+          <div class="col-xl-4 col-sm-4">
             <div class="card bg-secondary text-white">
               <div class="card-header border-0">
                 <div class="revenue-date">
-                  <span class="text-black">Expenses</span>
-                  <h4 class="text-black">$920.035</h4>
+                  <span class="text-black">Active Customers</span>
+                  <h4 class="text-black">1327</h4>
                 </div>
                 <div class="avatar-list avatar-list-stacked me-2">
                   <span class="avatar rounded-circle bg-white">
@@ -476,8 +476,8 @@ const HomeCards = () => {
                 <ReactApexChart
                   options={expensesdata}
                   series={expensesdata.series}
-                  width={240}
-                  height={100}
+                  width={300}
+                  height={120}
                   class="chartBar"
                   type="bar"
                 />
@@ -517,7 +517,7 @@ const HomeCards = () => {
               </div>
             </div>
           </div>
-          <div class="col-xl-6 col-sm-6">
+          {/* <div class="col-xl-4 col-sm-4">
             <div class="card">
               <div class="card-body depostit-card">
                 <div class="depostit-card-media d-flex justify-content-between style-1">
@@ -581,8 +581,8 @@ const HomeCards = () => {
                 </div>
               </div>
             </div>
-          </div>
-          <div class="col-xl-6 col-sm-6">
+          </div> */}
+          <div class="col-xl-4 col-sm-4">
             <div class="card same-card">
               <div class="card-body depostit-card p-0">
                 <div class="depostit-card-media d-flex justify-content-between pb-0">
@@ -609,8 +609,8 @@ const HomeCards = () => {
                 <ReactApexChart
                   options={deposit}
                   series={deposit.series}
-                //   width={240}
-                  height={100}
+                //   width={300}
+                  height={120}
                 //   class="chartBar"
                   type="area"
                 />
