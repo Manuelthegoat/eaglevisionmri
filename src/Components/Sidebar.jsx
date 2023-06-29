@@ -134,7 +134,7 @@ const Sidebar = () => {
                   <a href="/new-loan-applicant">New Application</a>
                 </li>
                 <li>
-                  <a href="">Loan Applicants</a>
+                  <a href="/loan-applicants">Loan Applicants</a>
                 </li>
                 <li>
                   <a href="">Repayment Defaulters</a>

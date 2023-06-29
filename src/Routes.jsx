@@ -3,6 +3,7 @@ import { Route, Routes } from 'react-router-dom'
 import AddCustomer from './Pages/AddCustomer'
 import CustomerList from './Pages/CustomerList'
 import Home from './Pages/Home'
+import LoanApplicants from './Pages/LoanApplicants'
 import LoanApplication from './Pages/LoanApplication'
 import Loans from './Pages/Loans'
 import Savings from './Pages/Savings'
@@ -19,6 +20,7 @@ const Routing = () => {
         <Route path='/savings-list' element={<SavingsList />} />
         <Route path='/loans' element={<Loans />} />
         <Route path='/new-loan-applicant' element={<LoanApplication />} />
+        <Route path='/loan-applicants' element={<LoanApplicants />} />
       </Routes>
     </>
   )
