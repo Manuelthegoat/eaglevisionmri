@@ -17,6 +17,16 @@ function App() {
           <Routing />
         </div>
       </div>
+      <div class="footer">
+        <div class="copyright">
+          <p>
+            Copyright © 2023 Eagle Vision || Developed by{" "}
+            <a href="https://techmint.africa/" target="_blank">
+              Techmint
+            </a>
+          </p>
+        </div>
+      </div>
     </div>
   );
 }

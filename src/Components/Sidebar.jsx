@@ -84,7 +84,7 @@ const Sidebar = () => {
                   <a href="/savings">Overview</a>
                 </li>
                 <li>
-                  <a href="">All Savings</a>
+                  <a href="/savings-list">All Savings</a>
                 </li>
               </ul>
             </li>
