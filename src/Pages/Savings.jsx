@@ -6,7 +6,7 @@ const Savings = () => {
       <div className="row">
         <h2>Incoming</h2>
         <div class="col-xl-4 col-xxl-4 col-sm-6">
-          <div class="card crm-cart bg-secondary border-0">
+          <div class="card crm-cart bg-primary border-0">
             <div class="card-header border-0 pb-0">
               <span class="text-white fs-16">
                 Count: 18,780<i class="fa-solid fa-chevron-up ms-1"></i>
@@ -28,8 +28,8 @@ const Savings = () => {
             </div>
             <div class="card-body">
               <div class="crm-cart-data">
-                <p>&#8358; 278,559,550.0</p>
-                <span class="d-block mb-3 text-black">Total Savings</span>
+                <p class="text-white">&#8358; 278,559,550.0</p>
+                <span class="d-block mb-3 text-white">Total Savings</span>
                 <span class="badge bg-white text-black border-0">
                   Last 4 Month
                 </span>
@@ -38,7 +38,7 @@ const Savings = () => {
           </div>
         </div>
         <div class="col-xl-4 col-xxl-4 col-sm-6">
-          <div class="card crm-cart bg-secondary border-0">
+          <div class="card crm-cart bg-primary border-0">
             <div class="card-header border-0 pb-0">
               <span class="text-white fs-16">
                 Count: 15,606<i class="fa-solid fa-chevron-up ms-1"></i>
@@ -60,8 +60,8 @@ const Savings = () => {
             </div>
             <div class="card-body">
               <div class="crm-cart-data">
-                <p>&#8358; 230,531,850.0</p>
-                <span class="d-block mb-3 text-black">Collected Via CASH</span>
+                <p class="text-white">&#8358; 230,531,850.0</p>
+                <span class="d-block mb-3 text-white">Collected Via CASH</span>
                 <span class="badge bg-white text-black border-0">
                   Last 4 Month
                 </span>
@@ -107,7 +107,7 @@ const Savings = () => {
       <div className="row">
         <h2>Outgoing</h2>
         <div class="col-xl-4 col-xxl-4 col-sm-6">
-          <div class="card crm-cart bg-secondary border-0">
+          <div class="card crm-cart bg-primary border-0">
             <div class="card-header border-0 pb-0">
               <span class="text-white fs-16">
                 Count: 2,263<i class="fa-solid fa-chevron-up ms-1"></i>
@@ -129,8 +129,8 @@ const Savings = () => {
             </div>
             <div class="card-body">
               <div class="crm-cart-data">
-                <p>&#8358; 197,182,250.0</p>
-                <span class="d-block mb-3 text-black">Total Withdrawals</span>
+                <p class="text-white">&#8358; 197,182,250.0</p>
+                <span class="d-block mb-3 text-white">Total Withdrawals</span>
                 <span class="badge bg-white text-black border-0">
                   Last 4 Month
                 </span>
@@ -139,7 +139,7 @@ const Savings = () => {
           </div>
         </div>
         <div class="col-xl-4 col-xxl-4 col-sm-6">
-          <div class="card crm-cart bg-secondary border-0">
+          <div class="card crm-cart bg-primary border-0">
             <div class="card-header border-0 pb-0">
               <span class="text-white fs-16">
                 Count: 1,379<i class="fa-solid fa-chevron-up ms-1"></i>
@@ -161,8 +161,8 @@ const Savings = () => {
             </div>
             <div class="card-body">
               <div class="crm-cart-data">
-                <p>&#8358; 51,789,550.0</p>
-                <span class="d-block mb-3 text-black">Withdrawn Via CASH</span>
+                <p class="text-white">&#8358; 51,789,550.0</p>
+                <span class="d-block mb-3 text-white">Withdrawn Via CASH</span>
                 <span class="badge bg-white text-black border-0">
                   Last 4 Month
                 </span>
