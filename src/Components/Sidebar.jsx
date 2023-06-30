@@ -190,7 +190,7 @@ const Sidebar = () => {
                   <a href="/add-user">Add New User</a>
                 </li>
                 <li>
-                  <a href="">Groups And Permissions</a>
+                  <a href="/list-group-and-permissions">Groups And Permissions</a>
                 </li>
                 <li>
                   <a href="">Add Group And Permission</a>
