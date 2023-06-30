@@ -4,6 +4,7 @@ import AddCustomer from './Pages/AddCustomer'
 import AddNewUser from './Pages/AddNewUser'
 import CustomerList from './Pages/CustomerList'
 import Home from './Pages/Home'
+import ListGroupPermission from './Pages/ListGroupPermission'
 import LoanApplicants from './Pages/LoanApplicants'
 import LoanApplication from './Pages/LoanApplication'
 import Loans from './Pages/Loans'
@@ -29,6 +30,7 @@ const Routing = () => {
         <Route path='/new-loan-applicant' element={<LoanApplication />} />
         <Route path='/loan-applicants' element={<LoanApplicants />} />
         <Route path='/repayment-defaulters' element={<RepaymentDefaulters />} />
+        <Route path='/list-group-and-permissions' element={<ListGroupPermission />} />
       </Routes>
     </>
   )
