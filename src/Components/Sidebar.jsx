@@ -200,7 +200,7 @@ const Sidebar = () => {
                 </li>
 				<li class="menu-title">EAGLE VISION</li>
                 <li>
-                  <a href="">Loan Durations</a>
+                  <a href="/loan-duration">Loan Durations</a>
                 </li>
               </ul>
             </li>

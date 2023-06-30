@@ -9,6 +9,7 @@ import Home from './Pages/Home'
 import ListGroupPermission from './Pages/ListGroupPermission'
 import LoanApplicants from './Pages/LoanApplicants'
 import LoanApplication from './Pages/LoanApplication'
+import LoanDurations from './Pages/LoanDurations'
 import Loans from './Pages/Loans'
 import RepaymentDefaulters from './Pages/RepaymentDefaulters'
 import Savings from './Pages/Savings'
@@ -35,6 +36,7 @@ const Routing = () => {
         <Route path='/list-group-and-permissions' element={<ListGroupPermission />} />
         <Route path='/create-group-and-permissions' element={<CreateGroupPermission />} />
         <Route path='/change-password' element={<ChangePassword />} />
+        <Route path='/loan-duration' element={<LoanDurations />} />
       </Routes>
     </>
   )
