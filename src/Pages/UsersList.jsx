@@ -1,11 +1,11 @@
 import React from "react";
 
-const LoanApplicants = () => {
+const UsersList = () => {
   return (
     <>
       <div className="card">
         <div className="card-header">
-          <h4 class="card-title">Loan Application List</h4>
+          <h4 class="card-title">Users'List</h4>
 
           <form class="d-flex align-items-center flex-wrap flex-sm-nowrap">
             <div class="mb-3 mt-2 mx-sm-2">
@@ -17,7 +17,7 @@ const LoanApplicants = () => {
               Search
             </button>
             &nbsp;&nbsp;
-            <button className="btn btn-primary mb-2">Export As Excel</button>
+            <button className="btn btn-primary mb-2">Add New User</button>
           </form>
         </div>
         <div className="card-body">
@@ -32,26 +32,15 @@ const LoanApplicants = () => {
                     <strong>Name</strong>
                   </th>
                   <th>
-                    <strong>Amt Approved (&#8358;)</strong>
+                    <strong>Email</strong>
                   </th>
                   <th>
-                    <strong>Interest On Loan (&#8358;)</strong>
+                    <strong>User Type</strong>
                   </th>
                   <th>
-                    <strong>Total Loan + Interest(&#8358;)</strong>
+                    <strong>Status</strong>
                   </th>
-                  <th>
-                    <strong>Repayment (&#8358;)</strong>
-                  </th>
-                  <th>
-                    <strong>Balance</strong>
-                  </th>
-                  <th>
-                    <strong>Approved Date</strong>
-                  </th>
-                  <th>
-                    <strong>Loan Due Date</strong>
-                  </th>
+
                   <th>Action</th>
                 </tr>
               </thead>
@@ -61,19 +50,16 @@ const LoanApplicants = () => {
                     <strong>01</strong>
                   </td>
                   <td>
-                    ISHOLA ADEWALE OLUWASEYI
+                    Esther Komolafe
                     <br />
-                    Individual Loan
-                    <br />
-                    08034863864
+                    Manager
                   </td>
-                  <td>&#8358;3,000,000.0</td>
-                  <td>&#8358;720,000.0</td>
-                  <td>&#8358;3,720,000.0</td>
-                  <td>0</td>
-                  <td>&#8358;3,720,000.0</td>
-                  <td>March 30, 2023, midnight</td>
-                  <td>Sept. 26, 2023</td>
+                  <td>estherkomolafe@eaglevisionmri.com</td>
+                  <td>Manager</td>
+                  <td>
+                    <span class="badge light badge-success">ACTIVE</span>
+                  </td>
+
                   <td>
                     <div class="dropdown">
                       <button
@@ -124,4 +110,4 @@ const LoanApplicants = () => {
   );
 };
 
-export default LoanApplicants;
+export default UsersList;

@@ -1,6 +1,7 @@
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
 import AddCustomer from './Pages/AddCustomer'
+import AddNewUser from './Pages/AddNewUser'
 import CustomerList from './Pages/CustomerList'
 import Home from './Pages/Home'
 import LoanApplicants from './Pages/LoanApplicants'
@@ -10,6 +11,7 @@ import RepaymentDefaulters from './Pages/RepaymentDefaulters'
 import Savings from './Pages/Savings'
 import SavingsList from './Pages/SavingsList'
 import Users from './Pages/Users'
+import UsersList from './Pages/UsersList'
 
 const Routing = () => {
   return (
@@ -22,6 +24,8 @@ const Routing = () => {
         <Route path='/savings-list' element={<SavingsList />} />
         <Route path='/loans' element={<Loans />} />
         <Route path='/users' element={<Users />} />
+        <Route path='/users-list' element={<UsersList />} />
+        <Route path='/add-user' element={<AddNewUser />} />
         <Route path='/new-loan-applicant' element={<LoanApplication />} />
         <Route path='/loan-applicants' element={<LoanApplicants />} />
         <Route path='/repayment-defaulters' element={<RepaymentDefaulters />} />
