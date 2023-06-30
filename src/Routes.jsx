@@ -2,6 +2,8 @@ import React from 'react'
 import { Route, Routes } from 'react-router-dom'
 import AddCustomer from './Pages/AddCustomer'
 import AddNewUser from './Pages/AddNewUser'
+import ChangePassword from './Pages/ChangePassword'
+import CreateGroupPermission from './Pages/CreateGroupPermission'
 import CustomerList from './Pages/CustomerList'
 import Home from './Pages/Home'
 import ListGroupPermission from './Pages/ListGroupPermission'
@@ -31,6 +33,8 @@ const Routing = () => {
         <Route path='/loan-applicants' element={<LoanApplicants />} />
         <Route path='/repayment-defaulters' element={<RepaymentDefaulters />} />
         <Route path='/list-group-and-permissions' element={<ListGroupPermission />} />
+        <Route path='/create-group-and-permissions' element={<CreateGroupPermission />} />
+        <Route path='/change-password' element={<ChangePassword />} />
       </Routes>
     </>
   )

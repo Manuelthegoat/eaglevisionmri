@@ -193,10 +193,10 @@ const Sidebar = () => {
                   <a href="/list-group-and-permissions">Groups And Permissions</a>
                 </li>
                 <li>
-                  <a href="">Add Group And Permission</a>
+                  <a href="/create-group-and-permissions">Add Group And Permission</a>
                 </li>
                 <li>
-                  <a href="">Change Password</a>
+                  <a href="/change-password">Change Password</a>
                 </li>
 				<li class="menu-title">EAGLE VISION</li>
                 <li>
