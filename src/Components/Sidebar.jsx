@@ -137,7 +137,7 @@ const Sidebar = () => {
                   <a href="/loan-applicants">Loan Applicants</a>
                 </li>
                 <li>
-                  <a href="">Repayment Defaulters</a>
+                  <a href="/repayment-defaulters">Repayment Defaulters</a>
                 </li>
               </ul>
             </li>
@@ -181,7 +181,7 @@ const Sidebar = () => {
               </a>
               <ul aria-expanded="false">
                 <li>
-                  <a href="">Overview</a>
+                  <a href="/users">Overview</a>
                 </li>
                 <li>
                   <a href="">Users</a>

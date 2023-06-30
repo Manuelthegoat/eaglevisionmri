@@ -6,8 +6,10 @@ import Home from './Pages/Home'
 import LoanApplicants from './Pages/LoanApplicants'
 import LoanApplication from './Pages/LoanApplication'
 import Loans from './Pages/Loans'
+import RepaymentDefaulters from './Pages/RepaymentDefaulters'
 import Savings from './Pages/Savings'
 import SavingsList from './Pages/SavingsList'
+import Users from './Pages/Users'
 
 const Routing = () => {
   return (
@@ -19,8 +21,10 @@ const Routing = () => {
         <Route path='/savings' element={<Savings />} />
         <Route path='/savings-list' element={<SavingsList />} />
         <Route path='/loans' element={<Loans />} />
+        <Route path='/users' element={<Users />} />
         <Route path='/new-loan-applicant' element={<LoanApplication />} />
         <Route path='/loan-applicants' element={<LoanApplicants />} />
+        <Route path='/repayment-defaulters' element={<RepaymentDefaulters />} />
       </Routes>
     </>
   )
