@@ -87,7 +87,7 @@ const UsersList = () => {
                         </svg>
                       </button>
                       <div class="dropdown-menu">
-                        <a class="dropdown-item" href="#">
+                        <a class="dropdown-item" href="/user-details">
                           View Details
                         </a>
                         <a class="dropdown-item" href="#">

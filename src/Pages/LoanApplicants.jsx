@@ -101,7 +101,7 @@ const LoanApplicants = () => {
                         </svg>
                       </button>
                       <div class="dropdown-menu">
-                        <a class="dropdown-item" href="#">
+                        <a class="dropdown-item" href="/loan-applicants-details">
                           View Details
                         </a>
                         <a class="dropdown-item" href="#">

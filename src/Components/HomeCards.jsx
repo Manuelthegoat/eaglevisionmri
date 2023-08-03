@@ -380,7 +380,7 @@ const HomeCards = () => {
             <div class="card bg-primary text-white">
               <div class="card-header border-0 flex-wrap">
                 <div class="revenue-date">
-                  <span>New Customers</span>
+                  <span>All Customers</span>
                   <h4 class="text-white">1327</h4>
                 </div>
                 <div class="avatar-list avatar-list-stacked me-2">

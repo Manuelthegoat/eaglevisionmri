@@ -18,6 +18,9 @@ import Users from './Pages/Users'
 import UsersList from './Pages/UsersList'
 import CustomerProfile from './Pages/CustomerProfile'
 import AddDepositWithdrawal from './Pages/AddDepositWithdrawal'
+import LoanApplicantsDetails from './Pages/LoanApplicantsDetails'
+import CustomerAvailableBalance from './Pages/CustomerAvailableBalance'
+import UsersDetails from './Pages/UsersDetails'
 
 const Routing = () => {
   return (
@@ -33,6 +36,9 @@ const Routing = () => {
         <Route path='/add-contribution' element={<AddDepositWithdrawal />} />
         <Route path='/users' element={<Users />} />
         <Route path='/users-list' element={<UsersList />} />
+        <Route path='/loan-applicants-details' element={<LoanApplicantsDetails />} />
+        <Route path='/customer-available-balance' element={<CustomerAvailableBalance />} />
+        <Route path='/user-details' element={<UsersDetails />} />
         <Route path='/add-user' element={<AddNewUser />} />
         <Route path='/new-loan-applicant' element={<LoanApplication />} />
         <Route path='/loan-applicants' element={<LoanApplicants />} />

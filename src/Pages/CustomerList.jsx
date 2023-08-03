@@ -85,7 +85,7 @@ const CustomerList = () => {
                           </svg>
                         </button>
                         <div class="dropdown-menu">
-                          <a class="dropdown-item" href="#">
+                          <a class="dropdown-item" href="/customer-available-balance">
                             View Details
                           </a>
                           <a class="dropdown-item" href="#">
