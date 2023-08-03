@@ -5,7 +5,7 @@ const Savings = () => {
     <>
       <div className="row">
         <h2>Incoming</h2>
-        <div class="col-xl-4 col-xxl-4 col-sm-6">
+        <a href="/savings-list" class="col-xl-4 col-xxl-4 col-sm-6">
           <div class="card crm-cart bg-primary border-0">
             <div class="card-header border-0 pb-0">
               <span class="text-white fs-16">
@@ -36,8 +36,8 @@ const Savings = () => {
               </div>
             </div>
           </div>
-        </div>
-        <div class="col-xl-4 col-xxl-4 col-sm-6">
+        </a>
+        <a href="/savings-list" class="col-xl-4 col-xxl-4 col-sm-6">
           <div class="card crm-cart bg-primary border-0">
             <div class="card-header border-0 pb-0">
               <span class="text-white fs-16">
@@ -68,8 +68,8 @@ const Savings = () => {
               </div>
             </div>
           </div>
-        </div>
-        <div class="col-xl-4 col-xxl-4 col-sm-4">
+        </a>
+        <a href="/savings-list" class="col-xl-4 col-xxl-4 col-sm-4">
           <div class="card crm-cart bg-primary border-0">
             <div class="card-header border-0 pb-0">
               <span class="text-white fs-16">
@@ -102,11 +102,11 @@ const Savings = () => {
               </div>
             </div>
           </div>
-        </div>
+        </a>
       </div>
       <div className="row">
         <h2>Outgoing</h2>
-        <div class="col-xl-4 col-xxl-4 col-sm-6">
+        <a href="/savings-list" class="col-xl-4 col-xxl-4 col-sm-6">
           <div class="card crm-cart bg-primary border-0">
             <div class="card-header border-0 pb-0">
               <span class="text-white fs-16">
@@ -137,8 +137,8 @@ const Savings = () => {
               </div>
             </div>
           </div>
-        </div>
-        <div class="col-xl-4 col-xxl-4 col-sm-6">
+        </a>
+        <a href="/savings-list" class="col-xl-4 col-xxl-4 col-sm-6">
           <div class="card crm-cart bg-primary border-0">
             <div class="card-header border-0 pb-0">
               <span class="text-white fs-16">
@@ -169,8 +169,8 @@ const Savings = () => {
               </div>
             </div>
           </div>
-        </div>
-        <div class="col-xl-4 col-xxl-4 col-sm-4">
+        </a>
+        <a href="/savings-list" class="col-xl-4 col-xxl-4 col-sm-4">
           <div class="card crm-cart bg-primary border-0">
             <div class="card-header border-0 pb-0">
               <span class="text-white fs-16">
@@ -203,7 +203,7 @@ const Savings = () => {
               </div>
             </div>
           </div>
-        </div>
+        </a>
       </div>
     </>
   );
