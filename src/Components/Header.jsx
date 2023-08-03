@@ -1,6 +1,10 @@
 import React from "react";
 
 const Header = () => {
+  const logout = () => {
+    localStorage.removeItem('token')
+    window.location.reload()
+  }
   return (
     <div>
       <div class="header">
@@ -131,7 +135,7 @@ const Header = () => {
 
                           <div class="card-footer px-0 py-2">
                             <a
-                              href="page-login.html"
+                             onClick={logout}
                               class="dropdown-item ai-icon"
                             >
                               <svg
@@ -149,7 +153,7 @@ const Header = () => {
                                 <polyline points="16 17 21 12 16 7"></polyline>
                                 <line x1="21" y1="12" x2="9" y2="12"></line>
                               </svg>
-                              <span class="ms-2">Logout </span>
+                              <span class="ms-2" >Logout </span>
                             </a>
                           </div>
                         </div>
