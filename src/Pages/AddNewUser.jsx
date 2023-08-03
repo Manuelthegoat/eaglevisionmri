@@ -64,12 +64,12 @@ const AddNewUser = () => {
                 </div>
                 <div class="row">
                   <div class="mb-3 col-md-6">
-                    <label class="form-label">User Type:</label>
+                    <label class="form-label">Role:</label>
                     <select
                       id="inputState"
                       class="default-select form-control wide"
                     >
-                      <option selected>Select User Type</option>
+                      <option selected>Select Role</option>
                       <option>Account Officer</option>
                       <option>Manager</option>
                       <option>Assistant Manager</option>
