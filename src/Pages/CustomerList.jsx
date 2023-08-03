@@ -3,7 +3,6 @@ import React from "react";
 const CustomerList = () => {
   return (
     <>
-     
       <div class="col-xl-12 col-xxl-12">
         <div class="card">
           <div class="card-header">

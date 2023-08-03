@@ -97,7 +97,7 @@ const SavingsList = () => {
                         </svg>
                       </button>
                       <div class="dropdown-menu">
-                        <a class="dropdown-item" href="#">
+                        <a class="dropdown-item" href="/customer-profile">
                           View Details
                         </a>
 
