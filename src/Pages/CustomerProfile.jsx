@@ -97,7 +97,7 @@ const CustomerProfile = () => {
             <div class="card-header">
               <h4 class="card-title">Deposits/Withdrawal</h4>
               <div class="d-flex align-items-center flex-wrap flex-sm-nowrap">
-                <a href="Create" className="btn btn-primary mb-2">
+                <a href="/add-contribution" className="btn btn-primary mb-2">
                   Add Deposits/Withdrawal
                 </a>
               </div>

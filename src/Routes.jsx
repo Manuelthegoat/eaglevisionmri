@@ -17,6 +17,7 @@ import SavingsList from './Pages/SavingsList'
 import Users from './Pages/Users'
 import UsersList from './Pages/UsersList'
 import CustomerProfile from './Pages/CustomerProfile'
+import AddDepositWithdrawal from './Pages/AddDepositWithdrawal'
 
 const Routing = () => {
   return (
@@ -29,6 +30,7 @@ const Routing = () => {
         <Route path='/customer-profile' element={<CustomerProfile />} />
         <Route path='/savings-list' element={<SavingsList />} />
         <Route path='/loans' element={<Loans />} />
+        <Route path='/add-contribution' element={<AddDepositWithdrawal />} />
         <Route path='/users' element={<Users />} />
         <Route path='/users-list' element={<UsersList />} />
         <Route path='/add-user' element={<AddNewUser />} />
