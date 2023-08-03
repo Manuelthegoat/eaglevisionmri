@@ -18,7 +18,7 @@ const Login = ({onPress}) => {
                             <div class="col-xl-12">
                                 <div class="auth-form">
 									<div class="text-center mb-3">
-										<a ><img src="images/logo/logo-full.png" alt="" /></a>
+										<a ><img src="./images/logo/logofull.png" alt="" /></a>
 									</div>
                                     <h4 class="text-center mb-4">Sign up your account</h4>
                                     <div >
@@ -35,12 +35,10 @@ const Login = ({onPress}) => {
                                             <input type="password" class="form-control" value="Password" />
                                         </div>
                                         <div class="text-center mt-4">
-                                            <button class="btn btn-primary btn-block" onClick={onPress}>Sign me up</button>
+                                            <button class="btn btn-primary btn-block" onClick={onPress}>Sign me In</button>
                                         </div>
                                     </div>
-                                    <div class="new-account mt-3">
-                                        <p>Already have an account? <p class="text-primary">Sign in</p></p>
-                                    </div>
+                                  
                                 </div>
                             </div>
                         </div>
