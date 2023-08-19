@@ -19,17 +19,13 @@ function App() {
   // }, []);
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (token === "mtg") {
-      setAuthenticated(true);
-      
-    } else {
+    if (token === "undefined") {
       setAuthenticated(false);
+    } else if (token) {
+      setAuthenticated(true);
     }
   }, []);
-  const onPress = () => {
-    localStorage.setItem("token", "mtg");
-    window.location.reload()
-  };
+
   return (
     <>
       {authenticated ? (
@@ -55,7 +51,7 @@ function App() {
           </div>
         </div>
       ) : (
-        <Login onPress={onPress} />
+        <Login />
       )}
     </>
   );

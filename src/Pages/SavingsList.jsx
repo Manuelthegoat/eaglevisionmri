@@ -63,7 +63,7 @@ const SavingsList = () => {
                   <td>
                     <strong>01</strong>
                   </td>
-                  <td>ISHOLA ADEWALE OLUWASEYI</td>
+                  <td><a href="/customer-profile">ISHOLA ADEWALE OLUWASEYI</a></td>
                   <td>EV0000001362</td>
                   <td>08034863864</td>
                   <td>3,600,000.0</td>
