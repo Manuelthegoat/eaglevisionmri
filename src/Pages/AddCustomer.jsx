@@ -1,6 +1,77 @@
-import React from "react";
+import React, { useState } from "react";
 
 const AddCustomer = () => {
+  const [accountHolderName, setAccountHolderName] = useState("");
+  const [dob, setDob] = useState("");
+  const [occupation, setOccupation] = useState("");
+  const [placeOfBirth, setPlaceOfBirth] = useState("");
+  const [sex, setSex] = useState("");
+  const [passport, setPassport] = useState(null);
+  const [phone, setPhone] = useState("");
+  const [maritalStatus, setMaritalStatus] = useState("");
+  const [spouseName, setSpouseName] = useState("");
+  const [spousePhone, setSpousePhone] = useState("");
+  const [identificationMeans, setIdentificationMeans] = useState("");
+  const [idNumber, setIdNumber] = useState("");
+  const [bankName, setBankName] = useState("");
+  const [bankAccountNo, setBankAccountNo] = useState("");
+  const [bankAccountName, setBankAccountName] = useState("");
+  const [nextOfKin, setNextOfKin] = useState("");
+  const [nextOfKinPhone, setNextOfKinPhone] = useState("");
+  const [contactAddress, setContactAddress] = useState("");
+  const [bvn, setBvn] = useState("");
+  const [accountOfficer, setAccountOfficer] = useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const formData = {
+      name: accountHolderName,
+      dateOfBirth: dob,
+      occupation: occupation,
+      placeOfBirth: placeOfBirth,
+      sex: sex,
+      customersPhoneNo: phone,
+      maritalStatus: maritalStatus,
+      spouseName: spouseName,
+      spousePhoneNo: spousePhone,
+      meansOfIdentification: identificationMeans,
+      meansOfIdentificationNumber: idNumber,
+      bankName: bankName,
+      bankAccountNo: bankAccountNo,
+      bankAccountName: bankAccountName,
+      nextOfKin: nextOfKin,
+      nextOfKinPhone: nextOfKinPhone,
+      contactAddress: contactAddress,
+      bvn: bvn,
+    };
+
+    try {
+      const response = await fetch(
+        "https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/customer",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const data = await response.json();
+      console.log(data);
+    } catch (error) {
+      console.error(
+        "There was a problem with the fetch operation:",
+        error.message
+      );
+    }
+  };
+
   return (
     <div>
       <div class="col-xl-12 col-lg-12">
@@ -10,25 +81,34 @@ const AddCustomer = () => {
           </div>
           <div class="card-body">
             <div class="basic-form">
-              <form>
+              <div>
                 <div class="row">
                   <div class="mb-3 col-md-6">
                     <label class="form-label">Account Holder's Name:</label>
                     <input
                       type="text"
+                      value={accountHolderName}
+                      onChange={(e) => setAccountHolderName(e.target.value)}
                       class="form-control"
                       placeholder="Applicants Full Name"
                     />
                   </div>
                   <div class="mb-3 col-md-6">
                     <label class="form-label">Date of Birth</label>
-                    <input type="date" class="form-control" />
+                    <input
+                      type="date"
+                      value={dob}
+                      onChange={(e) => setDob(e.target.value)}
+                      className="form-control"
+                    />
                   </div>
                   <div class="mb-3 col-md-6">
                     <label class="form-label">Occupation</label>
                     <input
                       type="text"
-                      class="form-control"
+                      value={occupation}
+                      onChange={(e) => setOccupation(e.target.value)}
+                      className="form-control"
                       placeholder="Occupation"
                     />
                   </div>
@@ -36,7 +116,9 @@ const AddCustomer = () => {
                     <label>Place Of Birth</label>
                     <input
                       type="text"
-                      class="form-control"
+                      value={placeOfBirth}
+                      onChange={(e) => setPlaceOfBirth(e.target.value)}
+                      className="form-control"
                       placeholder="Place Of Birth"
                     />
                   </div>
@@ -45,38 +127,50 @@ const AddCustomer = () => {
                   <div class="mb-3 col-md-6">
                     <label class="form-label">Sex</label>
                     <select
-                      id="inputState"
-                      class="default-select form-control wide"
+                      value={sex}
+                      onChange={(e) => setSex(e.target.value)}
+                      className="default-select form-control wide"
                     >
-                      <option selected>Select Gender</option>
-                      <option>Male</option>
-                      <option>Female</option>
+                      <option value="" disabled>
+                        Select Gender
+                      </option>
+                      <option value="male">Male</option>
+                      <option value="female">Female</option>
                     </select>
                   </div>
                   <div class="mb-3 col-md-6">
-                    <label class="form-label">Zip</label>
-                    <input type="file" class="form-control" />
+                    <label class="form-label">Passport</label>
+                    <input
+                      type="file"
+                      onChange={(e) => setPassport(e.target.files[0])}
+                      className="form-control"
+                    />
                   </div>
                 </div>
                 <div class="row">
                   <div class="mb-3 col-md-6">
                     <label class="form-label">Customer's Phone Number</label>
                     <input
-                      type="number"
+                      type="text"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
                       placeholder="Customer's Phone"
-                      class="form-control"
+                      className="form-control"
                     />
                   </div>
                   <div class="mb-3 col-md-6">
                     <label class="form-label">Marital Status</label>
                     <select
-                      id="inputState"
-                      class="default-select form-control wide"
+                      value={maritalStatus}
+                      onChange={(e) => setMaritalStatus(e.target.value)}
+                      className="default-select form-control wide"
                     >
-                      <option selected>Select One</option>
-                      <option>Single</option>
-                      <option>Married</option>
-                      <option>Divorced</option>
+                      <option value="" disabled>
+                        Select One
+                      </option>
+                      <option value={"single"}>Single</option>
+                      <option value={"married"}>Married</option>
+                      <option value={"divorced"}>Divorced</option>
                     </select>
                   </div>
                 </div>
@@ -84,17 +178,21 @@ const AddCustomer = () => {
                   <div class="mb-3 col-md-6">
                     <label class="form-label">Spouse Name</label>
                     <input
-                      type="number"
+                      type="text"
+                      value={spouseName}
+                      onChange={(e) => setSpouseName(e.target.value)}
                       placeholder="Spouse Name"
-                      class="form-control"
+                      className="form-control"
                     />
                   </div>
                   <div class="mb-3 col-md-6">
                     <label class="form-label">Spouse Phone No</label>
                     <input
-                      type="number"
+                      type="text"
+                      value={spousePhone}
+                      onChange={(e) => setSpousePhone(e.target.value)}
                       placeholder="Spouse Phone No"
-                      class="form-control"
+                      className="form-control"
                     />
                   </div>
                 </div>
@@ -102,16 +200,19 @@ const AddCustomer = () => {
                   <div class="mb-3 col-md-6">
                     <label class="form-label">Means of Identification</label>
                     <select
-                      id="inputState"
-                      class="default-select form-control wide"
+                      value={identificationMeans}
+                      onChange={(e) => setIdentificationMeans(e.target.value)}
+                      className="default-select form-control wide"
                     >
-                      <option selected>
+                      <option value="" disabled>
                         Intl Passport, drivers license etc...
                       </option>
-                      <option>International Passport</option>
-                      <option>NIN</option>
-                      <option>Voter's Card</option>
-                      <option>Others</option>
+                      <option value={"intl passport"}>
+                        International Passport
+                      </option>
+                      <option value={"nin"}>NIN</option>
+                      <option value={"voters card"}>Voter's Card</option>
+                      <option value={"others"}>Others</option>
                     </select>
                   </div>
                   <div class="mb-3 col-md-6">
@@ -120,9 +221,11 @@ const AddCustomer = () => {
                       and ID number)
                     </label>
                     <input
-                      type="number"
+                      type="text"
+                      value={idNumber}
+                      onChange={(e) => setIdNumber(e.target.value)}
                       placeholder="Intl Passport, drivers license Number etc..."
-                      class="form-control"
+                      className="form-control"
                     />
                   </div>
                 </div>
@@ -130,25 +233,31 @@ const AddCustomer = () => {
                   <div class="mb-3 col-md-4">
                     <label class="form-label">Bank Name</label>
                     <input
-                      type="number"
+                      type="text"
+                      value={bankName}
+                      onChange={(e) => setBankName(e.target.value)}
                       placeholder="Bank Name"
-                      class="form-control"
+                      className="form-control"
                     />
                   </div>
                   <div class="mb-3 col-md-4">
                     <label class="form-label">Bank Account No</label>
                     <input
-                      type="number"
+                      type="text"
+                      value={bankAccountNo}
+                      onChange={(e) => setBankAccountNo(e.target.value)}
                       placeholder="Bank Account Number"
-                      class="form-control"
+                      className="form-control"
                     />
                   </div>
                   <div class="mb-3 col-md-4">
                     <label class="form-label">Bank Account Name</label>
                     <input
                       type="text"
+                      value={bankAccountName}
+                      onChange={(e) => setBankAccountName(e.target.value)}
                       placeholder="Bank Account Name"
-                      class="form-control"
+                      className="form-control"
                     />
                   </div>
                 </div>
@@ -157,16 +266,20 @@ const AddCustomer = () => {
                     <label class="form-label">Next of Kin</label>
                     <input
                       type="text"
+                      value={nextOfKin}
+                      onChange={(e) => setNextOfKin(e.target.value)}
                       placeholder="Next of Kin"
-                      class="form-control"
+                      className="form-control"
                     />
                   </div>
                   <div class="mb-3 col-md-6">
                     <label class="form-label">Next of Kin Phone No</label>
                     <input
-                      type="number"
+                      type="text"
+                      value={nextOfKinPhone}
+                      onChange={(e) => setNextOfKinPhone(e.target.value)}
                       placeholder="Next of Kin Phone Number"
-                      class="form-control"
+                      className="form-control"
                     />
                   </div>
                 </div>
@@ -175,8 +288,10 @@ const AddCustomer = () => {
                     <label class="form-label">Contact Address</label>
                     <input
                       type="text"
+                      value={contactAddress}
+                      onChange={(e) => setContactAddress(e.target.value)}
                       placeholder="Contact Address"
-                      class="form-control"
+                      className="form-control"
                     />
                   </div>
                 </div>
@@ -184,18 +299,23 @@ const AddCustomer = () => {
                   <div class="mb-3 col-md-6">
                     <label class="form-label">BVN</label>
                     <input
-                      type="number"
+                      type="text"
+                      value={bvn}
+                      onChange={(e) => setBvn(e.target.value)}
                       placeholder="BVN"
-                      class="form-control"
+                      className="form-control"
                     />
                   </div>
                   <div class="mb-3 col-md-6">
-                    <label class="form-label">Marital Status</label>
+                    <label class="form-label">Officer in charge</label>
                     <select
-                      id="inputState"
-                      class="default-select form-control wide"
+                      value={accountOfficer}
+                      onChange={(e) => setAccountOfficer(e.target.value)}
+                      className="default-select form-control wide"
                     >
-                      <option selected>Select Account Officer In Charge</option>
+                      <option value="" disabled>
+                        Select Account Officer In Charge
+                      </option>
                       <option>Esther Komolafe</option>
                       <option>Chisom Ogbonna</option>
                       <option>Amaka Okoye</option>
@@ -203,10 +323,10 @@ const AddCustomer = () => {
                   </div>
                 </div>
 
-                <button type="submit" class="btn btn-primary">
+                <button onClick={handleSubmit} class="btn btn-primary">
                   Submit
                 </button>
-              </form>
+              </div>
             </div>
           </div>
         </div>
