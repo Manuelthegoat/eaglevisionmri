@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Loader from '../Components/Loader/Loader'
 
 const AddCustomer = () => {
   const [accountHolderName, setAccountHolderName] = useState("");
@@ -21,6 +24,7 @@ const AddCustomer = () => {
   const [contactAddress, setContactAddress] = useState("");
   const [bvn, setBvn] = useState("");
   const [accountOfficer, setAccountOfficer] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -64,16 +68,20 @@ const AddCustomer = () => {
 
       const data = await response.json();
       console.log(data);
+      toast.success("Customer Added Successfully");
     } catch (error) {
       console.error(
         "There was a problem with the fetch operation:",
         error.message
       );
+      toast.error("An Error Occurred");
     }
   };
 
   return (
     <div>
+      <ToastContainer />
+      {loading && <Loader /> }
       <div class="col-xl-12 col-lg-12">
         <div class="card">
           <div class="card-header">

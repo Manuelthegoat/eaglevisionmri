@@ -28,15 +28,16 @@ const Login = () => {
 
       if (response.ok) {
         console.log("Login successful", data);
+        toast.success("Login Successfull");
         localStorage.setItem("token", data.data.token);
         localStorage.setItem("username", data.data.user.fullName);
         window.location.reload();
       } else {
         console.error("Login failed", data.message);
-        toast.error(data.message || "Login failed");
       }
     } catch (error) {
       console.error("There was an error with the fetch operation:", error);
+      toast.error("Login failed");
     }
   };
   return (
