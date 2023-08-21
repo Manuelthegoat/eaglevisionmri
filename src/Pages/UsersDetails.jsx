@@ -1,10 +1,30 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
 const UsersDetails = () => {
+  const [userDetails, setUserDetails] = useState(null);
+
+  const { id } = useParams();
+  useEffect(() => {
+    fetch(`https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/register/${id}`)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Fetched Specific Customer Data:", data.data);
+        setUserDetails(data.data);
+      })
+      .catch((error) =>
+        console.log("Error fetching specific customer data: ", error)
+      );
+  }, [id]);
   return (
     <>
       <div className="row">
-        <h2>Savings Collected By Esther Komolafe5</h2>
+        <h2>Savings Collected By {userDetails?.firstName} {userDetails?.lastName}</h2>
         <div class="col-xl-4 col-xxl-4 col-sm-6">
           <div class="card crm-cart bg-primary border-0">
             <div class="card-header border-0 pt-15"></div>

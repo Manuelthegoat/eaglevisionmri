@@ -1,13 +1,19 @@
 import React, { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Loader from "../Loader/Loader";
+import { useCookies } from "react-cookie";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [cookies, setCookie] = useCookies(['userToken', 'userId']);
+
 
   const onPress = async () => {
+    setLoading(true);
     try {
       const response = await fetch(
         "https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/login",
@@ -31,6 +37,10 @@ const Login = () => {
         toast.success("Login Successfull");
         localStorage.setItem("token", data.data.token);
         localStorage.setItem("username", data.data.user.fullName);
+
+        const sevenDaysInSeconds = 7 * 24 * 60 * 60;
+        setCookie('userToken', data.data.token, { path: '/', maxAge: sevenDaysInSeconds });
+        setCookie('userId', data.data.user._id, { path: '/', maxAge: sevenDaysInSeconds });
         window.location.reload();
       } else {
         console.error("Login failed", data.message);
@@ -38,10 +48,13 @@ const Login = () => {
     } catch (error) {
       console.error("There was an error with the fetch operation:", error);
       toast.error("Login failed");
+    } finally {
+      setLoading(false); // <-- stop the loader
     }
   };
   return (
     <>
+      {loading && <Loader />}
       <ToastContainer />
       <div
         class="vh-100"

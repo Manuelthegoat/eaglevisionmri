@@ -1,15 +1,35 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
 const CustomerAvailableBalance = () => {
+  const [customerDetails, setCustomerDetails] = useState(null);
+
+  const { id } = useParams();
+  useEffect(() => {
+    fetch(`https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/customer/${id}`)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Fetched Specific Customer Data:", data.data);
+        setCustomerDetails(data.data);
+      })
+      .catch((error) =>
+        console.log("Error fetching specific customer data: ", error)
+      );
+  }, [id]);
   return (
     <>
       <div class="row">
         <div class="col-lg-12">
           <div class="profile card card-body px-3 pt-3 pb-0">
             <div class="profile-head">
-              <div class="photo-content">
+              {/* <div class="photo-content">
                 <div class="cover-photo rounded"></div>
-              </div>
+              </div> */}
               <div class="profile-info">
                 <div class="profile-photo">
                   <img
@@ -20,8 +40,8 @@ const CustomerAvailableBalance = () => {
                 </div>
                 <div class="profile-details">
                   <div class="profile-name px-3 pt-2">
-                    <h4 class="text-primary mb-0">ISHOLA ADEWALE OLUWASEYI</h4>
-                    <p>Phone: 09039168715</p>
+                    <h4 class="text-primary mb-0">{customerDetails?.name}</h4>
+                    <p>Phone: {customerDetails?.customersPhoneNo}</p>
                   </div>
                   <div class="profile-email px-2 pt-2">
                     <h4 class="text-muted mb-0">
@@ -106,7 +126,6 @@ const CustomerAvailableBalance = () => {
                     <tr>
                       <th>Title</th>
                       <th>Amount (N)</th>
-                     
                     </tr>
                   </thead>
                   <tbody>
@@ -114,25 +133,21 @@ const CustomerAvailableBalance = () => {
                       <td>SAVINGS BALANCE:</td>
 
                       <td>₦ 0</td>
-                      
                     </tr>
                     <tr>
                       <td>ACTIVE LOAN STATUS</td>
 
                       <td>₦ 0</td>
-                      
                     </tr>
                     <tr>
                       <td>Total Approved Amount</td>
 
                       <td>₦ 0</td>
-                      
                     </tr>
                     <tr>
                       <td>Total Repayment Done:</td>
 
                       <td>₦ 0</td>
-                      
                     </tr>
                   </tbody>
                 </table>

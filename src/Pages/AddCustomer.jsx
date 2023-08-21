@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Loader from '../Components/Loader/Loader'
+import Loader from "../Components/Loader/Loader";
 
 const AddCustomer = () => {
   const [accountHolderName, setAccountHolderName] = useState("");
@@ -49,6 +49,7 @@ const AddCustomer = () => {
       contactAddress: contactAddress,
       bvn: bvn,
     };
+    setLoading(true);
 
     try {
       const response = await fetch(
@@ -75,13 +76,15 @@ const AddCustomer = () => {
         error.message
       );
       toast.error("An Error Occurred");
+    } finally {
+      setLoading(false); // <-- stop the loader
     }
   };
 
   return (
     <div>
       <ToastContainer />
-      {loading && <Loader /> }
+      {loading && <Loader />}
       <div class="col-xl-12 col-lg-12">
         <div class="card">
           <div class="card-header">
