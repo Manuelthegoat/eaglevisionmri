@@ -53,7 +53,7 @@ const AddCustomer = () => {
 
     try {
       const response = await fetch(
-        "https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/customer",
+        "https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/customers",
         {
           method: "POST",
           headers: {

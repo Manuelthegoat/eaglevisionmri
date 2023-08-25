@@ -6,6 +6,7 @@ import NavHeader from "./Components/NavHeader";
 import Routing from "./Routes";
 import Login from "./Components/LoginAndRegister/Login";
 import { useEffect, useState } from "react";
+import { UserContextProvider } from './UserContext';
 
 function App() {
   const [authenticated, setAuthenticated] = useState(false);
@@ -27,7 +28,7 @@ function App() {
   }, []);
 
   return (
-    <>
+    <UserContextProvider>
       {authenticated ? (
         <div id="main-wrapper">
           <NavHeader />
@@ -53,7 +54,7 @@ function App() {
       ) : (
         <Login />
       )}
-    </>
+    </UserContextProvider>
   );
 }
 

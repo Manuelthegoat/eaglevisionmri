@@ -1,30 +1,81 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import Loader from "../Components/Loader/Loader";
+import { Link } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
 
 const SavingsList = () => {
+  const [customers, setCustomers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [deleting, setDeleting] = useState(false);
+
+  useEffect(() => {
+    fetch("https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/customers")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Fetched Data:", data.data);
+        toast.success("Customer Fetched Successfully");
+        setCustomers(data.data);
+      })
+      .catch((error) => {
+        console.log("Error fetching data: ", error);
+        toast.error("Customer Failed To Fetched");
+      })
+      .finally(() => setLoading(false)); // Set loading to false here, after success or error
+  }, []);
+  const deleteCustomer = (customerId) => {
+    setDeleting(true);
+    fetch(
+      `https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/customers/${customerId}`,
+      {
+        method: "DELETE",
+      }
+    )
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        // If successfully deleted from backend, remove from local state
+        const updatedCustomers = customers.filter(
+          (customer) => customer._id !== customerId
+        );
+        toast.success("Customer Deleted Successfully");
+        setCustomers(updatedCustomers);
+      })
+      .catch((error) => console.log("Error deleting customer: ", error))
+      .finally(() => {
+        // Hide loader
+        setDeleting(false);
+      });
+  };
+
   return (
     <>
+      {loading && <Loader />}
+      {deleting && <Loader />}
       <div className="card">
         <div className="card-header">
           <h4 class="card-title">All Savings</h4>
-         
+
           <form class="d-flex align-items-center flex-wrap flex-sm-nowrap">
-              <div class="mb-3 mt-2 mx-sm-2">
-                <label class="sr-only">Search</label>
-                <input
-                  type="Search"
-                  class="form-control"
-                  placeholder="Search"
-                />
-              </div>
-              &nbsp;
-              <button type="submit" class="btn btn-primary mb-2">
-                Search
-              </button>
-              &nbsp;&nbsp;
-              <button className="btn btn-primary mb-2">
-            Export As Excel
-          </button>
-            </form>
+            <div class="mb-3 mt-2 mx-sm-2">
+              <label class="sr-only">Search</label>
+              <input type="Search" class="form-control" placeholder="Search" />
+            </div>
+            &nbsp;
+            <button type="submit" class="btn btn-primary mb-2">
+              Search
+            </button>
+            &nbsp;&nbsp;
+            <button className="btn btn-primary mb-2">Export As Excel</button>
+          </form>
         </div>
         <div className="card-body">
           <div class="table-responsive">
@@ -59,55 +110,62 @@ const SavingsList = () => {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>
-                    <strong>01</strong>
-                  </td>
-                  <td><a href="/customer-profile">ISHOLA ADEWALE OLUWASEYI</a></td>
-                  <td>EV0000001362</td>
-                  <td>08034863864</td>
-                  <td>3,600,000.0</td>
-                  <td>uche Chioma</td>
-                  <td>May 17, 2023, 9:23 a.m.</td>
-                  <td>June 27, 2023, 2:19 p.m.</td>
-                  <td>
-                    <div class="dropdown">
-                      <button
-                        type="button"
-                        class="btn btn-success light sharp"
-                        data-bs-toggle="dropdown"
-                      >
-                        <svg
-                          width="20px"
-                          height="20px"
-                          viewBox="0 0 24 24"
-                          version="1.1"
+                {customers.map((customer, index) => (
+                  <tr key={index}>
+                    <td>
+                      <strong>{index}</strong>
+                    </td>
+                    <td>
+                      <a href="/customer-profile">{customer.name}</a>
+                    </td>
+                    <td>{customer.accountNumber}</td>
+                    <td>{customer.customersPhoneNo}</td>
+                    <td>{customer.accountBalance}</td>
+                    <td>uche Chioma</td>
+                    <td>May 17, 2023, 9:23 a.m.</td>
+                    <td>June 27, 2023, 2:19 p.m.</td>
+                    <td>
+                      <div class="dropdown">
+                        <button
+                          type="button"
+                          class="btn btn-success light sharp"
+                          data-bs-toggle="dropdown"
                         >
-                          <g
-                            stroke="none"
-                            stroke-width="1"
-                            fill="none"
-                            fill-rule="evenodd"
+                          <svg
+                            width="20px"
+                            height="20px"
+                            viewBox="0 0 24 24"
+                            version="1.1"
                           >
-                            <rect x="0" y="0" width="24" height="24" />
-                            <circle fill="#000000" cx="5" cy="12" r="2" />
-                            <circle fill="#000000" cx="12" cy="12" r="2" />
-                            <circle fill="#000000" cx="19" cy="12" r="2" />
-                          </g>
-                        </svg>
-                      </button>
-                      <div class="dropdown-menu">
-                        <a class="dropdown-item" href="/customer-profile">
-                          View Details
-                        </a>
+                            <g
+                              stroke="none"
+                              stroke-width="1"
+                              fill="none"
+                              fill-rule="evenodd"
+                            >
+                              <rect x="0" y="0" width="24" height="24" />
+                              <circle fill="#000000" cx="5" cy="12" r="2" />
+                              <circle fill="#000000" cx="12" cy="12" r="2" />
+                              <circle fill="#000000" cx="19" cy="12" r="2" />
+                            </g>
+                          </svg>
+                        </button>
+                        <div class="dropdown-menu">
+                          <a class="dropdown-item" href="/customer-profile">
+                            View Details
+                          </a>
 
-                        <a class="dropdown-item" href="#">
-                          Delete
-                        </a>
+                          <a
+                            class="dropdown-item"
+                            onClick={() => deleteCustomer(customer._id)}
+                          >
+                            Delete
+                          </a>
+                        </div>
                       </div>
-                    </div>
-                  </td>
-                </tr>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>

@@ -9,7 +9,7 @@ const CustomerList = () => {
   const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
-    fetch("https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/customer")
+    fetch("https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/customers")
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -21,13 +21,16 @@ const CustomerList = () => {
         toast.success("Customer Fetched Successfully");
         setCustomers(data.data);
       })
-      .catch((error) => console.log("Error fetching data: ", error))
+      .catch((error) => {
+        console.log("Error fetching data: ", error);
+        toast.error("Customer Failed To Fetched");
+      })
       .finally(() => setLoading(false)); // Set loading to false here, after success or error
   }, []);
   const deleteCustomer = (customerId) => {
     setDeleting(true);
     fetch(
-      `https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/customer/${customerId}`,
+      `https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/customers/${customerId}`,
       {
         method: "DELETE",
       }
@@ -106,7 +109,7 @@ const CustomerList = () => {
                 <tbody>
                   {customers.map((customer, index) => (
                     <tr key={index}>
-                      <td>{customer.name}</td>
+                      <td>key={index}</td>
 
                       <td>EV{customer?._id?.substring(0, 9)}</td>
                       <td>{customer.customersPhoneNo}</td>

@@ -6,7 +6,7 @@ const CustomerAvailableBalance = () => {
 
   const { id } = useParams();
   useEffect(() => {
-    fetch(`https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/customer/${id}`)
+    fetch(`https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/customers/${id}`)
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
