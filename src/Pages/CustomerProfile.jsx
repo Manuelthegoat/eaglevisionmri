@@ -1,6 +1,28 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
 
 const CustomerProfile = () => {
+  const [customerDetails, setCustomerDetails] = useState(null);
+
+  const { id } = useParams();
+  useEffect(() => {
+    fetch(
+      `https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/customers/${id}`
+    )
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Fetched Specific Customer Data:", data.data);
+        setCustomerDetails(data.data);
+      })
+      .catch((error) =>
+        console.log("Error fetching specific customer data: ", error)
+      );
+  }, [id]);
   return (
     <>
       <div class="row">
@@ -20,8 +42,8 @@ const CustomerProfile = () => {
                 </div>
                 <div class="profile-details">
                   <div class="profile-name px-3 pt-2">
-                    <h4 class="text-primary mb-0">ISHOLA ADEWALE OLUWASEYI</h4>
-                    <p>Phone: 09039168715</p>
+                    <h4 class="text-primary mb-0">{customerDetails?.name}</h4>
+                    <p>Phone: {customerDetails?.customersPhoneNo}</p>
                   </div>
                   <div class="profile-email px-2 pt-2">
                     <h4 class="text-muted mb-0">
@@ -97,9 +119,12 @@ const CustomerProfile = () => {
             <div class="card-header">
               <h4 class="card-title">Deposits/Withdrawal</h4>
               <div class="d-flex align-items-center flex-wrap flex-sm-nowrap">
-                <a href="/add-contribution" className="btn btn-primary mb-2">
+                <Link
+                  to={`/add-contribution/${customerDetails?._id}`}
+                  class="btn btn-primary mb-2"
+                >
                   Add Deposits/Withdrawal
-                </a>
+                </Link>
               </div>
             </div>
             <div class="card-body p-0">

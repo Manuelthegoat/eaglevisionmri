@@ -30,10 +30,10 @@ const Routing = () => {
         <Route path="/customers-list" element={<CustomerList />} />
         <Route path="/add-customer" element={<AddCustomer />} />
         <Route path="/savings" element={<Savings />} />
-        <Route path="/customer-profile" element={<CustomerProfile />} />
+        <Route path="/customer-profile/:id" element={<CustomerProfile />} />
         <Route path="/savings-list" element={<SavingsList />} />
         <Route path="/loans" element={<Loans />} />
-        <Route path="/add-contribution" element={<AddDepositWithdrawal />} />
+        <Route path="/add-contribution/:id" element={<AddDepositWithdrawal />} />
         <Route path="/users" element={<Users />} />
         <Route path="/users-list" element={<UsersList />} />
         <Route

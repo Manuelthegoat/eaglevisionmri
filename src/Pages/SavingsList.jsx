@@ -151,9 +151,12 @@ const SavingsList = () => {
                           </svg>
                         </button>
                         <div class="dropdown-menu">
-                          <a class="dropdown-item" href="/customer-profile">
+                          <Link
+                            to={`/customer-profile/${customer._id}`}
+                            class="dropdown-item"
+                          >
                             View Details
-                          </a>
+                          </Link>
 
                           <a
                             class="dropdown-item"
