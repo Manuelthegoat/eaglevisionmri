@@ -1,6 +1,52 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import Loader from "../Components/Loader/Loader";
+import { Link } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
 
 const LoanApplicants = () => {
+  const [loans, setloans] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [deleting, setDeleting] = useState(false);
+  const [customerDetails, setCustomerDetails] = useState(null);
+
+  useEffect(() => {
+    fetch("https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/loans")
+        .then(response => response.json())
+        .then(async data => {
+            // Extract the customer IDs
+            const customerIds = data.data.map(loan => loan.customer);
+
+            // Fetch details for each customer
+            const customerDetailsPromises = customerIds.map(id => 
+                fetch(`https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/customers/${id}`)
+                    .then(response => response.json())
+            );
+
+            // Await all promises to complete
+            const customerDetailsResponses = await Promise.all(customerDetailsPromises);
+
+            // Extract data from each response
+            const customerDetailsData = customerDetailsResponses.map(response => response.data);
+
+            // Map the customer data to the respective loan
+            const loansWithCustomerDetails = data.data.map((loan, index) => {
+                return {
+                    ...loan,
+                    customerDetails: customerDetailsData[index]
+                };
+            });
+
+            setloans(loansWithCustomerDetails);
+        })
+        .catch(error => {
+            console.log("Error fetching data: ", error);
+            toast.error("Customer Failed To Fetched");
+        })
+        .finally(() => setLoading(false));
+}, []);
+
+ 
+
   return (
     <>
       <div className="card">
@@ -56,24 +102,25 @@ const LoanApplicants = () => {
                 </tr>
               </thead>
               <tbody>
+              {loans.map((loanitem, index) => (
                 <tr>
                   <td>
                     <strong>01</strong>
                   </td>
                   <td>
-                    ISHOLA ADEWALE OLUWASEYI
+                  {loanitem.customerDetails.name}
                     <br />
-                    Individual Loan
+                   {loanitem.loanTitle}
                     <br />
-                    08034863864
+                    {loanitem.customerDetails.customersPhoneNo}
                   </td>
-                  <td>&#8358;3,000,000.0</td>
-                  <td>&#8358;720,000.0</td>
+                  <td>&#8358; {loanitem.amount}</td>
+                  <td>&#8358; {loanitem.interestRate}</td>
                   <td>&#8358;3,720,000.0</td>
                   <td>0</td>
                   <td>&#8358;3,720,000.0</td>
-                  <td>March 30, 2023, midnight</td>
-                  <td>Sept. 26, 2023</td>
+                  <td> {loanitem.loanStartDate}</td>
+                  <td>{loanitem.loanEndDate}</td>
                   <td>
                     <div class="dropdown">
                       <button
@@ -115,6 +162,7 @@ const LoanApplicants = () => {
                     </div>
                   </td>
                 </tr>
+                 ))}
               </tbody>
             </table>
           </div>
