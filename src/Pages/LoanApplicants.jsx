@@ -49,6 +49,7 @@ const LoanApplicants = () => {
 
   return (
     <>
+    {loading && <Loader />}
       <div className="card">
         <div className="card-header">
           <h4 class="card-title">Loan Application List</h4>
@@ -116,9 +117,9 @@ const LoanApplicants = () => {
                   </td>
                   <td>&#8358; {loanitem.amount}</td>
                   <td>&#8358; {loanitem.interestRate}</td>
-                  <td>&#8358;3,720,000.0</td>
+                  <td>&#8358; {(loanitem.amount + loanitem.interestRate).toFixed(2)}</td>
                   <td>0</td>
-                  <td>&#8358;3,720,000.0</td>
+                  <td>&#8358;{loanitem.amount}</td>
                   <td> {loanitem.loanStartDate}</td>
                   <td>{loanitem.loanEndDate}</td>
                   <td>
