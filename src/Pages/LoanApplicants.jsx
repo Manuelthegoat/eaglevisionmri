@@ -11,45 +11,49 @@ const LoanApplicants = () => {
 
   useEffect(() => {
     fetch("https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/loans")
-        .then(response => response.json())
-        .then(async data => {
-            // Extract the customer IDs
-            const customerIds = data.data.map(loan => loan.customer);
+      .then((response) => response.json())
+      .then(async (data) => {
+        // Extract the customer IDs
+        const customerIds = data.data.map((loan) => loan.customer);
 
-            // Fetch details for each customer
-            const customerDetailsPromises = customerIds.map(id => 
-                fetch(`https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/customers/${id}`)
-                    .then(response => response.json())
-            );
+        // Fetch details for each customer
+        const customerDetailsPromises = customerIds.map((id) =>
+          fetch(
+            `https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/customers/${id}`
+          ).then((response) => response.json())
+        );
 
-            // Await all promises to complete
-            const customerDetailsResponses = await Promise.all(customerDetailsPromises);
+        // Await all promises to complete
+        const customerDetailsResponses = await Promise.all(
+          customerDetailsPromises
+        );
 
-            // Extract data from each response
-            const customerDetailsData = customerDetailsResponses.map(response => response.data);
+        // Extract data from each response
+        const customerDetailsData = customerDetailsResponses.map(
+          (response) => response.data
+        );
 
-            // Map the customer data to the respective loan
-            const loansWithCustomerDetails = data.data.map((loan, index) => {
-                return {
-                    ...loan,
-                    customerDetails: customerDetailsData[index]
-                };
-            });
+        // Map the customer data to the respective loan
+        const loansWithCustomerDetails = data.data.map((loan, index) => {
+          return {
+            ...loan,
+            customerDetails: customerDetailsData[index],
+          };
+        });
 
-            setloans(loansWithCustomerDetails);
-        })
-        .catch(error => {
-            console.log("Error fetching data: ", error);
-            toast.error("Customer Failed To Fetched");
-        })
-        .finally(() => setLoading(false));
-}, []);
-
- 
+        setloans(loansWithCustomerDetails);
+        console.log(loansWithCustomerDetails);
+      })
+      .catch((error) => {
+        console.log("Error fetching data: ", error);
+        toast.error("Customer Failed To Fetched");
+      })
+      .finally(() => setLoading(false));
+  }, []);
 
   return (
     <>
-    {loading && <Loader />}
+      {loading && <Loader />}
       <div className="card">
         <div className="card-header">
           <h4 class="card-title">Loan Application List</h4>
@@ -103,67 +107,73 @@ const LoanApplicants = () => {
                 </tr>
               </thead>
               <tbody>
-              {loans.map((loanitem, index) => (
-                <tr>
-                  <td>
-                    <strong>01</strong>
-                  </td>
-                  <td>
-                  {loanitem.customerDetails.name}
-                    <br />
-                   {loanitem.loanTitle}
-                    <br />
-                    {loanitem.customerDetails.customersPhoneNo}
-                  </td>
-                  <td>&#8358; {loanitem.amount}</td>
-                  <td>&#8358; {loanitem.interestRate}</td>
-                  <td>&#8358; {(loanitem.amount + loanitem.interestRate).toFixed(2)}</td>
-                  <td>0</td>
-                  <td>&#8358;{loanitem.amount}</td>
-                  <td> {loanitem.loanStartDate}</td>
-                  <td>{loanitem.loanEndDate}</td>
-                  <td>
-                    <div class="dropdown">
-                      <button
-                        type="button"
-                        class="btn btn-success light sharp"
-                        data-bs-toggle="dropdown"
-                      >
-                        <svg
-                          width="20px"
-                          height="20px"
-                          viewBox="0 0 24 24"
-                          version="1.1"
+                {loans.map((loanitem, index) => (
+                  <tr>
+                    <td>
+                      <strong>01</strong>
+                    </td>
+                    <td>
+                      {loanitem.customerDetails.name}
+                      <br />
+                      {loanitem.loanTitle}
+                      <br />
+                      {loanitem.customerDetails.customersPhoneNo}
+                    </td>
+                    <td>&#8358; {loanitem.amount}</td>
+                    <td>&#8358; {loanitem.interestRate}</td>
+                    <td>
+                      &#8358;{" "}
+                      {(loanitem.amount + loanitem.interestRate).toFixed(2)}
+                    </td>
+                    <td>0</td>
+                    <td>&#8358;{loanitem.amount}</td>
+                    <td> {loanitem.loanStartDate}</td>
+                    <td>{loanitem.loanEndDate}</td>
+                    <td>
+                      <div class="dropdown">
+                        <button
+                          type="button"
+                          class="btn btn-success light sharp"
+                          data-bs-toggle="dropdown"
                         >
-                          <g
-                            stroke="none"
-                            stroke-width="1"
-                            fill="none"
-                            fill-rule="evenodd"
+                          <svg
+                            width="20px"
+                            height="20px"
+                            viewBox="0 0 24 24"
+                            version="1.1"
                           >
-                            <rect x="0" y="0" width="24" height="24" />
-                            <circle fill="#000000" cx="5" cy="12" r="2" />
-                            <circle fill="#000000" cx="12" cy="12" r="2" />
-                            <circle fill="#000000" cx="19" cy="12" r="2" />
-                          </g>
-                        </svg>
-                      </button>
-                      <div class="dropdown-menu">
-                        <a class="dropdown-item" href="/loan-applicants-details">
-                          View Details
-                        </a>
-                        <a class="dropdown-item" href="#">
-                          Edit
-                        </a>
+                            <g
+                              stroke="none"
+                              stroke-width="1"
+                              fill="none"
+                              fill-rule="evenodd"
+                            >
+                              <rect x="0" y="0" width="24" height="24" />
+                              <circle fill="#000000" cx="5" cy="12" r="2" />
+                              <circle fill="#000000" cx="12" cy="12" r="2" />
+                              <circle fill="#000000" cx="19" cy="12" r="2" />
+                            </g>
+                          </svg>
+                        </button>
+                        <div class="dropdown-menu">
+                          <Link
+                            to={`/loan-applicants-details/${loanitem._id}`}
+                            class="dropdown-item"
+                          >
+                            View Details
+                          </Link>
+                          <a class="dropdown-item" href="#">
+                            Edit
+                          </a>
 
-                        <a class="dropdown-item" href="#">
-                          Delete
-                        </a>
+                          <a class="dropdown-item" href="#">
+                            Delete
+                          </a>
+                        </div>
                       </div>
-                    </div>
-                  </td>
-                </tr>
-                 ))}
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
