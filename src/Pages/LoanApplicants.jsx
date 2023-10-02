@@ -58,6 +58,17 @@ const LoanApplicants = () => {
         <div className="card-header">
           <h4 class="card-title">Loan Application List</h4>
 
+          <div class="d-flex align-items-center flex-wrap flex-sm-nowrap">
+            <div class="mb-3 mt-2 mx-sm-2">
+              <label class="sr-only">Search</label>
+              <input type="date" class="form-control" placeholder="Search" />
+            </div>
+            &nbsp;
+            <button type="submit" class="btn btn-primary mb-2">
+              Filter By Date
+            </button>
+          </div>
+
           <form class="d-flex align-items-center flex-wrap flex-sm-nowrap">
             <div class="mb-3 mt-2 mx-sm-2">
               <label class="sr-only">Search</label>
