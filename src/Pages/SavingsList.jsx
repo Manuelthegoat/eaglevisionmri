@@ -72,6 +72,10 @@ const SavingsList = () => {
 
     setDisplayedCustomers(filteredCustomers);
   };
+  const formatDate = (dateString) => {
+    const options = { year: "numeric", month: "short", day: "numeric" };
+    return new Date(dateString).toLocaleDateString(undefined, options);
+  };
 
   return (
     <>
@@ -146,7 +150,7 @@ const SavingsList = () => {
                 {displayedCustomers.map((customer, index) => (
                   <tr key={index}>
                     <td>
-                      <strong>{index}</strong>
+                      <strong>{index + 1}</strong>
                     </td>
                     <td>
                       <a href="/customer-profile">{customer.name}</a>
@@ -155,8 +159,8 @@ const SavingsList = () => {
                     <td>{customer.customersPhoneNo}</td>
                     <td>{customer.accountBalance}</td>
                     <td>uche Chioma</td>
-                    <td>May 17, 2023, 9:23 a.m.</td>
-                    <td>June 27, 2023, 2:19 p.m.</td>
+                    <td>{formatDate(customer.createdAt)}</td>
+                    <td>{formatDate(customer.updatedAt)}</td>
                     <td>
                       <div class="dropdown">
                         <button
