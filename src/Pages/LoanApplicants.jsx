@@ -8,6 +8,9 @@ const LoanApplicants = () => {
   const [loading, setLoading] = useState(true);
   const [deleting, setDeleting] = useState(false);
   const [customerDetails, setCustomerDetails] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [allCustomers, setAllCustomers] = useState([]); // stores all fetched data
+  const [displayedCustomers, setDisplayedCustomers] = useState([]); // stores data currently displayed in table
 
   useEffect(() => {
     fetch("https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/loans")
@@ -42,6 +45,8 @@ const LoanApplicants = () => {
         });
 
         setloans(loansWithCustomerDetails);
+        setAllCustomers(loansWithCustomerDetails);
+        setDisplayedCustomers(loansWithCustomerDetails);
         console.log(loansWithCustomerDetails);
       })
       .catch((error) => {
@@ -50,7 +55,28 @@ const LoanApplicants = () => {
       })
       .finally(() => setLoading(false));
   }, []);
+  const handleDateChange = (event) => {
+    setSelectedDate(event.target.value);
 
+    // Immediately filter the data when a date is selected
+    const date = new Date(event.target.value);
+    const filteredCustomers = allCustomers.filter((customer) => {
+      const customerCreatedAt = new Date(customer.createdAt);
+      return customerCreatedAt.toDateString() === date.toDateString();
+    });
+
+    setDisplayedCustomers(filteredCustomers);
+  };
+  function safeSumAndFormat(a, b) {
+    const numberA = parseFloat(a);
+    const numberB = parseFloat(b);
+
+    if (!isNaN(numberA) && !isNaN(numberB)) {
+      return (numberA + numberB).toFixed(2);
+    }
+
+    return "N/A"; // or some other default value if the conversion fails
+  }
   return (
     <>
       {loading && <Loader />}
@@ -61,14 +87,18 @@ const LoanApplicants = () => {
           <div class="d-flex align-items-center flex-wrap flex-sm-nowrap">
             <div class="mb-3 mt-2 mx-sm-2">
               <label class="sr-only">Search</label>
-              <input type="date" class="form-control" placeholder="Search" />
+              <input
+                type="date"
+                class="form-control"
+                placeholder="Search"
+                onChange={handleDateChange}
+              />{" "}
             </div>
             &nbsp;
             <button type="submit" class="btn btn-primary mb-2">
               Filter By Date
             </button>
           </div>
-
           <form class="d-flex align-items-center flex-wrap flex-sm-nowrap">
             <div class="mb-3 mt-2 mx-sm-2">
               <label class="sr-only">Search</label>
@@ -118,23 +148,23 @@ const LoanApplicants = () => {
                 </tr>
               </thead>
               <tbody>
-                {loans.map((loanitem, index) => (
+                {displayedCustomers.map((loanitem, index) => (
                   <tr>
                     <td>
                       <strong>01</strong>
                     </td>
                     <td>
-                      {loanitem.customerDetails.name}
+                      {loanitem.customerDetails?.name}
                       <br />
                       {loanitem.loanTitle}
                       <br />
-                      {loanitem.customerDetails.customersPhoneNo}
+                      {loanitem.customerDetails?.customersPhoneNo}
                     </td>
                     <td>&#8358; {loanitem.amount}</td>
                     <td>&#8358; {loanitem.interestRate}</td>
                     <td>
                       &#8358;{" "}
-                      {(loanitem.amount + loanitem.interestRate).toFixed(2)}
+                      {safeSumAndFormat(loanitem.amount, loanitem.interestRate)}
                     </td>
                     <td>0</td>
                     <td>&#8358;{loanitem.amount}</td>
