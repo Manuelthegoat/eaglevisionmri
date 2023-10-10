@@ -151,10 +151,12 @@ const LoanApplicants = () => {
                 {displayedCustomers.map((loanitem, index) => (
                   <tr>
                     <td>
-                      <strong>{index+1}</strong>
+                      <strong>{index + 1}</strong>
                     </td>
                     <td>
-                      {loanitem.customerDetails?.name}
+                      <Link to={`/loan-applicants-details/${loanitem._id}`}>
+                        {loanitem.customerDetails?.name}
+                      </Link>
                       <br />
                       {loanitem.loanTitle}
                       <br />
