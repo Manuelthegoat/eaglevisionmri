@@ -51,8 +51,8 @@ const RepayLoan = () => {
     e.preventDefault();
 
     const formData = {
-      customerId: customerDetails?._id,
-      repaymentAmount: repaymentAmount,
+      customerId: customerDetails._id,
+      amount: repaymentAmount,
       interestRate: loanApplicantsDetails?.interestRate,
       loanStartDate: loanApplicantsDetails?.loanStartDate,
       loanEndDate: loanApplicantsDetails?.loanEndDate,
@@ -65,7 +65,7 @@ const RepayLoan = () => {
 
     try {
       const response = await fetch(
-        `https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/loans/repayments`,
+        `https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/loans/withdrawals`,
         {
           method: "POST",
           headers: {

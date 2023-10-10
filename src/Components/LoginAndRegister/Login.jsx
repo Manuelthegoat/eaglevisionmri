@@ -37,6 +37,7 @@ const Login = () => {
         toast.success("Login Successfull");
         localStorage.setItem("token", data.data.token);
         localStorage.setItem("username", data.data.user.fullName);
+        localStorage.setItem("userId", data.data.user._id);
 
         const sevenDaysInSeconds = 7 * 24 * 60 * 60;
         setCookie('userToken', data.data.token, { path: '/', maxAge: sevenDaysInSeconds });

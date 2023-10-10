@@ -70,6 +70,7 @@ const LoanApplication = () => {
       loanStartDate: loanStartDate,
       loanEndDate: loanEndDate,
       repaymentSchedule: repaymentSchedule,
+      repaymentDate: loanEndDate,
       loanTitle: loanTitle,
       phoneNo1: phone1,
       phoneNo2: phone2,

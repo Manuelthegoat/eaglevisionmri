@@ -151,7 +151,7 @@ const LoanApplicants = () => {
                 {displayedCustomers.map((loanitem, index) => (
                   <tr>
                     <td>
-                      <strong>01</strong>
+                      <strong>{index+1}</strong>
                     </td>
                     <td>
                       {loanitem.customerDetails?.name}
@@ -167,7 +167,7 @@ const LoanApplicants = () => {
                       {safeSumAndFormat(loanitem.amount, loanitem.interestRate)}
                     </td>
                     <td>0</td>
-                    <td>&#8358;{loanitem.amount}</td>
+                    <td>&#8358;{loanitem.balance}</td>
                     <td> {loanitem.loanStartDate}</td>
                     <td>{loanitem.loanEndDate}</td>
                     <td>
