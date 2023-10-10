@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import Loader from "../Components/Loader/Loader";
 import ReactApexChart from "react-apexcharts";
 
 const chartData = {
@@ -371,9 +372,35 @@ const deposit = {
     },
   },
 };
-const   HomeCards = () => {
+const HomeCards = () => {
+  const [customers, setCustomers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [totalDeposit, setTotalDeposit] = useState(0);
+
+
+  useEffect(() => {
+    fetch("https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/customers")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Fetched Data:", data.data);
+        setCustomers(data.data);
+        const totalBalance = data.data.reduce((sum, customer) => sum + customer.accountBalance, 0);
+        setTotalDeposit(totalBalance);
+       
+      })
+      .catch((error) => {
+        console.log("Error fetching data: ", error);
+      })
+      .finally(() => setLoading(false)); // Set loading to false here, after success or error
+  }, []);
   return (
     <div>
+       {loading && <Loader />}
       <div class="col-xl-12">
         <div class="row">
           <a href="/customers-list" class="col-xl-4 col-sm-4">
@@ -381,9 +408,8 @@ const   HomeCards = () => {
               <div class="card-header border-0 flex-wrap">
                 <div class="revenue-date">
                   <span>All Customers</span>
-                  <h4 class="text-white">1327</h4>
+                  <h4 class="text-white">{customers.length}</h4>
                 </div>
-              
               </div>
               <div class="card-body pb-0 custome-tooltip d-flex align-items-center">
                 {/* <div id="chartBar" class="chartBar"></div> */}
@@ -395,7 +421,6 @@ const   HomeCards = () => {
                   class="chartBar"
                   type="bar"
                 />
-            
               </div>
             </div>
           </a>
@@ -404,9 +429,8 @@ const   HomeCards = () => {
               <div class="card-header border-0">
                 <div class="revenue-date">
                   <span class="text-black">Active Customers</span>
-                  <h4 class="text-black">1327</h4>
+                  <h4 class="text-black">{customers.length}</h4>
                 </div>
-               
               </div>
               <div class="card-body pb-0 custome-tooltip d-flex align-items-center">
                 {/* <div id="expensesChart" class="chartBar"></div> */}
@@ -418,7 +442,6 @@ const   HomeCards = () => {
                   class="chartBar"
                   type="bar"
                 />
-                
               </div>
             </div>
           </a>
@@ -493,7 +516,7 @@ const   HomeCards = () => {
                 <div class="depostit-card-media d-flex justify-content-between pb-0">
                   <div>
                     <h6>Total Deposit</h6>
-                    <h3>$1200.00</h3>
+                    <h3>&#8358; {totalDeposit.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</h3>
                   </div>
                   <div class="icon-box bg-primary">
                     <svg
@@ -514,9 +537,9 @@ const   HomeCards = () => {
                 <ReactApexChart
                   options={deposit}
                   series={deposit.series}
-                //   width={300}
+                  //   width={300}
                   height={120}
-                //   class="chartBar"
+                  //   class="chartBar"
                   type="area"
                 />
               </div>
