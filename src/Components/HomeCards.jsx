@@ -4,12 +4,12 @@ import ReactApexChart from "react-apexcharts";
 const chartData = {
   series: [
     {
-      name: "Running",
+      name: "Active",
       data: [50, 90, 90],
       radius: 12,
     },
     {
-      name: "Cycling",
+      name: "InActive",
       data: [50, 60, 55],
     },
   ],
@@ -371,7 +371,7 @@ const deposit = {
     },
   },
 };
-const HomeCards = () => {
+const   HomeCards = () => {
   return (
     <div>
       <div class="col-xl-12">

@@ -8,51 +8,101 @@ const LoanApplicants = () => {
   const [loading, setLoading] = useState(true);
   const [deleting, setDeleting] = useState(false);
   const [customerDetails, setCustomerDetails] = useState(null);
+  const [startDate, setStartDate] = useState(""); // Step 1
+  const [endDate, setEndDate] = useState(""); // Step 1
 
   useEffect(() => {
-    fetch("https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/loans")
-        .then(response => response.json())
-        .then(async data => {
-            // Extract the customer IDs
-            const customerIds = data.data.map(loan => loan.customer);
+    const fetchData = async () => {
+      try {
+        setLoading(true);
 
-            // Fetch details for each customer
-            const customerDetailsPromises = customerIds.map(id => 
-                fetch(`https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/customers/${id}`)
-                    .then(response => response.json())
-            );
+        // Use the selected start and end dates in the API URL
+        const apiUrl = `https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/loans/by-payment-date?startDate=${startDate}&endDate=${endDate}`;
+        const response = await fetch(apiUrl);
+        const data = await response.json();
 
-            // Await all promises to complete
-            const customerDetailsResponses = await Promise.all(customerDetailsPromises);
+        // Extract the customer IDs
+        const customerIds = data.data.map((loan) => loan.customer);
 
-            // Extract data from each response
-            const customerDetailsData = customerDetailsResponses.map(response => response.data);
+        // Fetch details for each customer
+        const customerDetailsPromises = customerIds.map((id) =>
+          fetch(
+            `https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/customers/${id}`
+          ).then((response) => response.json())
+        );
 
-            // Map the customer data to the respective loan
-            const loansWithCustomerDetails = data.data.map((loan, index) => {
-                return {
-                    ...loan,
-                    customerDetails: customerDetailsData[index]
-                };
-            });
+        // Await all promises to complete
+        const customerDetailsResponses = await Promise.all(
+          customerDetailsPromises
+        );
 
-            setloans(loansWithCustomerDetails);
-        })
-        .catch(error => {
-            console.log("Error fetching data: ", error);
-            toast.error("Customer Failed To Fetched");
-        })
-        .finally(() => setLoading(false));
-}, []);
+        // Extract data from each response
+        const customerDetailsData = customerDetailsResponses.map(
+          (response) => response.data
+        );
 
- 
+        // Map the customer data to the respective loan
+        const loansWithCustomerDetails = data.data.map((loan, index) => {
+          return {
+            ...loan,
+            customerDetails: customerDetailsData[index],
+          };
+        });
+
+        setloans(loansWithCustomerDetails);
+      } catch (error) {
+        console.error("Error fetching data: ", error);
+        toast.error("Customer Failed To Fetch");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    // Fetch data only if start and end dates are provided
+    if (startDate && endDate) {
+      fetchData();
+    }
+  }, [startDate, endDate]);
+  const handleSearch = (e) => {
+    e.preventDefault();
+
+    // Step 4: Update state variables with the selected dates
+    // (You may want to add validation here before setting the dates)
+    setStartDate(e.target.elements.startDate.value);
+    setEndDate(e.target.elements.endDate.value);
+  };
 
   return (
     <>
+      {loading && <Loader />}
       <div className="card">
         <div className="card-header">
           <h4 class="card-title">Loan Application List</h4>
 
+          <form
+            class="d-flex align-items-center flex-wrap flex-sm-nowrap"
+            onSubmit={handleSearch}
+          >
+            <div class="mb-3 mt-2 mx-sm-2">
+              <label class="sr-only">Search</label>
+              <input
+                type="date"
+                class="form-control"
+                placeholder="Select start date"
+                name="startDate"
+              />
+              <input
+                type="date"
+                class="form-control"
+                placeholder="select end date"
+                name="endDate"
+              />
+            </div>
+            &nbsp;
+            <button type="submit" class="btn btn-primary mb-2">
+              Search
+            </button>
+          </form>
           <form class="d-flex align-items-center flex-wrap flex-sm-nowrap">
             <div class="mb-3 mt-2 mx-sm-2">
               <label class="sr-only">Search</label>
@@ -102,67 +152,70 @@ const LoanApplicants = () => {
                 </tr>
               </thead>
               <tbody>
-              {loans.map((loanitem, index) => (
-                <tr>
-                  <td>
-                    <strong>01</strong>
-                  </td>
-                  <td>
-                  {loanitem.customerDetails.name}
-                    <br />
-                   {loanitem.loanTitle}
-                    <br />
-                    {loanitem.customerDetails.customersPhoneNo}
-                  </td>
-                  <td>&#8358; {loanitem.amount}</td>
-                  <td>&#8358; {loanitem.interestRate}</td>
-                  <td>&#8358;3,720,000.0</td>
-                  <td>0</td>
-                  <td>&#8358;3,720,000.0</td>
-                  <td> {loanitem.loanStartDate}</td>
-                  <td>{loanitem.loanEndDate}</td>
-                  <td>
-                    <div class="dropdown">
-                      <button
-                        type="button"
-                        class="btn btn-success light sharp"
-                        data-bs-toggle="dropdown"
-                      >
-                        <svg
-                          width="20px"
-                          height="20px"
-                          viewBox="0 0 24 24"
-                          version="1.1"
+                {loans.map((loanitem, index) => (
+                  <tr>
+                    <td>
+                      <strong>01</strong>
+                    </td>
+                    <td>
+                      {loanitem.customerDetails?.name}
+                      <br />
+                      {loanitem.loanTitle}
+                      <br />
+                      {loanitem.customerDetails?.customersPhoneNo}
+                    </td>
+                    <td>&#8358; {loanitem.amount}</td>
+                    <td>&#8358; {loanitem.interestRate}</td>
+                    <td>&#8358;3,720,000.0</td>
+                    <td>0</td>
+                    <td>&#8358;3,720,000.0</td>
+                    <td> {loanitem.loanStartDate}</td>
+                    <td>{loanitem.loanEndDate}</td>
+                    <td>
+                      <div class="dropdown">
+                        <button
+                          type="button"
+                          class="btn btn-success light sharp"
+                          data-bs-toggle="dropdown"
                         >
-                          <g
-                            stroke="none"
-                            stroke-width="1"
-                            fill="none"
-                            fill-rule="evenodd"
+                          <svg
+                            width="20px"
+                            height="20px"
+                            viewBox="0 0 24 24"
+                            version="1.1"
                           >
-                            <rect x="0" y="0" width="24" height="24" />
-                            <circle fill="#000000" cx="5" cy="12" r="2" />
-                            <circle fill="#000000" cx="12" cy="12" r="2" />
-                            <circle fill="#000000" cx="19" cy="12" r="2" />
-                          </g>
-                        </svg>
-                      </button>
-                      <div class="dropdown-menu">
-                        <a class="dropdown-item" href="/loan-applicants-details">
-                          View Details
-                        </a>
-                        <a class="dropdown-item" href="#">
-                          Edit
-                        </a>
+                            <g
+                              stroke="none"
+                              stroke-width="1"
+                              fill="none"
+                              fill-rule="evenodd"
+                            >
+                              <rect x="0" y="0" width="24" height="24" />
+                              <circle fill="#000000" cx="5" cy="12" r="2" />
+                              <circle fill="#000000" cx="12" cy="12" r="2" />
+                              <circle fill="#000000" cx="19" cy="12" r="2" />
+                            </g>
+                          </svg>
+                        </button>
+                        <div class="dropdown-menu">
+                          <a
+                            class="dropdown-item"
+                            href="/loan-applicants-details"
+                          >
+                            View Details
+                          </a>
+                          <a class="dropdown-item" href="#">
+                            Edit
+                          </a>
 
-                        <a class="dropdown-item" href="#">
-                          Delete
-                        </a>
+                          <a class="dropdown-item" href="#">
+                            Delete
+                          </a>
+                        </div>
                       </div>
-                    </div>
-                  </td>
-                </tr>
-                 ))}
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>

@@ -109,7 +109,7 @@ const CustomerList = () => {
                 <tbody>
                   {customers.map((customer, index) => (
                     <tr key={index}>
-                      <td>key={index}</td>
+                      <td>{index+1}</td>
 
                       <td>EV{customer?._id?.substring(0, 9)}</td>
                       <td>{customer.customersPhoneNo}</td>
