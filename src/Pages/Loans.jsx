@@ -1,14 +1,39 @@
-import React from 'react'
-
+import React, { useState, useEffect } from "react";
+import Loader from "../Components/Loader/Loader";
 const Loans = () => {
+  const [customers, setCustomers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [totalDeposit, setTotalDeposit] = useState(0);
+
+  useEffect(() => {
+    fetch("https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/loans")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Fetched Data:", data.data);
+        setCustomers(data.data);
+        const totalBalance = data.data.reduce((sum, customer) => sum + customer.balance, 0);
+        setTotalDeposit(totalBalance);
+       
+      })
+      .catch((error) => {
+        console.log("Error fetching data: ", error);
+      })
+      .finally(() => setLoading(false)); // Set loading to false here, after success or error
+  }, []);
   return (
     <>
+    {loading && <Loader />}
       <div className="row">
         <div class="col-xl-4 col-xxl-4 col-sm-6">
           <div class="card crm-cart bg-secondary border-0">
             <div class="card-header border-0 pb-0">
               <span class="text-white fs-16">
-              Count: 170<i class="fa-solid fa-chevron-up ms-1"></i>
+              Count: {customers.length}<i class="fa-solid fa-chevron-up ms-1"></i>
               </span>
               <div class="icon-box bg-white">
                 <svg
@@ -27,7 +52,7 @@ const Loans = () => {
             </div>
             <div class="card-body">
               <div class="crm-cart-data">
-                <p>&#8358; 531,410,000.0</p>
+                <p>&#8358; {totalDeposit.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                 <span class="d-block mb-3 text-black">All Loan Applications</span>
                 <span class="badge bg-white text-black border-0">
                   Last 4 Month
@@ -40,7 +65,7 @@ const Loans = () => {
           <div class="card crm-cart bg-secondary border-0">
             <div class="card-header border-0 pb-0">
               <span class="text-white fs-16">
-              Count: 169<i class="fa-solid fa-chevron-up ms-1"></i>
+              Count: {customers.length}<i class="fa-solid fa-chevron-up ms-1"></i>
               </span>
               <div class="icon-box bg-white">
                 <svg
@@ -59,7 +84,7 @@ const Loans = () => {
             </div>
             <div class="card-body">
               <div class="crm-cart-data">
-                <p>&#8358; 286,940,000.0</p>
+                <p>&#8358; {totalDeposit.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                 <span class="d-block mb-3 text-black">All Approved(Current Loan)</span>
                 <span class="badge bg-white text-black border-0">
                   Last 4 Month
@@ -72,7 +97,7 @@ const Loans = () => {
           <div class="card crm-cart bg-primary border-0">
             <div class="card-header border-0 pb-0">
               <span class="text-white fs-16">
-              Count: 1<i class="fa-solid fa-chevron-up ms-1"></i>
+              Count: 0<i class="fa-solid fa-chevron-up ms-1"></i>
               </span>
               <div class="icon-box bg-white">
                 <svg
@@ -91,7 +116,7 @@ const Loans = () => {
             </div>
             <div class="card-body">
               <div class="crm-cart-data">
-                <p class="text-white">&#8358; 150,000.0</p>
+                <p class="text-white">&#8358; 0</p>
                 <span class="d-block mb-3 text-white">
                 All Pending
                 </span>

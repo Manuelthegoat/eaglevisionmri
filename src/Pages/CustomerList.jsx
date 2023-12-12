@@ -7,6 +7,9 @@ const CustomerList = () => {
   const [customers, setCustomers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [deleting, setDeleting] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [allCustomers, setAllCustomers] = useState([]); // stores all fetched data
+  const [displayedCustomers, setDisplayedCustomers] = useState([]); // stores data currently displayed in table
 
   useEffect(() => {
     fetch("https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/customers")
@@ -20,6 +23,8 @@ const CustomerList = () => {
         console.log("Fetched Data:", data.data);
         toast.success("Customer Fetched Successfully");
         setCustomers(data.data);
+        setAllCustomers(data.data);
+        setDisplayedCustomers(data.data);
       })
       .catch((error) => {
         console.log("Error fetching data: ", error);
@@ -55,6 +60,18 @@ const CustomerList = () => {
         setDeleting(false);
       });
   };
+  const handleDateChange = (event) => {
+    setSelectedDate(event.target.value);
+
+    // Immediately filter the data when a date is selected
+    const date = new Date(event.target.value);
+    const filteredCustomers = allCustomers.filter((customer) => {
+      const customerCreatedAt = new Date(customer.createdAt);
+      return customerCreatedAt.toDateString() === date.toDateString();
+    });
+
+    setDisplayedCustomers(filteredCustomers);
+  };
 
   return (
     <>
@@ -65,6 +82,21 @@ const CustomerList = () => {
         <div class="card">
           <div class="card-header">
             <h4 class="card-title">Customers List</h4>
+            <div class="d-flex align-items-center flex-wrap flex-sm-nowrap">
+              <div class="mb-3 mt-2 mx-sm-2">
+                <label class="sr-only">Search</label>
+                <input
+                  type="date"
+                  class="form-control"
+                  placeholder="Search"
+                  onChange={handleDateChange}
+                />
+              </div>
+              &nbsp;
+              <button type="submit" class="btn btn-primary mb-2">
+                Filter By Date
+              </button>
+            </div>
             <form class="d-flex align-items-center flex-wrap flex-sm-nowrap">
               <div class="mb-3 mt-2 mx-sm-2">
                 <label class="sr-only">Search</label>
@@ -107,7 +139,7 @@ const CustomerList = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {customers.map((customer, index) => (
+                  {displayedCustomers.map((customer, index) => (
                     <tr key={index}>
                       <td>{index+1}</td>
 

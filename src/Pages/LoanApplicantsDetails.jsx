@@ -1,8 +1,53 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
+import Loader from "../Components/Loader/Loader";
+import { ToastContainer, toast } from "react-toastify";
 
 const LoanApplicantsDetails = () => {
+  const [loading, setLoading] = useState(true);
+
+  const [loanApplicantsDetails, setLoanApplicantsDetails] = useState(null);
+  const [customerDetails, setCustomerDetails] = useState(null);
+
+  const { id } = useParams();
+  useEffect(() => {
+    fetch(`https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/loans/${id}`)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Fetched Specific Loan Data:", data.data);
+        setLoanApplicantsDetails(data.data);
+
+        // fetch customer details using the id from loanApplicantsDetails.customer
+        return fetch(
+          `https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/customers/${data.data.customer}`
+        );
+      })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to fetch customer data");
+        }
+        return response.json();
+      })
+      .then((customerData) => {
+        console.log("Fetched Customer Data:", customerData);
+        setCustomerDetails(customerData.data);
+      })
+      .catch((error) => {
+        console.log("Error fetching data: ", error);
+        toast.error("Customer Failed To Fetched");
+      })
+      .finally(() => setLoading(false));
+  }, [id]);
+
   return (
     <>
+      {loading && <Loader />}
+      <ToastContainer />
       <div class="row">
         <div class="col-lg-12">
           <div class="profile card card-body px-3 pt-3 pb-0">
@@ -20,17 +65,21 @@ const LoanApplicantsDetails = () => {
                 </div>
                 <div class="profile-details">
                   <div class="profile-name px-3 pt-2">
-                    <h4 class="text-primary mb-0">ISHOLA ADEWALE OLUWASEYI</h4>
-                    <p>Phone: 09039168715</p>
+                    <h4 class="text-primary mb-0">{customerDetails?.name}</h4>
+                    <p>Phone: {customerDetails?.customersPhoneNo}</p>
                   </div>
                   <div class="profile-email px-2 pt-2">
                     <h4 class="text-muted mb-0">
                       Account Officer: nmesonma Ezeh (08168184111)
                     </h4>
                     <h4 className="text-muted mb-0">
-                      Guarantor Name: guarantor #5543
+                      Guarantor Name:{" "}
+                      {loanApplicantsDetails?.firstGuarantorsName}
                     </h4>
-                    <p>Guarantor Phone: 09039168715</p>
+                    <p>
+                      Guarantor Phone:{" "}
+                      {loanApplicantsDetails?.firstGuarantorsPhoneNumber}
+                    </p>
                   </div>
                   <div class="dropdown ms-auto">
                     <a
@@ -99,9 +148,12 @@ const LoanApplicantsDetails = () => {
             <div class="card-header">
               <h4 class="card-title">Repayments</h4>
               <div class="d-flex align-items-center flex-wrap flex-sm-nowrap">
-                <a href="/add-contribution" className="btn btn-primary mb-2">
-                  Add Deposits/Withdrawal
-                </a>
+                {/* <a href="/add-contribution" className="btn btn-primary mb-2">
+                  Repay Loan
+                </a> */}
+                <Link to={`/repay-loan/${id}`} class="btn btn-primary mb-2">
+                  Repay Loan
+                </Link>
               </div>
             </div>
             <div class="card-body p-0">

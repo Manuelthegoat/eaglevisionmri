@@ -7,6 +7,9 @@ const SavingsList = () => {
   const [customers, setCustomers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [deleting, setDeleting] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [allCustomers, setAllCustomers] = useState([]); // stores all fetched data
+  const [displayedCustomers, setDisplayedCustomers] = useState([]); // stores data currently displayed in table
 
   useEffect(() => {
     fetch("https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/customers")
@@ -20,6 +23,8 @@ const SavingsList = () => {
         console.log("Fetched Data:", data.data);
         toast.success("Customer Fetched Successfully");
         setCustomers(data.data);
+        setAllCustomers(data.data);
+        setDisplayedCustomers(data.data);
       })
       .catch((error) => {
         console.log("Error fetching data: ", error);
@@ -55,6 +60,22 @@ const SavingsList = () => {
         setDeleting(false);
       });
   };
+  const handleDateChange = (event) => {
+    setSelectedDate(event.target.value);
+
+    // Immediately filter the data when a date is selected
+    const date = new Date(event.target.value);
+    const filteredCustomers = allCustomers.filter((customer) => {
+      const customerCreatedAt = new Date(customer.createdAt);
+      return customerCreatedAt.toDateString() === date.toDateString();
+    });
+
+    setDisplayedCustomers(filteredCustomers);
+  };
+  const formatDate = (dateString) => {
+    const options = { year: "numeric", month: "short", day: "numeric" };
+    return new Date(dateString).toLocaleDateString(undefined, options);
+  };
 
   return (
     <>
@@ -63,6 +84,22 @@ const SavingsList = () => {
       <div className="card">
         <div className="card-header">
           <h4 class="card-title">All Savings</h4>
+
+          <div class="d-flex align-items-center flex-wrap flex-sm-nowrap">
+            <div class="mb-3 mt-2 mx-sm-2">
+              <label class="sr-only">Search</label>
+              <input
+                type="date"
+                class="form-control"
+                placeholder="Search"
+                onChange={handleDateChange}
+              />{" "}
+            </div>
+            &nbsp;
+            <button type="submit" class="btn btn-primary mb-2">
+              Filter By Date
+            </button>
+          </div>
 
           <form class="d-flex align-items-center flex-wrap flex-sm-nowrap">
             <div class="mb-3 mt-2 mx-sm-2">
@@ -122,10 +159,10 @@ const SavingsList = () => {
                 </tr>
               </thead>
               <tbody>
-                {customers.map((customer, index) => (
+                {displayedCustomers.map((customer, index) => (
                   <tr key={index}>
                     <td>
-                      <strong>{index}</strong>
+                      <strong>{index + 1}</strong>
                     </td>
                     <td>
                       <a href="/customer-profile">{customer.name}</a>
@@ -134,8 +171,8 @@ const SavingsList = () => {
                     <td>{customer.customersPhoneNo}</td>
                     <td>{customer.accountBalance}</td>
                     <td>uche Chioma</td>
-                    <td>May 17, 2023, 9:23 a.m.</td>
-                    <td>June 27, 2023, 2:19 p.m.</td>
+                    <td>{formatDate(customer.createdAt)}</td>
+                    <td>{formatDate(customer.updatedAt)}</td>
                     <td>
                       <div class="dropdown">
                         <button

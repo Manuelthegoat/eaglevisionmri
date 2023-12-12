@@ -21,6 +21,7 @@ import AddDepositWithdrawal from "./Pages/AddDepositWithdrawal";
 import LoanApplicantsDetails from "./Pages/LoanApplicantsDetails";
 import CustomerAvailableBalance from "./Pages/CustomerAvailableBalance";
 import UsersDetails from "./Pages/UsersDetails";
+import RepayLoan from "./Pages/RepayLoan";
 
 const Routing = () => {
   return (
@@ -34,10 +35,11 @@ const Routing = () => {
         <Route path="/savings-list" element={<SavingsList />} />
         <Route path="/loans" element={<Loans />} />
         <Route path="/add-contribution/:id" element={<AddDepositWithdrawal />} />
+        <Route path="/repay-loan/:id" element={<RepayLoan />} />
         <Route path="/users" element={<Users />} />
         <Route path="/users-list" element={<UsersList />} />
         <Route
-          path="/loan-applicants-details"
+          path="/loan-applicants-details/:id"
           element={<LoanApplicantsDetails />}
         />
         <Route
