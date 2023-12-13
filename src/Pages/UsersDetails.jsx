@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import Loader from "../Components/Loader/Loader";
 
 const UsersDetails = () => {
   const [userDetails, setUserDetails] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const { id } = useParams();
   useEffect(() => {
-    fetch(`https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/register/${id}`)
+    fetch(`https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/users/${id}`)
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -19,12 +21,16 @@ const UsersDetails = () => {
       })
       .catch((error) =>
         console.log("Error fetching specific customer data: ", error)
-      );
+      )
+      .finally(() => setLoading(false));
   }, [id]);
   return (
     <>
+      {loading && <Loader />}
       <div className="row">
-        <h2>Savings Collected By {userDetails?.firstName} {userDetails?.lastName}</h2>
+        <h2>
+          Savings Collected By {userDetails?.firstName} {userDetails?.lastName}
+        </h2>
         <div class="col-xl-4 col-xxl-4 col-sm-6">
           <div class="card crm-cart bg-primary border-0">
             <div class="card-header border-0 pt-15"></div>
@@ -97,7 +103,9 @@ const UsersDetails = () => {
 
                       <td>Jan. 13, 2023</td>
                       <td>DEPOSIT</td>
-                      <td><span class="badge light badge-success">Credit</span></td>
+                      <td>
+                        <span class="badge light badge-success">Credit</span>
+                      </td>
                       <td>2,000.0</td>
                       <td>-----</td>
                       <td>146,000.0</td>

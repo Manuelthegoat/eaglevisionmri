@@ -7,7 +7,7 @@ const UsersList = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/register")
+    fetch("https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/users")
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -47,7 +47,7 @@ const UsersList = () => {
               Search
             </button>
             &nbsp;&nbsp;
-            <button className="btn btn-primary mb-2">Add New User</button>
+            <a href="/add-user" className="btn btn-primary mb-2">Add New User</a>
           </form>
         </div>
         <div className="card-body">

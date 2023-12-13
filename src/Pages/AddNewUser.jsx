@@ -33,7 +33,7 @@ const AddNewUser = () => {
 
     try {
       const response = await fetch(
-        "https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/register",
+        "https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/users/register",
         {
           method: "POST",
           headers: {

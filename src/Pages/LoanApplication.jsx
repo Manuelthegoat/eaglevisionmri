@@ -38,6 +38,7 @@ const LoanApplication = () => {
   const [guarantor2Occupation, setGuarantor2Occupation] = useState("");
   const [guarantor2HouseAddress, setGuarantor2HouseAddress] = useState("");
   const [guarantor2OfficeAddress, setGuarantor2OfficeAddress] = useState("");
+  const [interestRate, setinterestRate] = useState("");
 
   useEffect(() => {
     fetch("https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/customers")
@@ -66,7 +67,7 @@ const LoanApplication = () => {
     const payload = {
       customerId: customerSelection,
       amount: loanAmount,
-      interestRate: 10,
+      interestRate: interestRate,
       loanStartDate: loanStartDate,
       loanEndDate: loanEndDate,
       repaymentSchedule: repaymentSchedule,
@@ -281,7 +282,7 @@ const LoanApplication = () => {
                 </div>
                 <h3>LOAN REQUEST DETAILS</h3>
                 <div class="row">
-                  <div class="mb-3 col-md-6">
+                  <div class="mb-3 col-md-4">
                     <label class="form-label">LOAN REQUESTED AMOUNT</label>
                     <div class="input-group mb-3">
                       <span class="input-group-text border-0">&#8358;</span>
@@ -293,7 +294,7 @@ const LoanApplication = () => {
                       />
                     </div>
                   </div>
-                  <div class="mb-3 col-md-6">
+                  <div class="mb-3 col-md-4">
                     <label class="form-label">LOAN TENURE/DURATION</label>
                     <select
                       id="inputState"
@@ -306,6 +307,18 @@ const LoanApplication = () => {
                       <option value={"twomonths"}>2 Month (60 Days)</option>
                       <option value={"threemonths"}>3 Month (90 Days)</option>
                     </select>
+                  </div>
+                  <div class="mb-3 col-md-4">
+                    <label class="form-label">Interest Rate</label>
+                    <div class="input-group mb-3">
+                      <span class="input-group-text border-0">&#8358;</span>
+                      <input
+                        type="number"
+                        value={interestRate}
+                        onChange={(e) => setinterestRate(e.target.value)}
+                        class="form-control"
+                      />
+                    </div>
                   </div>
                 </div>
                 <div class="row">

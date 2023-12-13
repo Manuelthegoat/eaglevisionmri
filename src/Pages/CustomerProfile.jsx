@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import Loader from "../Components/Loader/Loader";
 
 const CustomerProfile = () => {
   const [customerDetails, setCustomerDetails] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const { id } = useParams();
   useEffect(() => {
@@ -21,10 +23,12 @@ const CustomerProfile = () => {
       })
       .catch((error) =>
         console.log("Error fetching specific customer data: ", error)
-      );
+      )
+      .finally(() => setLoading(false));
   }, [id]);
   return (
     <>
+      {loading && <Loader />}
       <div class="row">
         <div class="col-lg-12">
           <div class="profile card card-body px-3 pt-3 pb-0">

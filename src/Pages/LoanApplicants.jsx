@@ -1,124 +1,113 @@
 import React, { useState, useEffect } from "react";
 import Loader from "../Components/Loader/Loader";
-import { Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
+import { Link } from "react-router-dom";
 
 const LoanApplicants = () => {
-  const [loans, setloans] = useState([]);
+  const [loans, setLoans] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [deleting, setDeleting] = useState(false);
-  const [customerDetails, setCustomerDetails] = useState(null);
-  const [startDate, setStartDate] = useState(""); // Step 1
-  const [endDate, setEndDate] = useState(""); // Step 1
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [customerData, setCustomerData] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
 
-        // Use the selected start and end dates in the API URL
-        const apiUrl = `https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/loans/by-payment-date?startDate=${startDate}&endDate=${endDate}`;
+        let apiUrl;
+
+        if (startDate && endDate) {
+          // If start and end dates are provided, fetch data for the date range
+          apiUrl = `https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/loans/by-payment-date?startDate=${startDate}&endDate=${endDate}`;
+        } else {
+          // If start and end dates are not provided, fetch all data
+          apiUrl = "https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/loans";
+        }
+
         const response = await fetch(apiUrl);
         const data = await response.json();
 
-        // Extract the customer IDs
-        const customerIds = data.data.map((loan) => loan.customer);
+        setLoans(data.data);
 
-        // Fetch details for each customer
-        const customerDetailsPromises = customerIds.map((id) =>
-          fetch(
-            `https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/customers/${id}`
-          ).then((response) => response.json())
-        );
-
-        // Await all promises to complete
-        const customerDetailsResponses = await Promise.all(
-          customerDetailsPromises
-        );
-
-        // Extract data from each response
-        const customerDetailsData = customerDetailsResponses.map(
-          (response) => response.data
-        );
-
-        // Map the customer data to the respective loan
-        const loansWithCustomerDetails = data.data.map((loan, index) => {
-          return {
-            ...loan,
-            customerDetails: customerDetailsData[index],
-          };
+        const promises = data.data?.map(async (loan) => {
+          const customerId = loan.customer;
+          if (customerId) {
+            const customerResponse = await fetch(
+              `https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/customers/${customerId}`
+            );
+            const customerData = await customerResponse.json();
+            return customerData.data;
+          }
+          return null;
         });
 
-        setloans(loansWithCustomerDetails);
+        // Wait for all customer details to be fetched
+        const customerResults = await Promise.all(promises);
+        setCustomerData(customerResults);
       } catch (error) {
         console.error("Error fetching data: ", error);
-        toast.error("Customer Failed To Fetch");
+        toast.error("Failed to fetch loan data");
       } finally {
         setLoading(false);
       }
     };
 
-    // Fetch data only if start and end dates are provided
-    if (startDate && endDate) {
-      fetchData();
-    }
+    fetchData();
   }, [startDate, endDate]);
+
   const handleSearch = (e) => {
     e.preventDefault();
-
-    // Step 4: Update state variables with the selected dates
-    // (You may want to add validation here before setting the dates)
     setStartDate(e.target.elements.startDate.value);
     setEndDate(e.target.elements.endDate.value);
   };
+
+  function safeSumAndFormat(a, b) {
+    const numberA = parseFloat(a);
+    const numberB = parseFloat(b);
+
+    if (!isNaN(numberA) && !isNaN(numberB)) {
+      return (numberA + numberB).toFixed(2);
+    }
+
+    return "N/A"; // or some other default value if the conversion fails
+  }
 
   return (
     <>
       {loading && <Loader />}
       <div className="card">
         <div className="card-header">
-          <h4 class="card-title">Loan Application List</h4>
+          <h4 className="card-title">Loan Application List</h4>
 
           <form
-            class="d-flex align-items-center flex-wrap flex-sm-nowrap"
+            className="d-flex align-items-center flex-wrap flex-sm-nowrap"
             onSubmit={handleSearch}
           >
-            <div class="mb-3 mt-2 mx-sm-2">
-              <label class="sr-only">Search</label>
+            <div className="mb-3 mt-2 mx-sm-2">
+              <label className="sr-only">Search</label>
               <input
                 type="date"
-                class="form-control"
+                className="form-control"
                 placeholder="Select start date"
                 name="startDate"
               />
               <input
                 type="date"
-                class="form-control"
-                placeholder="select end date"
+                className="form-control"
+                placeholder="Select end date"
                 name="endDate"
               />
             </div>
             &nbsp;
-            <button type="submit" class="btn btn-primary mb-2">
+            <button type="submit" className="btn btn-primary mb-2">
               Search
             </button>
-          </form>
-          <form class="d-flex align-items-center flex-wrap flex-sm-nowrap">
-            <div class="mb-3 mt-2 mx-sm-2">
-              <label class="sr-only">Search</label>
-              <input type="Search" class="form-control" placeholder="Search" />
-            </div>
-            &nbsp;
-            <button type="submit" class="btn btn-primary mb-2">
-              Search
-            </button>
-            &nbsp;&nbsp;
-            <button className="btn btn-primary mb-2">Export As Excel</button>
           </form>
         </div>
         <div className="card-body">
-          <div class="table-responsive">
-            <table class="table table-responsive-md">
+          <div className="table-responsive">
+            <table className="table table-responsive-md">
               <thead>
                 <tr>
                   <th style={{ width: "80px" }}>
@@ -143,6 +132,9 @@ const LoanApplicants = () => {
                     <strong>Balance</strong>
                   </th>
                   <th>
+                    <strong>Payment Date</strong>
+                  </th>
+                  <th>
                     <strong>Approved Date</strong>
                   </th>
                   <th>
@@ -153,29 +145,41 @@ const LoanApplicants = () => {
               </thead>
               <tbody>
                 {loans.map((loanitem, index) => (
-                  <tr>
+                  <tr key={index}>
                     <td>
-                      <strong>01</strong>
+                      <strong>{index + 1}</strong>
                     </td>
+
                     <td>
-                      {loanitem.customerDetails?.name}
-                      <br />
+                      {customerData ? (
+                        <>
+                          {customerData[index]?.name}
+                          <br />
+                          {customerData[index]?.customersPhoneNo}
+                        </>
+                      ) : (
+                        "Loading customer data..."
+                      )}
                       {loanitem.loanTitle}
-                      <br />
-                      {loanitem.customerDetails?.customersPhoneNo}
                     </td>
                     <td>&#8358; {loanitem.amount}</td>
                     <td>&#8358; {loanitem.interestRate}</td>
-                    <td>&#8358;3,720,000.0</td>
-                    <td>0</td>
-                    <td>&#8358;3,720,000.0</td>
-                    <td> {loanitem.loanStartDate}</td>
+                    <td>&#8358;{safeSumAndFormat(loanitem.amount, loanitem.interestRate)}</td>
+                    <td>&#8358;{loanitem.repaymentAmount}</td>
+                    <td>&#8358;{loanitem.balance}</td>
+                    <td>
+                      {" "}
+                      {loanitem.paymentDate
+                        ? new Date(loanitem.paymentDate).toDateString()
+                        : "N/A"}
+                    </td>
+                    <td>{loanitem.loanStartDate}</td>
                     <td>{loanitem.loanEndDate}</td>
                     <td>
-                      <div class="dropdown">
+                      <div className="dropdown">
                         <button
                           type="button"
-                          class="btn btn-success light sharp"
+                          className="btn btn-success light sharp"
                           data-bs-toggle="dropdown"
                         >
                           <svg
@@ -197,18 +201,17 @@ const LoanApplicants = () => {
                             </g>
                           </svg>
                         </button>
-                        <div class="dropdown-menu">
-                          <a
+                        <div className="dropdown-menu">
+                        <Link
+                            to={`/loan-applicants-details/${loanitem._id}`}
                             class="dropdown-item"
-                            href="/loan-applicants-details"
                           >
                             View Details
-                          </a>
-                          <a class="dropdown-item" href="#">
+                          </Link>
+                          <a className="dropdown-item" href="#">
                             Edit
                           </a>
-
-                          <a class="dropdown-item" href="#">
+                          <a className="dropdown-item" href="#">
                             Delete
                           </a>
                         </div>

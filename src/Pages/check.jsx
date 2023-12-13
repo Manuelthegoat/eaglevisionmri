@@ -8,11 +8,7 @@ const RepayLoan = () => {
   const [loanApplicantsDetails, setLoanApplicantsDetails] = useState(null);
   const [customerDetails, setCustomerDetails] = useState(null);
   const [repaymentAmount, setRepaymentAmount] = useState("");
-  const [debitCredit, setDebitCredit] = useState("");
   const [repaymentDate, setRepaymentDate] = useState("");
-  const [paymentDate, setPaymentDate] = useState("");
-  const [interestRate, setInterestRate] = useState("");
-  const [type, setType] = useState("");
 
   const { id } = useParams();
   const navigate = useNavigate();
@@ -55,24 +51,21 @@ const RepayLoan = () => {
     e.preventDefault();
 
     const formData = {
-      type: debitCredit === "debit" ? "withdrawal" : "deposit",
       customerId: customerDetails._id,
       amount: repaymentAmount,
       interestRate: loanApplicantsDetails?.interestRate,
       loanStartDate: loanApplicantsDetails?.loanStartDate,
       loanEndDate: loanApplicantsDetails?.loanEndDate,
       repaymentDate: repaymentDate,
-      modeOfPayment: type,
-      paymentDate: paymentDate,
+      // paymentDate: paymentDate,
     };
 
     console.log(formData);
     setLoading(true);
-    const postEndpoint = debitCredit === "debit" ? "/loans/withdrawals" : "/loans/deposits";
 
     try {
       const response = await fetch(
-        `https://cute-teal-clownfish-belt.cyclic.cloud/api/v1${postEndpoint}`,
+        `https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/loans/withdrawals`,
         {
           method: "POST",
           headers: {
@@ -115,21 +108,6 @@ const RepayLoan = () => {
             <div class="basic-form">
               <div>
                 <div class="row">
-                <div class="mb-3 col-md-6">
-                    <label class="form-label">Choose Debit / Credit</label>
-                    <select
-                      value={debitCredit}
-                      onChange={(e) => {
-                        setDebitCredit(e.target.value);
-                        console.log('Value after changing debitCredit:', e.target.value);
-                    }} class="default-select form-control wide"
-                    >
-                      <option value="">Select One</option>
-                      <option value="credit">Credit</option>
-                      <option value="debit">Debit</option>
-                    </select>
-                  </div>
-
                   <div class="mb-3 col-md-6">
                     <label class="form-label">Customer</label>
                     <p>{customerDetails?.name}</p>
@@ -145,25 +123,8 @@ const RepayLoan = () => {
                     />
                   </div>
                   <div class="mb-3 col-md-6">
-                    <label class="form-label">Type</label>
-                    <select
-                      value={type}
-                      onChange={(e) => setType(e.target.value)}
-                      class="default-select form-control wide"
-                    >
-                      <option value="cash">Cash</option>
-                      <option value="transfer">Transfer</option>
-                    </select>
-                  </div>
-                  <div class="mb-3 col-md-6">
                     <label class="form-label">Interest Rate</label>
-                    <input
-                      type="number"
-                      class="form-control"
-                      placeholder={loanApplicantsDetails?.interestRate}
-                      value={interestRate}
-                      onChange={(e) => setInterestRate(e.target.value)}
-                    />
+                    <p>{loanApplicantsDetails?.interestRate}</p>
                   </div>
                   <div class="mb-3 col-md-6">
                     <label class="form-label">Loan Start Date</label>
@@ -174,15 +135,6 @@ const RepayLoan = () => {
                     <p>{loanApplicantsDetails?.loanEndDate}</p>
                   </div>
 
-                  <div class="mb-3 col-md-6">
-                    <label class="form-label">Payment Date</label>
-                    <input
-                      type="date"
-                      class="form-control"
-                      value={paymentDate}
-                      onChange={(e) => setPaymentDate(e.target.value)}
-                    />
-                  </div>
                   <div class="mb-3 col-md-6">
                     <label class="form-label">Re-Payment Date</label>
                     <input

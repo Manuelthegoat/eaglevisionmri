@@ -16,7 +16,7 @@ const Login = () => {
     setLoading(true);
     try {
       const response = await fetch(
-        "https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/login",
+        "https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/users/login",
         {
           method: "POST",
           headers: {

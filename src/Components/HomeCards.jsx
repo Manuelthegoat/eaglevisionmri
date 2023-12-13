@@ -372,7 +372,32 @@ const deposit = {
     },
   },
 };
-const   HomeCards = () => {
+const HomeCards = () => {
+  const [customers, setCustomers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [totalDeposit, setTotalDeposit] = useState(0);
+
+
+  useEffect(() => {
+    fetch("https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/customers")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Fetched Data:", data.data);
+        setCustomers(data.data);
+        const totalBalance = data.data.reduce((sum, customer) => sum + customer.accountBalance, 0);
+        setTotalDeposit(totalBalance);
+       
+      })
+      .catch((error) => {
+        console.log("Error fetching data: ", error);
+      })
+      .finally(() => setLoading(false)); // Set loading to false here, after success or error
+  }, []);
   return (
     <div>
        {loading && <Loader />}

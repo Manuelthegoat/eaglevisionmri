@@ -5,17 +5,19 @@ import "react-toastify/dist/ReactToastify.css";
 import Loader from "../Components/Loader/Loader";
 import { CookiesProvider, useCookies } from "react-cookie";
 
+
 const AddDepositWithdrawal = () => {
   const [customerDetails, setCustomerDetails] = useState(null);
   const [amount, setAmount] = useState("");
   const [user, setUser] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [cookies] = useCookies(["userId"]);
   const [debitCredit, setDebitCredit] = useState("");
   const [type, setType] = useState("");
   const [collectedBy, setCollectedBy] = useState("");
   const [paymentDate, setPaymentDate] = useState("");
   const [description, setDescription] = useState("");
+
   const navigate = useNavigate()
 
   const { id } = useParams();
@@ -35,11 +37,11 @@ const AddDepositWithdrawal = () => {
       })
       .catch((error) =>
         console.log("Error fetching specific customer data: ", error)
-      );
+      ) .finally(() => setLoading(false));
   }, [id]);
   useEffect(() => {
     fetch(
-      `https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/register/${cookies.userId}`
+      `https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/users/${cookies.userId}`
     )
       .then((response) => {
         if (!response.ok) {
@@ -52,8 +54,8 @@ const AddDepositWithdrawal = () => {
         setUser(data.data);
       })
       .catch((error) =>
-        console.log("Error fetching specific customer data: ", error)
-      );
+        console.log("Error fetching Logged In data: ", error)
+      ) .finally(() => setLoading(false));
   }, []);
 
   const handleSubmit = async (e) => {
@@ -66,7 +68,7 @@ const AddDepositWithdrawal = () => {
       customerId: customerDetails?._id,
       collectedBy: user.firstName && user.lastName,
       description: description,
-      // paymentDate: paymentDate,
+      paymentDate: paymentDate,
       
     };
     if (debitCredit !== "debit") {

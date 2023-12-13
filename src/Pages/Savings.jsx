@@ -4,10 +4,12 @@ import Loader from "../Components/Loader/Loader";
 const Savings = () => {
   const [customers, setCustomers] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [totalDeposit, setTotalDeposit] = useState(0);
+  const [totalWithdrawals, settotalWithdrawals] = useState([]);
+  const [totalWithdrawalsCash, settotalWithdrawalsCash] = useState([]);
+  const [totalDepositTf, setTotalDepositTf] = useState([]);
 
   useEffect(() => {
-    fetch("https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/customers")
+    fetch("https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/transactions/totalDepositByCashByPaymentDate?startDate=2023-01-01&endDate=2023-12-31")
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -17,17 +19,80 @@ const Savings = () => {
       .then((data) => {
         console.log("Fetched Data:", data.data);
         setCustomers(data.data);
-        const totalBalance = data.data.reduce(
-          (sum, customer) => sum + customer.accountBalance,
-          0
-        );
-        setTotalDeposit(totalBalance);
+       
       })
       .catch((error) => {
         console.log("Error fetching data: ", error);
       })
       .finally(() => setLoading(false)); // Set loading to false here, after success or error
   }, []);
+  useEffect(() => {
+    fetch("https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/transactions/totalWithdrawalsByTransferByPaymentDate?startDate=2023-01-01&endDate=2023-12-31")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Fetched Data:", data.data);
+        settotalWithdrawals(data.data);
+       
+      })
+      .catch((error) => {
+        console.log("Error fetching data: ", error);
+      })
+      .finally(() => setLoading(false)); // Set loading to false here, after success or error
+  }, []);
+  useEffect(() => {
+    fetch("https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/transactions/totalWithdrawalsByCashByPaymentDate?startDate=2023-01-01&endDate=2023-12-31")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Fetched Data:", data.data);
+        settotalWithdrawalsCash(data.data);
+       
+      })
+      .catch((error) => {
+        console.log("Error fetching data: ", error);
+      })
+      .finally(() => setLoading(false)); // Set loading to false here, after success or error
+  }, []);
+  useEffect(() => {
+    fetch("https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/transactions/totalDepositByTransferByPaymentDate?startDate=2023-01-01&endDate=2023-12-31")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Fetched Data:", data.data);
+        setTotalDepositTf(data.data);
+       
+      })
+      .catch((error) => {
+        console.log("Error fetching data: ", error);
+      })
+      .finally(() => setLoading(false)); // Set loading to false here, after success or error
+  }, []);
+
+  
+  function safeSumAndFormat(a, b) {
+    const numberA = parseFloat(a);
+    const numberB = parseFloat(b);
+
+    if (!isNaN(numberA) && !isNaN(numberB)) {
+      return (numberA + numberB)?.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+    }
+
+    return "N/A"; // or some other default value if the conversion fails
+  }
+
   return (
     <>
      {loading && <Loader />}
@@ -56,10 +121,10 @@ const Savings = () => {
             </div>
             <div class="card-body">
               <div class="crm-cart-data">
-                <p class="text-white">&#8358; {totalDeposit.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                <p class="text-white">&#8358; {safeSumAndFormat(customers.totalDepositAmount, totalDepositTf.totalDepositAmount)}</p>
                 <span class="d-block mb-3 text-white">Total Savings</span>
                 <span class="badge bg-white text-black border-0">
-                  Last 4 Month
+                  1 year
                 </span>
               </div>
             </div>
@@ -88,10 +153,10 @@ const Savings = () => {
             </div>
             <div class="card-body">
               <div class="crm-cart-data">
-                <p class="text-white">&#8358; {totalDeposit.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                <p class="text-white">&#8358; {(customers.totalDepositAmount)?.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                 <span class="d-block mb-3 text-white">Collected Via CASH</span>
                 <span class="badge bg-white text-black border-0">
-                  Last 4 Month
+                  i year
                 </span>
               </div>
             </div>
@@ -120,12 +185,12 @@ const Savings = () => {
             </div>
             <div class="card-body">
               <div class="crm-cart-data">
-                <p class="text-white">&#8358; 0</p>
+                <p class="text-white">&#8358; {(totalDepositTf.totalDepositAmount)?.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                 <span class="d-block mb-3 text-white">
                   Collected Via Transfer
                 </span>
                 <span class="badge bg-white text-black border-0">
-                  Last 6 Month
+                  1 year
                 </span>
               </div>
             </div>
@@ -157,7 +222,7 @@ const Savings = () => {
             </div>
             <div class="card-body">
               <div class="crm-cart-data">
-                <p class="text-white">&#8358; 197,182,250.0</p>
+                <p class="text-white">&#8358; {safeSumAndFormat(totalWithdrawalsCash.totalWithdrawalsAmount, totalWithdrawals.totalWithdrawalsAmount)}</p>
                 <span class="d-block mb-3 text-white">Total Withdrawals</span>
                 <span class="badge bg-white text-black border-0">
                   Last 4 Month
@@ -189,7 +254,7 @@ const Savings = () => {
             </div>
             <div class="card-body">
               <div class="crm-cart-data">
-                <p class="text-white">&#8358; 51,789,550.0</p>
+                <p class="text-white">&#8358; {(totalWithdrawalsCash.totalWithdrawalsAmount)?.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                 <span class="d-block mb-3 text-white">Withdrawn Via CASH</span>
                 <span class="badge bg-white text-black border-0">
                   Last 4 Month
@@ -221,7 +286,7 @@ const Savings = () => {
             </div>
             <div class="card-body">
               <div class="crm-cart-data">
-                <p class="text-white">&#8358; 145,328,200.0</p>
+                <p class="text-white">&#8358; {(totalWithdrawals.totalWithdrawalsAmount)?.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                 <span class="d-block mb-3 text-white">
                   Withdrawn Via Transfer
                 </span>
