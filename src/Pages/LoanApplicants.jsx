@@ -125,9 +125,9 @@ const LoanApplicants = () => {
                   <th>
                     <strong>Total Loan + Interest(&#8358;)</strong>
                   </th>
-                  <th>
+                  {/* <th>
                     <strong>Repayment (&#8358;)</strong>
-                  </th>
+                  </th> */}
                   <th>
                     <strong>Balance</strong>
                   </th>
@@ -153,7 +153,12 @@ const LoanApplicants = () => {
                     <td>
                       {customerData ? (
                         <>
-                          {customerData[index]?.name}
+                          <Link
+                            to={`/loan-applicants-details/${loanitem._id}`}
+                            class="dropdown-item"
+                          >
+                            {customerData[index]?.name}
+                          </Link>
                           <br />
                           {customerData[index]?.customersPhoneNo}
                         </>
@@ -164,8 +169,11 @@ const LoanApplicants = () => {
                     </td>
                     <td>&#8358; {loanitem.amount}</td>
                     <td>&#8358; {loanitem.interestRate}</td>
-                    <td>&#8358;{safeSumAndFormat(loanitem.amount, loanitem.interestRate)}</td>
-                    <td>&#8358;{loanitem.repaymentAmount}</td>
+                    <td>
+                      &#8358;
+                      {safeSumAndFormat(loanitem.amount, loanitem.interestRate)}
+                    </td>
+                    {/* <td>&#8358;{loanitem.repaymentAmount}</td> */}
                     <td>&#8358;{loanitem.balance}</td>
                     <td>
                       {" "}
@@ -202,7 +210,7 @@ const LoanApplicants = () => {
                           </svg>
                         </button>
                         <div className="dropdown-menu">
-                        <Link
+                          <Link
                             to={`/loan-applicants-details/${loanitem._id}`}
                             class="dropdown-item"
                           >
