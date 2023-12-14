@@ -101,7 +101,7 @@ const SavingsList = () => {
             </button>
           </div>
 
-          <form class="d-flex align-items-center flex-wrap flex-sm-nowrap">
+          {/* <form class="d-flex align-items-center flex-wrap flex-sm-nowrap">
             <div class="mb-3 mt-2 mx-sm-2">
               <label class="sr-only">Search</label>
               <input type="date" class="form-control" placeholder="Search" />
@@ -112,7 +112,7 @@ const SavingsList = () => {
               Search by Payment date
             </button>
            
-          </form>
+          </form> */}
           <form class="d-flex align-items-center flex-wrap flex-sm-nowrap">
             <div class="mb-3 mt-2 mx-sm-2">
               <label class="sr-only">Search</label>

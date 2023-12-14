@@ -4,6 +4,7 @@ import Loader from "../Components/Loader/Loader";
 
 const CustomerProfile = () => {
   const [customerDetails, setCustomerDetails] = useState(null);
+  const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const { id } = useParams();
@@ -20,6 +21,25 @@ const CustomerProfile = () => {
       .then((data) => {
         console.log("Fetched Specific Customer Data:", data.data);
         setCustomerDetails(data.data);
+      })
+      .catch((error) =>
+        console.log("Error fetching specific customer data: ", error)
+      )
+      .finally(() => setLoading(false));
+  }, [id]);
+  useEffect(() => {
+    fetch(
+      `https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/transactions/customer/${id}/transactions`
+    )
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Fetched Specific Customer Data:", data.data);
+        setTransactions(data.data);
       })
       .catch((error) =>
         console.log("Error fetching specific customer data: ", error)
@@ -154,62 +174,93 @@ const CustomerProfile = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td>Dec. 30, 2022</td>
+                    {transactions.map((transact) => (
+                      <tr>
+                        <td>
+                          {transact.paymentDate
+                            ? new Date(transact.paymentDate).toDateString()
+                            : "N/A"}
+                        </td>
 
-                      <td>Deposit</td>
-                      <td>
-                        <span class="badge light badge-success">Credit</span>
-                      </td>
-                      <td>35,000.0</td>
-                      <td>--------</td>
-                      <td>35,100.0</td>
-                      <td>100.0</td>
-                      <td>CASH</td>
-                      <td>nmesonma Ezeh</td>
-                      <td>--------</td>
-                      <td>Jan. 1, 2023, 5:27 p.m.</td>
-                      <td>Jan. 1, 2023, 5:27 p.m.</td>
-                      <td>
-                        <div class="dropdown">
-                          <button
-                            type="button"
-                            class="btn btn-success light sharp"
-                            data-bs-toggle="dropdown"
-                          >
-                            <svg
-                              width="20px"
-                              height="20px"
-                              viewBox="0 0 24 24"
-                              version="1.1"
+                        <td>
+                          {transact.description ? transact.description : "N/A"}
+                        </td>
+                        <td>
+                          <span class="badge light badge-success">
+                            {transact.type?.toUpperCase()}
+                          </span>
+                        </td>
+                        <td>
+                          {transact.amount?.toLocaleString("en-US", {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                          })}
+                        </td>
+                        <td>--------</td>
+                        <td>35,100.0</td>
+                        <td>100.0</td>
+                        <td>
+                          {transact.modeOfPayment
+                            ? transact.modeOfPayment?.toUpperCase()
+                            : "N/A"}
+                        </td>
+                        <td>
+                          {transact.collectedBy ? transact.collectedBy?.toUpperCase() : "N/A"}
+                        </td>
+                        <td>--------</td>
+                        <td>{new Date(transact.createdAt).toDateString()}</td>
+                        <td>{new Date(transact.updatedAt).toDateString()}</td>
+                        <td>
+                          <div class="dropdown">
+                            <button
+                              type="button"
+                              class="btn btn-success light sharp"
+                              data-bs-toggle="dropdown"
                             >
-                              <g
-                                stroke="none"
-                                stroke-width="1"
-                                fill="none"
-                                fill-rule="evenodd"
+                              <svg
+                                width="20px"
+                                height="20px"
+                                viewBox="0 0 24 24"
+                                version="1.1"
                               >
-                                <rect x="0" y="0" width="24" height="24" />
-                                <circle fill="#000000" cx="5" cy="12" r="2" />
-                                <circle fill="#000000" cx="12" cy="12" r="2" />
-                                <circle fill="#000000" cx="19" cy="12" r="2" />
-                              </g>
-                            </svg>
-                          </button>
-                          <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#">
-                              View Details
-                            </a>
-                            <a class="dropdown-item" href="#">
-                              Edit
-                            </a>
-                            <a class="dropdown-item" href="#">
-                              Delete
-                            </a>
+                                <g
+                                  stroke="none"
+                                  stroke-width="1"
+                                  fill="none"
+                                  fill-rule="evenodd"
+                                >
+                                  <rect x="0" y="0" width="24" height="24" />
+                                  <circle fill="#000000" cx="5" cy="12" r="2" />
+                                  <circle
+                                    fill="#000000"
+                                    cx="12"
+                                    cy="12"
+                                    r="2"
+                                  />
+                                  <circle
+                                    fill="#000000"
+                                    cx="19"
+                                    cy="12"
+                                    r="2"
+                                  />
+                                </g>
+                              </svg>
+                            </button>
+                            <div class="dropdown-menu">
+                              <a class="dropdown-item" href="#">
+                                View Details
+                              </a>
+                              <a class="dropdown-item" href="#">
+                                Edit
+                              </a>
+                              <a class="dropdown-item" href="#">
+                                Delete
+                              </a>
+                            </div>
                           </div>
-                        </div>
-                      </td>
-                    </tr>
+                        </td>
+                      </tr>
+                    ))}
                   </tbody>
                 </table>
               </div>
