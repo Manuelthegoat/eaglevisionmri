@@ -373,10 +373,11 @@ const deposit = {
   },
 };
 const HomeCards = () => {
+  const [customerss, setCustomerss] = useState([]);
   const [customers, setCustomers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [totalDeposit, setTotalDeposit] = useState(0);
-
+  const [totalDepositTf, setTotalDepositTf] = useState([]);
 
   useEffect(() => {
     fetch("https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/customers")
@@ -388,7 +389,7 @@ const HomeCards = () => {
       })
       .then((data) => {
         console.log("Fetched Data:", data.data);
-        setCustomers(data.data);
+        setCustomerss(data.data);
         const totalBalance = data.data.reduce((sum, customer) => sum + customer.accountBalance, 0);
         setTotalDeposit(totalBalance);
        
@@ -398,9 +399,60 @@ const HomeCards = () => {
       })
       .finally(() => setLoading(false)); // Set loading to false here, after success or error
   }, []);
+  useEffect(() => {
+    fetch(
+      "https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/transactions/totalDepositByCashByPaymentDate?startDate=2023-01-01&endDate=2023-12-31"
+    )
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Fetched Data:", data.data);
+        setCustomers(data.data);
+      })
+      .catch((error) => {
+        console.log("Error fetching data: ", error);
+      })
+      .finally(() => setLoading(false)); // Set loading to false here, after success or error
+  }, []);
+  useEffect(() => {
+    fetch(
+      "https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/transactions/totalDepositByTransferByPaymentDate?startDate=2023-01-01&endDate=2023-12-31"
+    )
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Fetched Data:", data.data);
+        setTotalDepositTf(data.data);
+      })
+      .catch((error) => {
+        console.log("Error fetching data: ", error);
+      })
+      .finally(() => setLoading(false)); // Set loading to false here, after success or error
+  }, []);
+  function safeSumAndFormat(a, b) {
+    const numberA = parseFloat(a);
+    const numberB = parseFloat(b);
+
+    if (!isNaN(numberA) && !isNaN(numberB)) {
+      return (numberA + numberB)?.toLocaleString("en-US", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      });
+    }
+
+    return "N/A"; // or some other default value if the conversion fails
+  }
   return (
     <div>
-       {loading && <Loader />}
+      {loading && <Loader />}
       <div class="col-xl-12">
         <div class="row">
           <a href="/customers-list" class="col-xl-4 col-sm-4">
@@ -408,7 +460,7 @@ const HomeCards = () => {
               <div class="card-header border-0 flex-wrap">
                 <div class="revenue-date">
                   <span>All Customers</span>
-                  <h4 class="text-white">{customers.length}</h4>
+                  <h4 class="text-white">{customerss.length}</h4>
                 </div>
               </div>
               <div class="card-body pb-0 custome-tooltip d-flex align-items-center">
@@ -429,7 +481,7 @@ const HomeCards = () => {
               <div class="card-header border-0">
                 <div class="revenue-date">
                   <span class="text-black">Active Customers</span>
-                  <h4 class="text-black">{customers.length}</h4>
+                  <h4 class="text-black">{customerss.length}</h4>
                 </div>
               </div>
               <div class="card-body pb-0 custome-tooltip d-flex align-items-center">
@@ -516,7 +568,13 @@ const HomeCards = () => {
                 <div class="depostit-card-media d-flex justify-content-between pb-0">
                   <div>
                     <h6>Total Deposit</h6>
-                    <h3>&#8358; {totalDeposit.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</h3>
+                    <h3>
+                      &#8358;{" "}
+                      {safeSumAndFormat(
+                        customers.totalDepositAmount,
+                        totalDepositTf.totalDepositAmount
+                      )}
+                    </h3>
                   </div>
                   <div class="icon-box bg-primary">
                     <svg
