@@ -68,6 +68,7 @@ const AddDepositWithdrawal = () => {
       customerId: customerDetails?._id,
       collectedBy: user.firstName && user.lastName,
       description: description,
+      modeOfPayment: type,
       paymentDate: paymentDate,
       
     };
@@ -162,6 +163,7 @@ const AddDepositWithdrawal = () => {
                     >
                       <option value="cash">Cash</option>
                       <option value="transfer">Transfer</option>
+                      <option value="credit_card">Credit Card</option>
                     </select>
                   </div>
                   <div class="mb-3 col-md-6">
