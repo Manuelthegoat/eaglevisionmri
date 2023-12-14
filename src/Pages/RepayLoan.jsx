@@ -16,7 +16,29 @@ const RepayLoan = () => {
 
   const { id } = useParams();
   const navigate = useNavigate();
+  const deleteLoan = async () => {
+    try {
+      const response = await fetch(
+        `https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/loans/${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const data = await response.json();
+      console.log("Deleted Loan:", data);
+    } catch (error) {
+      console.error("There was a problem with the delete operation:", error.message);
+      toast.error("An Error Occurred while deleting the loan", error.message);
+    }
+  };
   useEffect(() => {
     fetch(`https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/loans/${id}`)
       .then((response) => {
@@ -43,6 +65,7 @@ const RepayLoan = () => {
       .then((customerData) => {
         console.log("Fetched Customer Data:", customerData);
         setCustomerDetails(customerData.data);
+          deleteLoan(); 
       })
       .catch((error) => {
         console.log("Error fetching data: ", error);
