@@ -45,6 +45,7 @@ const LoanApplicants = () => {
         // Wait for all customer details to be fetched
         const customerResults = await Promise.all(promises);
         setCustomerData(customerResults);
+        toast.success("Fetched All");
       } catch (error) {
         console.error("Error fetching data: ", error);
         toast.error("Failed to fetch loan data");
@@ -72,10 +73,40 @@ const LoanApplicants = () => {
 
     return "N/A"; // or some other default value if the conversion fails
   }
+  const deleteLoan = async (loanId) => {
+    try {
+      const response = await fetch(
+        `https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/loans/${loanId}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const data = await response.json();
+      console.log("Deleted Loan:", data);
+      toast.success("Loan deleted successfully");
+
+      window.location.reload();
+    } catch (error) {
+      console.error(
+        "There was a problem with the delete operation:",
+        error.message
+      );
+      toast.error("An error occurred while deleting the loan", error.message);
+    }
+  };
 
   return (
     <>
       {loading && <Loader />}
+      <ToastContainer />
       <div className="card">
         <div className="card-header">
           <h4 className="card-title">Loan Application List</h4>
@@ -219,7 +250,10 @@ const LoanApplicants = () => {
                           <a className="dropdown-item" href="#">
                             Edit
                           </a>
-                          <a className="dropdown-item" href="#">
+                          <a
+                            className="dropdown-item"
+                            onClick={() => deleteLoan(loanitem._id)}
+                          >
                             Delete
                           </a>
                         </div>

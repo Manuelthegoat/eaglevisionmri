@@ -65,7 +65,7 @@ const RepayLoan = () => {
       .then((customerData) => {
         console.log("Fetched Customer Data:", customerData);
         setCustomerDetails(customerData.data);
-          deleteLoan(); 
+        
       })
       .catch((error) => {
         console.log("Error fetching data: ", error);
@@ -112,6 +112,7 @@ const RepayLoan = () => {
       const data = await response.json();
       console.log(data);
       toast.success("Repayment Added");
+      deleteLoan(); 
       setTimeout(() => {
         navigate("/loan-applicants");
       }, 1000);
