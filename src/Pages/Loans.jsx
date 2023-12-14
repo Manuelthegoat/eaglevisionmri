@@ -52,7 +52,7 @@ const Loans = () => {
             </div>
             <div class="card-body">
               <div class="crm-cart-data">
-                <p>{customers.length}</p>
+                <p>&#8358; {totalDeposit.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                 <span class="d-block mb-3 text-black">All Loan Customers</span>
                 <span class="badge bg-white text-black border-0">
                   Last 4 Month
