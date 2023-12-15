@@ -132,17 +132,17 @@ const CustomerAvailableBalance = () => {
                     <tr>
                       <td>SAVINGS BALANCE:</td>
 
-                      <td>₦ 0</td>
+                      <td>₦{customerDetails?.accountBalance}</td>
                     </tr>
                     <tr>
                       <td>ACTIVE LOAN STATUS</td>
 
-                      <td>₦ 0</td>
+                      <td>₦ {customerDetails?.loanBalance}</td>
                     </tr>
                     <tr>
                       <td>Total Approved Amount</td>
 
-                      <td>₦ 0</td>
+                      <td>₦ {customerDetails?.loanBalance}</td>
                     </tr>
                     <tr>
                       <td>Total Repayment Done:</td>
