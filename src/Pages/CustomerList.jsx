@@ -150,7 +150,7 @@ const CustomerList = () => {
                       <td>
                         <span class="badge light badge-success">ACTIVE</span>
                       </td>
-                      <td>nmesonma Ezeh</td>
+                      <td>{customer.accountOfficer}</td>
                       <td>
                         <div class="dropdown">
                           <button

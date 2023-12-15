@@ -29,7 +29,7 @@ const CustomerProfile = () => {
   }, [id]);
   useEffect(() => {
     fetch(
-      `https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/transactions/customer/${id}/transactions`
+      `https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/customers/${id}/transactions`
     )
       .then((response) => {
         if (!response.ok) {
@@ -38,8 +38,8 @@ const CustomerProfile = () => {
         return response.json();
       })
       .then((data) => {
-        console.log("Fetched Specific Customer Data:", data.data);
-        setTransactions(data.data);
+        console.log("Fetched Specific Customer Data:", data);
+        setTransactions(data);
       })
       .catch((error) =>
         console.log("Error fetching specific customer data: ", error)

@@ -3,19 +3,57 @@ import Loader from "../Components/Loader/Loader";
 
 const Savings = () => {
   const [customers, setCustomers] = useState([]);
+  const [filter1, setfilter1] = useState("");
+  const [filter2, setfilter2] = useState("");
+  const [customersnormal, setCustomersnormal] = useState([]);
   const [loading, setLoading] = useState(true);
   const [totalWithdrawals, settotalWithdrawals] = useState([]);
   const [totalWithdrawalsCash, settotalWithdrawalsCash] = useState([]);
   const [totalDepositTf, setTotalDepositTf] = useState([]);
+  const [totalDepositTfnormal, setTotalDepositTfnormal] = useState([]);
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [updatedTotalDepositAmount, setUpdatedTotalDepositAmount] =
+    useState(null);
 
   useEffect(() => {
-    const today = new Date();
-  const tomorrow = new Date(today);
-  tomorrow.setDate(today.getDate() + 1);
+    const fetchData = async () => {
+      setLoading(true);
 
-  const startDate = today.toISOString().split('T')[0];
-  const endDate = tomorrow.toISOString().split('T')[0];
-    fetch(`https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/transactions/totalDepositByCashByPaymentDate?startDate=${startDate}&endDate=${endDate}`)
+      try {
+        const today = new Date();
+        const tomorrow = new Date(today);
+        tomorrow.setDate(today.getDate() + 1);
+
+        const startDate = today.toISOString().split("T")[0];
+        const endDate = tomorrow.toISOString().split("T")[0];
+
+        const response = await fetch(
+          `https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/transactions/totalDepositByCashByPaymentDate?startDate=${
+            filter1 ? filter1 : startDate
+          }&endDate=${filter2 ? filter2 : endDate}`
+        );
+
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+
+        const data = await response.json();
+        console.log("Fetched Data:", data.data);
+        setCustomers(data.data);
+      } catch (error) {
+        console.log("Error fetching data: ", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [filter1, filter2]);
+  useEffect(() => {
+    fetch(
+      `https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/transactions/totalDepositByCashByPaymentDate?startDate=2010-01-01&endDate=2050-01-01`
+    )
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -23,9 +61,8 @@ const Savings = () => {
         return response.json();
       })
       .then((data) => {
-        console.log("Fetched Data:", data.data);
-        setCustomers(data.data);
-       
+        console.log("Fetched This:", data.data);
+        setCustomersnormal(data.data);
       })
       .catch((error) => {
         console.log("Error fetching data: ", error);
@@ -33,7 +70,9 @@ const Savings = () => {
       .finally(() => setLoading(false)); // Set loading to false here, after success or error
   }, []);
   useEffect(() => {
-    fetch("https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/transactions/totalWithdrawalsByTransferByPaymentDate?startDate=2023-01-01&endDate=2023-12-31")
+    fetch(
+      "https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/transactions/totalWithdrawalsByTransferByPaymentDate?startDate=2023-01-01&endDate=2023-12-31"
+    )
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -43,7 +82,6 @@ const Savings = () => {
       .then((data) => {
         console.log("Fetched Data:", data.data);
         settotalWithdrawals(data.data);
-       
       })
       .catch((error) => {
         console.log("Error fetching data: ", error);
@@ -51,7 +89,9 @@ const Savings = () => {
       .finally(() => setLoading(false)); // Set loading to false here, after success or error
   }, []);
   useEffect(() => {
-    fetch("https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/transactions/totalWithdrawalsByCashByPaymentDate?startDate=2023-01-01&endDate=2023-12-31")
+    fetch(
+      "https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/transactions/totalWithdrawalsByCashByPaymentDate?startDate=2023-01-01&endDate=2023-12-31"
+    )
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -61,7 +101,6 @@ const Savings = () => {
       .then((data) => {
         console.log("Fetched Data:", data.data);
         settotalWithdrawalsCash(data.data);
-       
       })
       .catch((error) => {
         console.log("Error fetching data: ", error);
@@ -72,10 +111,12 @@ const Savings = () => {
     const today = new Date();
     const tomorrow = new Date(today);
     tomorrow.setDate(today.getDate() + 1);
-  
-    const startDate = today.toISOString().split('T')[0];
-    const endDate = tomorrow.toISOString().split('T')[0];
-    fetch(`https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/transactions/totalDepositByTransferByPaymentDate?startDate=${startDate}&endDate=${endDate}`)
+
+    const startDate2 = today.toISOString().split("T")[0];
+    const endDate2 = tomorrow.toISOString().split("T")[0];
+    fetch(
+      `https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/transactions/totalDepositByTransferByPaymentDate?startDate=${startDate2}&endDate=${endDate2}`
+    )
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -85,7 +126,25 @@ const Savings = () => {
       .then((data) => {
         console.log("Fetched Data:", data.data);
         setTotalDepositTf(data.data);
-       
+      })
+      .catch((error) => {
+        console.log("Error fetching data: ", error);
+      })
+      .finally(() => setLoading(false)); // Set loading to false here, after success or error
+  }, []);
+  useEffect(() => {
+    fetch(
+      `https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/transactions/totalDepositByTransferByPaymentDate?startDate=2010-01-01&endDate=2050-01-01`
+    )
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Fetched Data:", data.data);
+        setTotalDepositTfnormal(data.data);
       })
       .catch((error) => {
         console.log("Error fetching data: ", error);
@@ -93,13 +152,15 @@ const Savings = () => {
       .finally(() => setLoading(false)); // Set loading to false here, after success or error
   }, []);
 
-  
   function safeSumAndFormat(a, b) {
     const numberA = parseFloat(a);
     const numberB = parseFloat(b);
 
     if (!isNaN(numberA) && !isNaN(numberB)) {
-      return (numberA + numberB)?.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+      return (numberA + numberB)?.toLocaleString("en-US", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      });
     }
 
     return "N/A"; // or some other default value if the conversion fails
@@ -107,14 +168,15 @@ const Savings = () => {
 
   return (
     <>
-     {loading && <Loader />}
+      {loading && <Loader />}
       <div className="row">
         <h2>Incoming</h2>
         <a href="/savings-list" class="col-xl-4 col-xxl-4 col-sm-6">
           <div class="card crm-cart bg-primary border-0">
             <div class="card-header border-0 pb-0">
               <span class="text-white fs-16">
-                Count: {customers.length}<i class="fa-solid fa-chevron-up ms-1"></i>
+                Count: {customers.length}
+                <i class="fa-solid fa-chevron-up ms-1"></i>
               </span>
               <div class="icon-box bg-white">
                 <svg
@@ -133,11 +195,14 @@ const Savings = () => {
             </div>
             <div class="card-body">
               <div class="crm-cart-data">
-                <p class="text-white">&#8358; {safeSumAndFormat(customers.totalDepositAmount, totalDepositTf.totalDepositAmount)}</p>
+                <p class="text-white">
+                  &#8358;{" "}
+                  {safeSumAndFormat(
+                    customersnormal.totalDepositAmount,
+                    totalDepositTfnormal.totalDepositAmount
+                  )}
+                </p>
                 <span class="d-block mb-3 text-white">Total Savings</span>
-                <span class="badge bg-white text-black border-0">
-                  1 year
-                </span>
               </div>
             </div>
           </div>
@@ -146,7 +211,8 @@ const Savings = () => {
           <div class="card crm-cart bg-primary border-0">
             <div class="card-header border-0 pb-0">
               <span class="text-white fs-16">
-                Count: {customers.length}<i class="fa-solid fa-chevron-up ms-1"></i>
+                Count: {customers.length}
+                <i class="fa-solid fa-chevron-up ms-1"></i>
               </span>
               <div class="icon-box bg-white">
                 <svg
@@ -165,10 +231,37 @@ const Savings = () => {
             </div>
             <div class="card-body">
               <div class="crm-cart-data">
-                <p class="text-white">&#8358; {(customers.totalDepositAmount)?.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                <p class="text-white">
+                  &#8358;{" "}
+                  {updatedTotalDepositAmount !== null
+                    ? updatedTotalDepositAmount.toLocaleString("en-US", {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      })
+                    : customers.totalDepositAmount?.toLocaleString("en-US", {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      })}
+                </p>
                 <span class="d-block mb-3 text-white">Collected Via CASH</span>
                 <span class="badge bg-white text-black border-0">
-                  i year
+                  <input
+                    type="date"
+                    value={filter1}
+                    onChange={(e) => setfilter1(e.target.value)}
+                    name=""
+                    id=""
+                  />
+                </span>
+                &nbsp;&nbsp;
+                <span class="badge bg-white text-black border-0">
+                  <input
+                    value={filter2}
+                    onChange={(e) => setfilter2(e.target.value)}
+                    type="date"
+                    name=""
+                    id=""
+                  />
                 </span>
               </div>
             </div>
@@ -197,13 +290,17 @@ const Savings = () => {
             </div>
             <div class="card-body">
               <div class="crm-cart-data">
-                <p class="text-white">&#8358; {(totalDepositTf.totalDepositAmount)?.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                <p class="text-white">
+                  &#8358;{" "}
+                  {totalDepositTf.totalDepositAmount?.toLocaleString("en-US", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}
+                </p>
                 <span class="d-block mb-3 text-white">
                   Collected Via Transfer
                 </span>
-                <span class="badge bg-white text-black border-0">
-                  1 year
-                </span>
+                <span class="badge bg-white text-black border-0">1 year</span>
               </div>
             </div>
           </div>
@@ -234,7 +331,13 @@ const Savings = () => {
             </div>
             <div class="card-body">
               <div class="crm-cart-data">
-                <p class="text-white">&#8358; {safeSumAndFormat(totalWithdrawalsCash.totalWithdrawalsAmount, totalWithdrawals.totalWithdrawalsAmount)}</p>
+                <p class="text-white">
+                  &#8358;{" "}
+                  {safeSumAndFormat(
+                    totalWithdrawalsCash.totalWithdrawalsAmount,
+                    totalWithdrawals.totalWithdrawalsAmount
+                  )}
+                </p>
                 <span class="d-block mb-3 text-white">Total Withdrawals</span>
                 <span class="badge bg-white text-black border-0">
                   Last 4 Month
@@ -266,7 +369,13 @@ const Savings = () => {
             </div>
             <div class="card-body">
               <div class="crm-cart-data">
-                <p class="text-white">&#8358; {(totalWithdrawalsCash.totalWithdrawalsAmount)?.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                <p class="text-white">
+                  &#8358;{" "}
+                  {totalWithdrawalsCash.totalWithdrawalsAmount?.toLocaleString(
+                    "en-US",
+                    { minimumFractionDigits: 2, maximumFractionDigits: 2 }
+                  )}
+                </p>
                 <span class="d-block mb-3 text-white">Withdrawn Via CASH</span>
                 <span class="badge bg-white text-black border-0">
                   Last 4 Month
@@ -298,7 +407,13 @@ const Savings = () => {
             </div>
             <div class="card-body">
               <div class="crm-cart-data">
-                <p class="text-white">&#8358; {(totalWithdrawals.totalWithdrawalsAmount)?.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                <p class="text-white">
+                  &#8358;{" "}
+                  {totalWithdrawals.totalWithdrawalsAmount?.toLocaleString(
+                    "en-US",
+                    { minimumFractionDigits: 2, maximumFractionDigits: 2 }
+                  )}
+                </p>
                 <span class="d-block mb-3 text-white">
                   Withdrawn Via Transfer
                 </span>

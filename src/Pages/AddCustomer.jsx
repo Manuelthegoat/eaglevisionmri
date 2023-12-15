@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Loader from "../Components/Loader/Loader";
 
 const AddCustomer = () => {
+  const [users, setUsers] = useState([]);
   const [accountHolderName, setAccountHolderName] = useState("");
   const [dob, setDob] = useState("");
   const [occupation, setOccupation] = useState("");
@@ -35,6 +36,7 @@ const AddCustomer = () => {
       occupation: occupation,
       placeOfBirth: placeOfBirth,
       sex: sex,
+      phone: phone,
       customersPhoneNo: phone,
       maritalStatus: maritalStatus,
       spouseName: spouseName,
@@ -46,8 +48,11 @@ const AddCustomer = () => {
       bankAccountName: bankAccountName,
       nextOfKin: nextOfKin,
       nextOfKinPhone: nextOfKinPhone,
+      homeAddress: contactAddress,
       contactAddress: contactAddress,
+      accountOfficer: accountOfficer,
       bvn: bvn,
+      passport: "null",
     };
     setLoading(true);
 
@@ -80,6 +85,24 @@ const AddCustomer = () => {
       setLoading(false); // <-- stop the loader
     }
   };
+
+  useEffect(() => {
+    fetch("https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/users")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Fetched Data:", data.data);
+        setUsers(data.data);
+      })
+      .catch((error) => console.log("Error fetching data: ", error))
+      .finally(() => setLoading(false)); // Set loading to false here, after success or error
+  }, []);
+  const filteredUsers = users.filter((user) => user.roles === "accountOfficer");
+  console.log(filteredUsers)
 
   return (
     <div>
@@ -179,9 +202,9 @@ const AddCustomer = () => {
                       <option value="" disabled>
                         Select One
                       </option>
-                      <option value={"single"}>Single</option>
-                      <option value={"married"}>Married</option>
-                      <option value={"divorced"}>Divorced</option>
+                      <option value={"Single"}>Single</option>
+                      <option value={"Married"}>Married</option>
+                      <option value={"Divorced"}>Divorced</option>
                     </select>
                   </div>
                 </div>
@@ -327,9 +350,11 @@ const AddCustomer = () => {
                       <option value="" disabled>
                         Select Account Officer In Charge
                       </option>
-                      <option>Esther Komolafe</option>
-                      <option>Chisom Ogbonna</option>
-                      <option>Amaka Okoye</option>
+                      {filteredUsers.map((item) => (
+                        <option key={item.id} value={item.firstName + item.lastName}>
+                          {item.firstName} {item.lastName}
+                        </option>
+                      ))}
                     </select>
                   </div>
                 </div>
