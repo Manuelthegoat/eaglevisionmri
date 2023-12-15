@@ -2,9 +2,29 @@ import React, { useState, useEffect } from "react";
 import Loader from "../Components/Loader/Loader";
 const Loans = () => {
   const [customers, setCustomers] = useState([]);
+  const [total, setTotal] = useState([]);
   const [loading, setLoading] = useState(true);
   const [totalDeposit, setTotalDeposit] = useState(0);
 
+
+  useEffect(() => {
+    fetch("https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/loans/total-deposit-amount-by-cash?startDate=2023-01-01&endDate=2023-12-31")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Fetched Data:", data.data);
+        setTotal(data);
+       
+      })
+      .catch((error) => {
+        console.log("Error fetching data: ", error);
+      })
+      .finally(() => setLoading(false)); // Set loading to false here, after success or error
+  }, []);
   useEffect(() => {
     fetch("https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/loans")
       .then((response) => {
@@ -184,8 +204,8 @@ const Loans = () => {
             </div>
             <div class="card-body">
               <div class="crm-cart-data">
-                <p>&#8358; 285,557,443.0</p>
-                <span class="d-block mb-3 text-black">All Repayments</span>
+                <p>&#8358; {(total?.totalDepositAmount)?.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                <span class="d-block mb-3 text-black">All Loan Deposit</span>
                 <span class="badge bg-white text-black border-0">
                   Last 4 Month
                 </span>
