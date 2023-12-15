@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Loader from "../Components/Loader/Loader";
 import { ToastContainer, toast } from "react-toastify";
 import { Link } from "react-router-dom";
+import { TableToExcelReact } from "table-to-excel-react";
 
 const LoanApplicants = () => {
   const [loans, setLoans] = useState([]);
@@ -110,6 +111,15 @@ const LoanApplicants = () => {
       <div className="card">
         <div className="card-header">
           <h4 className="card-title">Loan Application List</h4>
+          <TableToExcelReact
+            table="table-to-xls"
+            fileName="Eagle Vision Admin Report"
+            sheet="sheet 1"
+          >
+            <button type="submit" class="btn btn-primary mb-2">
+              EXPORT AS EXCEL
+            </button>
+          </TableToExcelReact>
 
           <form
             className="d-flex align-items-center flex-wrap flex-sm-nowrap"
@@ -138,7 +148,7 @@ const LoanApplicants = () => {
         </div>
         <div className="card-body">
           <div className="table-responsive">
-            <table className="table table-responsive-md">
+            <table className="table table-responsive-md" id="table-to-xls">
               <thead>
                 <tr>
                   <th style={{ width: "80px" }}>

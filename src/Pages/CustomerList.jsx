@@ -130,6 +130,7 @@ const CustomerList = () => {
               <table id="projects-tbl" class="table">
                 <thead>
                   <tr>
+                    <th>S/N</th>
                     <th>Customer</th>
                     <th>Customer NO</th>
                     <th>Phone</th>
@@ -142,6 +143,7 @@ const CustomerList = () => {
                   {displayedCustomers.map((customer, index) => (
                     <tr key={index}>
                       <td>{index+1}</td>
+                      <td>{customer.name}</td>
 
                       <td>EV{customer?._id?.substring(0, 9)}</td>
                       <td>{customer.customersPhoneNo}</td>

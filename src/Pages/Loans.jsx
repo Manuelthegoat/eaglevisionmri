@@ -8,7 +8,13 @@ const Loans = () => {
 
 
   useEffect(() => {
-    fetch("https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/loans/total-deposit-amount-by-cash?startDate=2023-01-01&endDate=2023-12-31")
+    const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(today.getDate() + 1);
+  
+    const startDate = today.toISOString().split('T')[0];
+    const endDate = tomorrow.toISOString().split('T')[0];
+    fetch(`https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/loans/total-deposit-amount-by-cash?startDate=${startDate}&endDate=${endDate}`)
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
