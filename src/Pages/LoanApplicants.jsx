@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Loader from "../Components/Loader/Loader";
 import { ToastContainer, toast } from "react-toastify";
 import { Link } from "react-router-dom";
-import { TableToExcelReact } from "table-to-excel-react";
+import * as XLSX from "xlsx";
 
 const LoanApplicants = () => {
   const [loans, setLoans] = useState([]);
@@ -104,6 +104,26 @@ const LoanApplicants = () => {
     }
   };
 
+  const exportToExcel = () => {
+    const formattedData = loans.map((loanitem, index) => [
+      index + 1,
+      customerData ? `${customerData[index]?.name}\n${customerData[index]?.customersPhoneNo}` : "Loading customer data...",
+      `₦ ${loanitem.amount}`,
+      `₦ ${loanitem.interestRate}`,
+      `₦ ${safeSumAndFormat(loanitem.amount, loanitem.interestRate)}`,
+      // ... (add more columns as needed)
+      loanitem.balance,
+      loanitem.paymentDate ? new Date(loanitem.paymentDate).toDateString() : "N/A",
+      loanitem.loanStartDate,
+      loanitem.loanEndDate,
+    ]);
+
+    const ws = XLSX.utils.aoa_to_sheet([["#", "Name", "Amt Approved (₦)", "Interest On Loan (₦)", "Total Loan + Interest (₦)", "Balance", "Payment Date", "Approved Date", "Loan Due Date"], ...formattedData]);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Loan Data");
+    XLSX.writeFile(wb, "Eagle Vision Loan Report.xlsx");
+  };
+
   return (
     <>
       {loading && <Loader />}
@@ -111,15 +131,17 @@ const LoanApplicants = () => {
       <div className="card">
         <div className="card-header">
           <h4 className="card-title">Loan Application List</h4>
-          <TableToExcelReact
-            table="table-to-xls"
-            fileName="Eagle Vision Admin Report"
-            sheet="sheet 1"
+          
+          <button
+            type="button"
+            className="btn btn-primary mb-2"
+            onClick={() => {
+              exportToExcel();
+            }}
           >
-            <button type="submit" class="btn btn-primary mb-2">
-              EXPORT AS EXCEL
-            </button>
-          </TableToExcelReact>
+            EXPORT AS EXCEL
+          </button>
+         
 
           <form
             className="d-flex align-items-center flex-wrap flex-sm-nowrap"
