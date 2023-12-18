@@ -98,9 +98,14 @@ const Savings = () => {
       .finally(() => setLoading(false)); // Set loading to false here, after success or error
   }, []);
   useEffect(() => {
-    
+    const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(today.getDate() + 1);
+
+    const startDate2 = today.toISOString().split("T")[0];
+    const endDate2 = tomorrow.toISOString().split("T")[0];
     fetch(
-      `https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/transactions/totalDepositByCashByPaymentDate?startDate=${startDate}&endDate=${endDate}`
+      `https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/transactions/totalDepositByTransferByPaymentDate?startDate=${startDate2}&endDate=${endDate2}`
     )
       .then((response) => {
         if (!response.ok) {
