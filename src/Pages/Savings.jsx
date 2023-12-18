@@ -3,8 +3,7 @@ import Loader from "../Components/Loader/Loader";
 
 const Savings = () => {
   const [customers, setCustomers] = useState([]);
-  const [filter1, setfilter1] = useState("");
-  const [filter2, setfilter2] = useState("");
+
   const [customersnormal, setCustomersnormal] = useState([]);
   const [loading, setLoading] = useState(true);
   const [totalWithdrawals, settotalWithdrawals] = useState([]);
@@ -21,17 +20,8 @@ const Savings = () => {
       setLoading(true);
 
       try {
-        const today = new Date();
-        const tomorrow = new Date(today);
-        tomorrow.setDate(today.getDate() + 1);
-
-        const startDate = today.toISOString().split("T")[0];
-        const endDate = tomorrow.toISOString().split("T")[0];
-
         const response = await fetch(
-          `https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/transactions/totalDepositByCashByPaymentDate?startDate=${
-            filter1 ? filter1 : startDate
-          }&endDate=${filter2 ? filter2 : endDate}`
+          `https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/transactions/totalDepositByCashByPaymentDate?startDate=${startDate}&endDate=${endDate}`
         );
 
         if (!response.ok) {
@@ -49,7 +39,7 @@ const Savings = () => {
     };
 
     fetchData();
-  }, [filter1, filter2]);
+  }, [startDate, endDate]);
   useEffect(() => {
     fetch(
       `https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/transactions/totalDepositByCashByPaymentDate?startDate=2010-01-01&endDate=2050-01-01`
@@ -108,14 +98,9 @@ const Savings = () => {
       .finally(() => setLoading(false)); // Set loading to false here, after success or error
   }, []);
   useEffect(() => {
-    const today = new Date();
-    const tomorrow = new Date(today);
-    tomorrow.setDate(today.getDate() + 1);
-
-    const startDate2 = today.toISOString().split("T")[0];
-    const endDate2 = tomorrow.toISOString().split("T")[0];
+    
     fetch(
-      `https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/transactions/totalDepositByTransferByPaymentDate?startDate=${startDate2}&endDate=${endDate2}`
+      `https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/transactions/totalDepositByCashByPaymentDate?startDate=${startDate}&endDate=${endDate}`
     )
       .then((response) => {
         if (!response.ok) {
@@ -171,7 +156,26 @@ const Savings = () => {
       {loading && <Loader />}
       <div className="row">
         <h2>Incoming</h2>
-        <a href="/savings-list" class="col-xl-4 col-xxl-4 col-sm-6">
+        <div className="flexy">
+        <div className="col-sm">
+          <label>Start Date:</label>
+
+          <input
+            type="date"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+          />
+        </div>
+        <div className="col-sm2">
+          <label>End Date:</label>
+          <input
+            type="date"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+          />
+        </div>
+        </div>
+        <a class="col-xl-4 col-xxl-4 col-sm-6">
           <div class="card crm-cart bg-primary border-0">
             <div class="card-header border-0 pb-0">
               <span class="text-white fs-16">
@@ -244,25 +248,6 @@ const Savings = () => {
                       })}
                 </p>
                 <span class="d-block mb-3 text-white">Collected Via CASH</span>
-                <span class="badge bg-white text-black border-0">
-                  <input
-                    type="date"
-                    value={filter1}
-                    onChange={(e) => setfilter1(e.target.value)}
-                    name=""
-                    id=""
-                  />
-                </span>
-                &nbsp;&nbsp;
-                <span class="badge bg-white text-black border-0">
-                  <input
-                    value={filter2}
-                    onChange={(e) => setfilter2(e.target.value)}
-                    type="date"
-                    name=""
-                    id=""
-                  />
-                </span>
               </div>
             </div>
           </div>
