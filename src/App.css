@@ -1,0 +1,19 @@
+.logo-abbr{
+    width: 3rem;
+}
+.rowed{
+    display: flex!important;
+    justify-content: space-between;
+    padding-right: 1rem;
+}
+.col-sm{
+    width: 2%;
+    height: 10;
+}
+.col-sm-2{
+    width: 1%;
+    height: 10;
+}
+.flexy{
+    display: flex;
+}
