@@ -378,6 +378,8 @@ const HomeCards = () => {
   const [loading, setLoading] = useState(true);
   const [totalDeposit, setTotalDeposit] = useState(0);
   const [totalDepositTf, setTotalDepositTf] = useState([]);
+  const [totalWitdrawal, setTotalWithdrawal] = useState([]);
+  const [totalWitdrawalssss, setTotalWithdrawalssss] = useState([]);
 
   useEffect(() => {
     fetch("https://eaglevision.onrender.com/api/v1/customers")
@@ -390,9 +392,35 @@ const HomeCards = () => {
       .then((data) => {
         console.log("Fetched Data:", data.data);
         setCustomerss(data.data);
-        const totalBalance = data.data.reduce((sum, customer) => sum + customer.accountBalance, 0);
+        const totalBalance = data.data.reduce(
+          (sum, customer) => sum + customer.accountBalance,
+          0
+        );
         setTotalDeposit(totalBalance);
-       
+      })
+      .catch((error) => {
+        console.log("Error fetching data: ", error);
+      })
+      .finally(() => setLoading(false)); // Set loading to false here, after success or error
+  }, []);
+  useEffect(() => {
+    fetch(
+      "https://eaglevision.onrender.com/api/v1/transactions/withdrawalsByPaymentDate?startDate=2000-10-01&endDate=2099-10-31"
+    )
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Fetched Data:", data.data);
+        setTotalWithdrawal(data.data);
+        const totalWitdrawalss = data.data.reduce(
+          (sum, customer) => sum + customer.amount,
+          0
+        );
+        setTotalWithdrawalssss(totalWitdrawalss);
       })
       .catch((error) => {
         console.log("Error fetching data: ", error);
@@ -574,6 +602,44 @@ const HomeCards = () => {
                         customers.totalDepositAmount,
                         totalDepositTf.totalDepositAmount
                       )}
+                    </h3>
+                  </div>
+                  <div class="icon-box bg-primary">
+                    <svg
+                      width="12"
+                      height="20"
+                      viewBox="0 0 12 20"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M11.4642 13.7074C11.4759 12.1252 10.8504 10.8738 9.60279 9.99009C8.6392 9.30968 7.46984 8.95476 6.33882 8.6137C3.98274 7.89943 3.29927 7.52321 3.29927 6.3965C3.29927 5.14147 4.93028 4.69493 6.32655 4.69493C7.34341 4.69493 8.51331 5.01109 9.23985 5.47964L10.6802 3.24887C9.73069 2.6333 8.43112 2.21342 7.14783 2.0831V0H4.49076V2.22918C2.12884 2.74876 0.640949 4.29246 0.640949 6.3965C0.640949 7.87005 1.25327 9.03865 2.45745 9.86289C3.37331 10.4921 4.49028 10.83 5.56927 11.1572C7.88027 11.8557 8.81873 12.2813 8.80805 13.691L8.80799 13.7014C8.80799 14.8845 7.24005 15.3051 5.89676 15.3051C4.62786 15.3051 3.248 14.749 2.46582 13.9222L0.535522 15.7481C1.52607 16.7957 2.96523 17.5364 4.4907 17.8267V20.0001H7.14783V17.8735C9.7724 17.4978 11.4616 15.9177 11.4642 13.7074Z"
+                        fill="#fff"
+                      />
+                    </svg>
+                  </div>
+                </div>
+                {/* <div id="NewExperience"></div> */}
+                <ReactApexChart
+                  options={deposit}
+                  series={deposit.series}
+                  //   width={300}
+                  height={120}
+                  //   class="chartBar"
+                  type="area"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="col-xl-4 col-sm-4">
+            <div class="card same-card">
+              <div class="card-body depostit-card p-0">
+                <div class="depostit-card-media d-flex justify-content-between pb-0">
+                  <div>
+                    <h6>Total Withdrawals</h6>
+                    <h3>
+                      &#8358;{" "}
+                      {totalWitdrawalssss}
                     </h3>
                   </div>
                   <div class="icon-box bg-primary">

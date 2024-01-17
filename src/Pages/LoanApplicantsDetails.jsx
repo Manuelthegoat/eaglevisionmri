@@ -48,7 +48,7 @@ const LoanApplicantsDetails = () => {
   useEffect(() => {
     // Fetch repayments using the customer id
     if (customerDetails) {
-      fetch(`https://eaglevision.onrender.com/api/v1/loans/customer/${id}/loans`)
+      fetch(`https://eaglevision.onrender.com/api/v1/loans/customer/${loanApplicantsDetails?.customer}/loans`)
         .then((response) => {
           console.log(response)
           if (!response.ok) {
@@ -58,7 +58,7 @@ const LoanApplicantsDetails = () => {
         })
         .then((repaymentsData) => {
           console.log("Fetched Repayments Data:", repaymentsData);
-          setRepayments(repaymentsData.data);
+          setRepayments(repaymentsData);
         })
         .catch((error) => {
           console.log("Error fetching repayments data: ", error);
@@ -116,7 +116,7 @@ const LoanApplicantsDetails = () => {
                   <div class="profile-email px-2 pt-2">
                    
                     <h2 className="text-muted mb-0">
-                     Balance:{" "}
+                    Loan Balance:{" "}
                       {loanApplicantsDetails?.balance}
                     </h2>
                    
@@ -203,72 +203,34 @@ const LoanApplicantsDetails = () => {
                 <table id="projects-tbl" class="table">
                   <thead>
                     <tr>
-                      <th>Customer</th>
-                      <th>Amount Paid</th>
-                      <th>Amount To Pay</th>
-                      <th>Mode</th>
-                      <th>Collection Officer</th>
-                      <th>Uploaded By Officer</th>
-                      <th>Payment Date</th>
+                    <th>Payment Date</th>
+                    <th>Description</th>
+                    <th>Mode</th>
+                      <th>Debit</th>
+                      <th>Credit</th>
+                      <th>Balance</th>
+                      <th>Uploaded By</th>
                       <th>Created At</th>
                       <th>Updated At</th>
-                      <th>Action</th>
                     </tr>
                   </thead>
                   <tbody>
-                  
-                    <tr>
-                      <td>AGU CHINWENDU SAMUEL</td>
-
-                      <td>1,120,000.0</td>
-                      <td>1,120,000.0</td>
-                      <td>TRANSFER</td>
-                      <td>Esther Komolafe</td>
-                      <td>Peace Malachi</td>
-                      <td>May 21, 2022, midnight</td>
-                      <td>Jan. 1, 2023, 5:27 p.m.</td>
-                      <td>Jan. 1, 2023, 5:27 p.m.</td>
-                      <td>
-                        <div class="dropdown">
-                          <button
-                            type="button"
-                            class="btn btn-success light sharp"
-                            data-bs-toggle="dropdown"
-                          >
-                            <svg
-                              width="20px"
-                              height="20px"
-                              viewBox="0 0 24 24"
-                              version="1.1"
-                            >
-                              <g
-                                stroke="none"
-                                stroke-width="1"
-                                fill="none"
-                                fill-rule="evenodd"
-                              >
-                                <rect x="0" y="0" width="24" height="24" />
-                                <circle fill="#000000" cx="5" cy="12" r="2" />
-                                <circle fill="#000000" cx="12" cy="12" r="2" />
-                                <circle fill="#000000" cx="19" cy="12" r="2" />
-                              </g>
-                            </svg>
-                          </button>
-                          <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#">
-                              View Details
-                            </a>
-                            <a class="dropdown-item" href="#">
-                              Edit
-                            </a>
-                            <a class="dropdown-item" href="#">
-                              Delete
-                            </a>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                  </tbody>
+                  {repayments &&
+                    repayments.map((repayment) => (
+                      <tr key={repayment._id}>
+                        <td>{new Date(repayment.paymentDate).toLocaleDateString()}</td>
+                        <td>{repayment.type === 'withdrawal' ? 'Withdrawal' : 'Deposit'}</td>
+                        <td>{repayment.modeOfPayment}</td>
+                        <td>&#8358;{repayment.amount}</td>
+                        <td>&#8358;{repayment.interestRate}</td>
+                        <td>&#8358;{repayment.balance}</td>
+                        <td>{repayment.uploadedBy}</td>
+                        <td>{new Date(repayment.createdAt).toLocaleString()}</td>
+                        <td>{new Date(repayment.updatedAt).toLocaleString()}</td>
+                       
+                      </tr>
+                    ))}
+                </tbody>
                 </table>
               </div>
             </div>

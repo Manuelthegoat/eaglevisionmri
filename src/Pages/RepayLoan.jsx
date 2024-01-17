@@ -12,33 +12,34 @@ const RepayLoan = () => {
   const [repaymentDate, setRepaymentDate] = useState("");
   const [paymentDate, setPaymentDate] = useState("");
   const [interestRate, setInterestRate] = useState("");
+  const [uploadedBy, setUploadedBy] = useState("");
   const [type, setType] = useState("");
 
   const { id } = useParams();
   const navigate = useNavigate();
-  const deleteLoan = async () => {
-    try {
-      const response = await fetch(
-        `https://eaglevision.onrender.com/api/v1/loans/${id}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+  // const deleteLoan = async () => {
+  //   try {
+  //     const response = await fetch(
+  //       `https://eaglevision.onrender.com/api/v1/loans/${id}`,
+  //       {
+  //         method: "DELETE",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //       }
+  //     );
 
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
+  //     if (!response.ok) {
+  //       throw new Error("Network response was not ok");
+  //     }
 
-      const data = await response.json();
-      console.log("Deleted Loan:", data);
-    } catch (error) {
-      console.error("There was a problem with the delete operation:", error.message);
-      toast.error("An Error Occurred while deleting the loan", error.message);
-    }
-  };
+  //     const data = await response.json();
+  //     console.log("Deleted Loan:", data);
+  //   } catch (error) {
+  //     console.error("There was a problem with the delete operation:", error.message);
+  //     toast.error("An Error Occurred while deleting the loan", error.message);
+  //   }
+  // };
   useEffect(() => {
     fetch(`https://eaglevision.onrender.com/api/v1/loans/${id}`)
       .then((response) => {
@@ -87,6 +88,7 @@ const RepayLoan = () => {
       repaymentDate: repaymentDate,
       modeOfPayment: type,
       paymentDate: paymentDate,
+      // uploadedBy: uploadedBy,
     };
 
     console.log(formData);
@@ -112,7 +114,7 @@ const RepayLoan = () => {
       const data = await response.json();
       console.log(data);
       toast.success("Repayment Added");
-      deleteLoan(); 
+      // deleteLoan(); 
       setTimeout(() => {
         navigate("/loan-applicants");
       }, 1000);
@@ -175,10 +177,22 @@ const RepayLoan = () => {
                       onChange={(e) => setType(e.target.value)}
                       class="default-select form-control wide"
                     >
+                    <option value="">Select One</option>
                       <option value="cash">Cash</option>
                       <option value="transfer">Transfer</option>
                     </select>
                   </div>
+                 {/* <div class="mb-3 col-md-6">
+                    <label class="form-label">Uploaded By</label>
+                    <select
+                      value={type}
+                      onChange={(e) => setType(e.target.value)}
+                      class="default-select form-control wide"
+                    >
+                    <option value="">Select One</option>
+                    
+                    </select>
+                  </div>*/}
                   <div class="mb-3 col-md-6">
                     <label class="form-label">Interest Amount</label>
                     <input

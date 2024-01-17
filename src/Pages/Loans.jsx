@@ -5,6 +5,8 @@ const Loans = () => {
   const [total, setTotal] = useState([]);
   const [loading, setLoading] = useState(true);
   const [totalDeposit, setTotalDeposit] = useState(0);
+  const [roi, setRoi] = useState(0);
+  const [totalAmount, setTotalAmount] = useState(0);
 
 
   useEffect(() => {
@@ -32,6 +34,7 @@ const Loans = () => {
       .finally(() => setLoading(false)); // Set loading to false here, after success or error
   }, []);
   useEffect(() => {
+    // Fetching all loans data
     fetch("https://eaglevision.onrender.com/api/v1/loans")
       .then((response) => {
         if (!response.ok) {
@@ -42,15 +45,22 @@ const Loans = () => {
       .then((data) => {
         console.log("Fetched Data:", data.data);
         setCustomers(data.data);
+        
+        // Calculating total balance and interest rate
         const totalBalance = data.data.reduce((sum, customer) => sum + customer.balance, 0);
+        const totalRoi = data.data.reduce((sum, customer) => sum + Number(customer.interestRate), 0);
+        
         setTotalDeposit(totalBalance);
-       
+        setRoi(totalRoi);
+        setTotalAmount(totalBalance + totalRoi);
       })
       .catch((error) => {
         console.log("Error fetching data: ", error);
       })
-      .finally(() => setLoading(false)); // Set loading to false here, after success or error
+      .finally(() => setLoading(false));
   }, []);
+
+
   return (
     <>
     {loading && <Loader />}
@@ -79,7 +89,7 @@ const Loans = () => {
             <div class="card-body">
               <div class="crm-cart-data">
                 <p>&#8358; {totalDeposit.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
-                <span class="d-block mb-3 text-black">All Loan Customers</span>
+                <span class="d-block mb-3 text-black">All Loan Applications</span>
                 <span class="badge bg-white text-black border-0">
                   Last 4 Month
                 </span>
@@ -223,7 +233,7 @@ const Loans = () => {
           <div class="card crm-cart bg-primary border-0">
             <div class="card-header border-0 pb-0">
               <span class="text-white fs-16">
-              roi:₦ 64,025,500.0<i class="fa-solid fa-chevron-up ms-1"></i>
+              roi:&#8358; {roi.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}<i class="fa-solid fa-chevron-up ms-1"></i>
               </span>
               <div class="icon-box bg-white">
                 <svg
@@ -242,7 +252,7 @@ const Loans = () => {
             </div>
             <div class="card-body">
               <div class="crm-cart-data">
-                <p class="text-white">&#8358; 350,965,500.0</p>
+                <p class="text-white">&#8358; {totalAmount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                 <span class="d-block mb-3 text-white">
                 Total ROI Amount
                 </span>

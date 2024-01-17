@@ -29,7 +29,19 @@ const LoanApplicants = () => {
         const response = await fetch(apiUrl);
         const data = await response.json();
 
-        setLoans(data.data);
+        const uniqueLoans = data.data.reduceRight((unique, loan) => {
+          const existingIndex = unique.findIndex(
+            (uniqueLoan) => uniqueLoan.customer === loan.customer
+          );
+
+          if (existingIndex === -1) {
+            unique.unshift(loan);
+          }
+
+          return unique;
+        }, []);
+
+        setLoans(uniqueLoans);
 
         const promises = data.data?.map(async (loan) => {
           const customerId = loan.customer;
@@ -232,9 +244,9 @@ const LoanApplicants = () => {
                     </td>
                     <td>&#8358; {loanitem.amount}</td>
                     <td>{loanitem.type === 'disbursement' || loanitem.balance === 'deposit' ? (
-                      <span className="text-success">Credit</span>
+                      <span className="text-danger">Topup Loan</span>
                     ) : (
-                      <span className="text-danger">Debit</span>
+                      <span className="text-success">Repayed Loan</span>
                     )}</td>
                     <td>
                       &#8358;

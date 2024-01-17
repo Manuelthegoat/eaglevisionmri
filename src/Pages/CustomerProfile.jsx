@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import Loader from "../Components/Loader/Loader";
+import { ToastContainer, toast } from "react-toastify";
+
 import * as XLSX from "xlsx";
 
 const CustomerProfile = () => {
@@ -8,13 +10,51 @@ const CustomerProfile = () => {
   const [selectedMode, setSelectedMode] = useState("all");
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
-  
+  const [loans, setLoans] = useState([]);
+  const [customerData, setCustomerData] = useState(null);
+  const [loanProfile, setLoanProfile] = useState(null);
 
   const { id } = useParams();
   useEffect(() => {
-    fetch(
-      `https://eaglevision.onrender.com/api/v1/customers/${id}`
-    )
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+
+        const response = await fetch(
+          "https://eaglevision.onrender.com/api/v1/loans"
+        );
+        const data = await response.json();
+
+        setLoans(data.data);
+        const promises = data.data?.map(async (loan) => {
+          const customerId = loan.customer;
+          if (customerId) {
+            const customerResponse = await fetch(
+              `https://eaglevision.onrender.com/api/v1/customers/${customerId}`
+            );
+            const customerData = await customerResponse.json();
+            return customerData.data;
+          }
+          return null;
+        });
+
+        // Wait for all customer details to be fetched
+        const customerResults = await Promise.all(promises);
+        setCustomerData(customerResults);
+        toast.success("Fetched All");
+      } catch (error) {
+        console.error("Error fetching data: ", error);
+        toast.error("Failed to fetch loan data");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    fetch(`https://eaglevision.onrender.com/api/v1/customers/${id}`)
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -59,6 +99,17 @@ const CustomerProfile = () => {
       return transact.modeOfPayment === selectedMode;
     }
   });
+  useEffect(() => {
+    // Find the loan item where customer field matches id
+    const matchingLoan = loans.find((loan) => loan.customer === id);
+
+    if (matchingLoan) {
+      // Extract _id from the matching loan
+      const loanId = matchingLoan._id;
+      setLoanProfile(loanId);
+      console.log("Matching Loan ID:", loanId);
+    }
+  }, [loans, id]);
   return (
     <>
       {loading && <Loader />}
@@ -94,10 +145,14 @@ const CustomerProfile = () => {
                       data-bs-toggle="dropdown"
                       aria-expanded="true"
                     >
-                  View Profile <i class="fa fa-user-circle text-primary me-2"></i>
+                      View Profile{" "}
+                      <i class="fa fa-user-circle text-primary me-2"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
-                      <Link to={`/customer-details/${id}`} class="dropdown-item">
+                      <Link
+                        to={`/customer-details/${id}`}
+                        class="dropdown-item"
+                      >
                         <i class="fa fa-user-circle text-primary me-2"></i> View
                         Customer Details
                       </Link>
@@ -116,15 +171,17 @@ const CustomerProfile = () => {
               <div class="text-center">
                 <div class="row">
                   <div class="col">
-                    <a class="btn btn-outline-primary mb-1 me-1">
-                      Deposits/Withdrawal
-                    </a>
+                    <Link
+                      class="btn btn-primary mb-1 me-1"
+                      to={`/loan-applicants-details/${loanProfile}`}
+                    >
+                      Loans
+                    </Link>
                   </div>
                   <div class="col">
-                    <a class="btn btn-primary mb-1 me-1">Loans</a>{" "}
-                  </div>
-                  <div class="col">
-                    <a class="btn btn-primary mb-1 me-1">Available Balance</a>{" "}
+                    <a class="btn btn-primary mb-1 me-1">
+                      Available Balance: {customerDetails?.accountBalance}
+                    </a>{" "}
                   </div>
                 </div>
               </div>
@@ -137,22 +194,19 @@ const CustomerProfile = () => {
           <div class="card">
             <div class="card-header">
               <h4 class="card-title">Deposits/Withdrawal</h4>
-              
+
               <div class="d-flex align-items-center flex-wrap flex-sm-nowrap">
-             
-              <select
-              className="form-control"
-              value={selectedMode}
-              onChange={handleModeChange}
-            >
-              <option value="all">Filter By Cash/Transfer</option>
-              <option value="cash">Cash</option>
-              <option value="transfer">Transfer</option>
-            </select>
-               
+                <select
+                  className="form-control"
+                  value={selectedMode}
+                  onChange={handleModeChange}
+                >
+                  <option value="all">Filter By Cash/Transfer</option>
+                  <option value="cash">Cash</option>
+                  <option value="transfer">Transfer</option>
+                </select>
               </div>
               <div class="d-flex align-items-center flex-wrap flex-sm-nowrap">
-             
                 <Link
                   to={`/add-contribution/${customerDetails?._id}`}
                   class="btn btn-primary mb-2"
@@ -161,7 +215,7 @@ const CustomerProfile = () => {
                 </Link>
               </div>
             </div>
-          
+
             <div class="card-body p-0">
               <div class="table-responsive active-projects">
                 <div className="rowed"></div>
@@ -174,9 +228,8 @@ const CustomerProfile = () => {
                       <th>Type</th>
                       <th>Debit</th>
                       <th>Credit</th>
-                      <th>Avail Bal (N)</th>
-                      <th>Old Bal (N)</th>
                       <th>Mode</th>
+                      <th>Bal (N)</th>
                       <th>Collected By</th>
                       <th>Uploaded By</th>
                       <th>Created At</th>
@@ -203,32 +256,35 @@ const CustomerProfile = () => {
                         </td>
                         <td>
                           {transact.choose === "Debit" ? (
-                            <>{transact.amount?.toLocaleString("en-US", {
-                              minimumFractionDigits: 2,
-                              maximumFractionDigits: 2,
-                            })}</>
+                            <>
+                              {transact.amount?.toLocaleString("en-US", {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2,
+                              })}
+                            </>
                           ) : (
                             <>--------</>
                           )}
                         </td>
                         <td>
                           {transact.choose === "credit" ? (
-                            <>{transact.amount?.toLocaleString("en-US", {
-                              minimumFractionDigits: 2,
-                              maximumFractionDigits: 2,
-                            })}</>
+                            <>
+                              {transact.amount?.toLocaleString("en-US", {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2,
+                              })}
+                            </>
                           ) : (
                             <>--------</>
                           )}
                         </td>
 
-                        <td>35,100.0</td>
-                        <td>100.0</td>
                         <td>
                           {transact.modeOfPayment
                             ? transact.modeOfPayment?.toUpperCase()
                             : "N/A"}
                         </td>
+                        <td>{transact.balance}</td>
                         <td>
                           {transact.collectedBy
                             ? transact.collectedBy?.toUpperCase()
