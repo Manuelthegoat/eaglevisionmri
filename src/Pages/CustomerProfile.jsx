@@ -110,6 +110,63 @@ const CustomerProfile = () => {
       console.log("Matching Loan ID:", loanId);
     }
   }, [loans, id]);
+  const exportToExcel = () => {
+    const formattedData = filteredTransactions.map((loanitem, index) => [
+      index + 1,
+      `{new Date(loanitem.paymentDate).toDateString()}`,
+      `{loanitem.description ? loanitem.description : "N/A"}`,
+
+      `{loanitem.type?.toUpperCase()}`,
+      ` {loanitem.choose === "Debit" ? (
+        <>
+          {transact.amount?.toLocaleString("en-US", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          })}
+        </>
+      ) : (
+        <>--------</>
+      )}`,
+      `{loanitem.choose === "credit" ? (
+        <>
+          {transact.amount?.toLocaleString("en-US", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          })}
+        </>
+      ) : (
+        <>--------</>
+      )}`,
+      loanitem.modeOfPayment,
+      loanitem.balance,
+      loanitem.collectedBy,
+      loanitem.uploadedBy,
+      `{new Date(loanitem.createdAt).toLocaleString()}`,
+      `{new Date(repayment.updatedAt).toLocaleString()}`,
+    ]);
+
+    const ws = XLSX.utils.aoa_to_sheet([
+      [
+        "#",
+        "Payment Date",
+        "Description",
+        "Type",
+        "Debit",
+        "Credit",
+        "Mode",
+        "Balance",
+        "Collected By",
+        "Uploaded By",
+        "Created At",
+        "Updated At",
+      ],
+      ...formattedData,
+    ]);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Loan Data");
+    XLSX.writeFile(wb, "Eagle Vision Loan Repayments.xlsx");
+  };
+
   return (
     <>
       {loading && <Loader />}
@@ -207,6 +264,17 @@ const CustomerProfile = () => {
                 </select>
               </div>
               <div class="d-flex align-items-center flex-wrap flex-sm-nowrap">
+                <button
+                  type="button"
+                  className="btn btn-primary mb-2"
+                  onClick={() => {
+                    exportToExcel();
+                  }}
+                >
+                  EXPORT AS EXCEL
+                </button>
+              </div>
+              <div class="d-flex align-items-center flex-wrap flex-sm-nowrap">
                 <Link
                   to={`/add-contribution/${customerDetails?._id}`}
                   class="btn btn-primary mb-2"
@@ -284,7 +352,12 @@ const CustomerProfile = () => {
                             ? transact.modeOfPayment?.toUpperCase()
                             : "N/A"}
                         </td>
-                        <td>{transact.balance}</td>
+                        <td>
+                          {transact.balance?.toLocaleString("en-US", {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                          })}
+                        </td>
                         <td>
                           {transact.collectedBy
                             ? transact.collectedBy?.toUpperCase()

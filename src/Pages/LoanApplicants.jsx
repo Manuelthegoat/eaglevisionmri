@@ -11,6 +11,10 @@ const LoanApplicants = () => {
   const [endDate, setEndDate] = useState("");
   const [customerData, setCustomerData] = useState(null);
 
+  function addCommas(number) {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -79,11 +83,12 @@ const LoanApplicants = () => {
   function safeSumAndFormat(a, b) {
     const numberA = parseFloat(a);
     const numberB = parseFloat(b);
-
+  
     if (!isNaN(numberA) && !isNaN(numberB)) {
-      return (numberA + numberB).toFixed(2);
+      const sum = (numberA + numberB).toFixed(2);
+      return addCommas(sum);
     }
-
+  
     return "N/A"; // or some other default value if the conversion fails
   }
   const deleteLoan = async (loanId) => {
@@ -135,7 +140,8 @@ const LoanApplicants = () => {
     XLSX.utils.book_append_sheet(wb, ws, "Loan Data");
     XLSX.writeFile(wb, "Eagle Vision Loan Report.xlsx");
   };
-
+ 
+  
   return (
     <>
       {loading && <Loader />}
@@ -242,7 +248,7 @@ const LoanApplicants = () => {
                       )}
                       {loanitem.loanTitle}
                     </td>
-                    <td>&#8358; {loanitem.amount}</td>
+                    <td>&#8358; {addCommas(loanitem.amount)}</td>
                     <td>{loanitem.type === 'disbursement' || loanitem.balance === 'deposit' ? (
                       <span className="text-danger">Topup Loan</span>
                     ) : (
@@ -253,7 +259,7 @@ const LoanApplicants = () => {
                       {safeSumAndFormat(loanitem.amount, loanitem.interestRate)}
                     </td>
                     {/* <td>&#8358;{loanitem.repaymentAmount}</td> */}
-                    <td>&#8358;{loanitem.balance}</td>
+                    <td>&#8358;{addCommas(loanitem.balance)}</td>
                     <td>
                       {" "}
                       {loanitem.paymentDate

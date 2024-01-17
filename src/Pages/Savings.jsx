@@ -515,7 +515,7 @@ const Savings = () => {
             </div>
           </div>
         </a>
-        <a href="/savings-list" class="col-xl-4 col-xxl-4 col-sm-6">
+        <a href="/transactions" class="col-xl-4 col-xxl-4 col-sm-6">
           <div class="card crm-cart bg-primary border-0">
             <div class="card-header border-0 pb-0">
              

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import Loader from "../Components/Loader/Loader";
 import { ToastContainer, toast } from "react-toastify";
+import * as XLSX from "xlsx";
 
 const LoanApplicantsDetails = () => {
   const [loading, setLoading] = useState(true);
@@ -48,9 +49,11 @@ const LoanApplicantsDetails = () => {
   useEffect(() => {
     // Fetch repayments using the customer id
     if (customerDetails) {
-      fetch(`https://eaglevision.onrender.com/api/v1/loans/customer/${loanApplicantsDetails?.customer}/loans`)
+      fetch(
+        `https://eaglevision.onrender.com/api/v1/loans/customer/${loanApplicantsDetails?.customer}/loans`
+      )
         .then((response) => {
-          console.log(response)
+          console.log(response);
           if (!response.ok) {
             throw new Error("Network response was not ok");
           }
@@ -69,8 +72,65 @@ const LoanApplicantsDetails = () => {
 
   function capitalizeFirstLetter(word) {
     return word?.charAt(0)?.toUpperCase() + word?.slice(1);
-}
+  }
 
+  const exportToExcel = () => {
+    const formattedData = repayments.map((loanitem, index) => [
+      index + 1,
+      `{new Date(loanitem.paymentDate).toLocaleDateString()}`,
+      `{loanitem.type === 'withdrawal' ? 'Withdrawal' : 'Deposit'}`,
+
+      `{loanitem.status === "withdrawn" ? (
+    <>
+      {repayment.amount?.toLocaleString("en-US", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      })}
+    </>
+  ) : (
+    <>--------</>
+  )}`,
+      `{loanitem.status === "deposited" ? (
+      <>
+        {repayment.amount?.toLocaleString("en-US", {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        })}
+      </>
+    ) : (
+      <>--------</>
+    )}`,
+      loanitem.interestRate,
+      loanitem.balance,
+      loanitem.loanEndDate,
+      loanitem.uploadedBy,
+      `{new Date(loanitem.createdAt).toLocaleString()}`,
+      `{new Date(repayment.updatedAt).toLocaleString()}`,
+    ]);
+
+    const ws = XLSX.utils.aoa_to_sheet([
+      [
+        "#",
+        "Payment Date",
+        "Description",
+        "Mode",
+        "Debit",
+        "Credit",
+        "interest Amount",
+        "Balance",
+        "Uploaded By",
+        "Created At",
+        "Updated At",
+      ],
+      ...formattedData,
+    ]);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Loan Data");
+    XLSX.writeFile(wb, "Eagle Vision Loan Repayments.xlsx");
+  };
+  function addCommas(number) {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
   return (
     <>
       {loading && <Loader />}
@@ -92,14 +152,13 @@ const LoanApplicantsDetails = () => {
                 </div>
                 <div class="profile-details">
                   <div class="profile-name px-3 pt-2">
-                  <h4 class="text-primary mb-0">
-                  Name: {capitalizeFirstLetter(customerDetails?.name)}
-                </h4>
+                    <h4 class="text-primary mb-0">
+                      Name: {capitalizeFirstLetter(customerDetails?.name)}
+                    </h4>
                     <p>Phone: {customerDetails?.customersPhoneNo}</p>
                     <p>Sex: {customerDetails?.sex}</p>
                   </div>
                   <div class="profile-email px-2 pt-2">
-                   
                     <p className="text-muted mb-0">
                       Guarantor Name:{" "}
                       {loanApplicantsDetails?.firstGuarantorsName}
@@ -114,12 +173,9 @@ const LoanApplicantsDetails = () => {
                     </p>
                   </div>
                   <div class="profile-email px-2 pt-2">
-                   
                     <h2 className="text-muted mb-0">
-                    Loan Balance:{" "}
-                      {loanApplicantsDetails?.balance}
+                      Loan Balance: {loanApplicantsDetails?.balance}
                     </h2>
-                   
                   </div>
                   <div class="dropdown ms-auto">
                     <a
@@ -167,13 +223,23 @@ const LoanApplicantsDetails = () => {
             <div class="profile-statistics">
               <div class="text-center">
                 <div class="row">
+                  <div className="col">
+                    <button
+                      type="button"
+                      className="btn btn-primary mb-2"
+                      onClick={() => {
+                        exportToExcel();
+                      }}
+                    >
+                      EXPORT AS EXCEL
+                    </button>
+                  </div>
                   <div class="col">
                     <a class="btn btn-primary mb-1 me-1">Deposits/Withdrawal</a>
                   </div>
                   <div class="col">
                     <a class="btn btn-outline-primary mb-1 me-1">Loans</a>{" "}
                   </div>
-                 
                 </div>
               </div>
             </div>
@@ -201,9 +267,9 @@ const LoanApplicantsDetails = () => {
                 <table id="projects-tbl" class="table">
                   <thead>
                     <tr>
-                    <th>Payment Date</th>
-                    <th>Description</th>
-                    <th>Mode</th>
+                      <th>Payment Date</th>
+                      <th>Description</th>
+                      <th>Mode</th>
                       <th>Debit</th>
                       <th>Credit</th>
                       <th>Interest Amount</th>
@@ -214,42 +280,59 @@ const LoanApplicantsDetails = () => {
                     </tr>
                   </thead>
                   <tbody>
-                  {repayments &&
-                    repayments.map((repayment) => (
-                      <tr key={repayment._id}>
-                        <td>{new Date(repayment.paymentDate).toLocaleDateString()}</td>
-                        <td>{repayment.type === 'withdrawal' ? 'Withdrawal' : 'Deposit'}</td>
-                        <td>{repayment.modeOfPayment}</td>
-                        <td>&#8358;{repayment.status === "withdrawn" ? (
-                          <>
-                            {repayment.amount?.toLocaleString("en-US", {
-                              minimumFractionDigits: 2,
-                              maximumFractionDigits: 2,
-                            })}
-                          </>
-                        ) : (
-                          <>--------</>
-                        )}</td>
-                        
-                        <td>&#8358; {repayment.status === "deposited" ? (
-                          <>
-                            {repayment.amount?.toLocaleString("en-US", {
-                              minimumFractionDigits: 2,
-                              maximumFractionDigits: 2,
-                            })}
-                          </>
-                        ) : (
-                          <>--------</>
-                        )}</td>
-                        <td>&#8358;{repayment.interestRate}</td>
-                        <td>&#8358;{repayment.balance}</td>
-                        <td>{repayment.uploadedBy}</td>
-                        <td>{new Date(repayment.createdAt).toLocaleString()}</td>
-                        <td>{new Date(repayment.updatedAt).toLocaleString()}</td>
-                       
-                      </tr>
-                    ))}
-                </tbody>
+                    {repayments &&
+                      repayments.map((repayment) => (
+                        <tr key={repayment._id}>
+                          <td>
+                            {new Date(
+                              repayment.paymentDate
+                            ).toLocaleDateString()}
+                          </td>
+                          <td>
+                            {repayment.type === "withdrawal"
+                              ? "Withdrawal"
+                              : "Deposit"}
+                          </td>
+                          <td>{repayment.modeOfPayment}</td>
+                          <td>
+                            &#8358;
+                            {repayment.status === "withdrawn" ? (
+                              <>
+                              {addCommas(repayment.amount?.toLocaleString("en-US", {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2,
+                              }))}
+                              </>
+                            ) : (
+                              <>--------</>
+                            )}
+                          </td>
+
+                          <td>
+                            &#8358;{" "}
+                            {repayment.status === "deposited" ? (
+                              <>
+                              {addCommas(repayment.amount?.toLocaleString("en-US", {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2,
+                              }))}
+                              </>
+                            ) : (
+                              <>--------</>
+                            )}
+                          </td>
+                          <td>&#8358;{addCommas(repayment.interestRate)}</td>
+                          <td>&#8358;{addCommas(repayment.balance)}</td>
+                          <td>{repayment.uploadedBy}</td>
+                          <td>
+                            {new Date(repayment.createdAt).toLocaleString()}
+                          </td>
+                          <td>
+                            {new Date(repayment.updatedAt).toLocaleString()}
+                          </td>
+                        </tr>
+                      ))}
+                  </tbody>
                 </table>
               </div>
             </div>
