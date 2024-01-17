@@ -82,7 +82,7 @@ const RepayLoan = () => {
       type: debitCredit === "debit" ? "withdrawal" : "deposit",
       customerId: customerDetails._id,
       amount: repaymentAmount,
-      interestRate: loanApplicantsDetails?.interestRate,
+      interestRate: interestRate,
       loanStartDate: loanApplicantsDetails?.loanStartDate,
       loanEndDate: loanApplicantsDetails?.loanEndDate,
       repaymentDate: repaymentDate,

@@ -43,7 +43,7 @@ const LoanApplicants = () => {
 
         setLoans(uniqueLoans);
 
-        const promises = data.data?.map(async (loan) => {
+        const promises = uniqueLoans?.map(async (loan) => {
           const customerId = loan.customer;
           if (customerId) {
             const customerResponse = await fetch(

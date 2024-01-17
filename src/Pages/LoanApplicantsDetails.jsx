@@ -173,9 +173,7 @@ const LoanApplicantsDetails = () => {
                   <div class="col">
                     <a class="btn btn-outline-primary mb-1 me-1">Loans</a>{" "}
                   </div>
-                  <div class="col">
-                    <a class="btn btn-primary mb-1 me-1">Available Balance</a>{" "}
-                  </div>
+                 
                 </div>
               </div>
             </div>
@@ -208,6 +206,7 @@ const LoanApplicantsDetails = () => {
                     <th>Mode</th>
                       <th>Debit</th>
                       <th>Credit</th>
+                      <th>Interest Amount</th>
                       <th>Balance</th>
                       <th>Uploaded By</th>
                       <th>Created At</th>
@@ -221,7 +220,27 @@ const LoanApplicantsDetails = () => {
                         <td>{new Date(repayment.paymentDate).toLocaleDateString()}</td>
                         <td>{repayment.type === 'withdrawal' ? 'Withdrawal' : 'Deposit'}</td>
                         <td>{repayment.modeOfPayment}</td>
-                        <td>&#8358;{repayment.amount}</td>
+                        <td>&#8358;{repayment.status === "withdrawn" ? (
+                          <>
+                            {repayment.amount?.toLocaleString("en-US", {
+                              minimumFractionDigits: 2,
+                              maximumFractionDigits: 2,
+                            })}
+                          </>
+                        ) : (
+                          <>--------</>
+                        )}</td>
+                        
+                        <td>&#8358; {repayment.status === "deposited" ? (
+                          <>
+                            {repayment.amount?.toLocaleString("en-US", {
+                              minimumFractionDigits: 2,
+                              maximumFractionDigits: 2,
+                            })}
+                          </>
+                        ) : (
+                          <>--------</>
+                        )}</td>
                         <td>&#8358;{repayment.interestRate}</td>
                         <td>&#8358;{repayment.balance}</td>
                         <td>{repayment.uploadedBy}</td>
