@@ -14,7 +14,7 @@ const Loans = () => {
   
     const startDate = today.toISOString().split('T')[0];
     const endDate = tomorrow.toISOString().split('T')[0];
-    fetch(`https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/loans/total-deposit-amount-by-cash?startDate=${startDate}&endDate=${endDate}`)
+    fetch(`https://eaglevision.onrender.com/api/v1/loans/total-deposit-amount-by-cash?startDate=${startDate}&endDate=${endDate}`)
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -32,7 +32,7 @@ const Loans = () => {
       .finally(() => setLoading(false)); // Set loading to false here, after success or error
   }, []);
   useEffect(() => {
-    fetch("https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/loans")
+    fetch("https://eaglevision.onrender.com/api/v1/loans")
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -211,7 +211,7 @@ const Loans = () => {
             <div class="card-body">
               <div class="crm-cart-data">
                 <p>&#8358; {(total?.totalDepositAmount)?.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
-                <span class="d-block mb-3 text-black">All Loan Deposit</span>
+                <span class="d-block mb-3 text-black">All Loan Repayment</span>
                 <span class="badge bg-white text-black border-0">
                   Last 4 Month
                 </span>

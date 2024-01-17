@@ -8,7 +8,7 @@ const UsersDetails = () => {
 
   const { id } = useParams();
   useEffect(() => {
-    fetch(`https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/users/${id}`)
+    fetch(`https://eaglevision.onrender.com/api/v1/users/${id}`)
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");

@@ -41,7 +41,7 @@ const LoanApplication = () => {
   const [interestRate, setinterestRate] = useState("");
 
   useEffect(() => {
-    fetch("https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/customers")
+    fetch("https://eaglevision.onrender.com/api/v1/customers")
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -103,7 +103,7 @@ const LoanApplication = () => {
 
     try {
       const response = await fetch(
-        "https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/loans/disbursement",
+        "https://eaglevision.onrender.com/api/v1/loans/disbursement",
         {
           method: "POST",
           headers: {
@@ -309,7 +309,7 @@ const LoanApplication = () => {
                     </select>
                   </div>
                   <div class="mb-3 col-md-4">
-                    <label class="form-label">Interest Rate</label>
+                    <label class="form-label">Interest Amount</label>
                     <div class="input-group mb-3">
                       <span class="input-group-text border-0">&#8358;</span>
                       <input

@@ -20,10 +20,10 @@ const LoanApplicants = () => {
 
         if (startDate && endDate) {
           // If start and end dates are provided, fetch data for the date range
-          apiUrl = `https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/loans/by-payment-date?startDate=${startDate}&endDate=${endDate}`;
+          apiUrl = `https://eaglevision.onrender.com/api/v1/loans/by-payment-date?startDate=${startDate}&endDate=${endDate}`;
         } else {
           // If start and end dates are not provided, fetch all data
-          apiUrl = "https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/loans";
+          apiUrl = "https://eaglevision.onrender.com/api/v1/loans";
         }
 
         const response = await fetch(apiUrl);
@@ -35,7 +35,7 @@ const LoanApplicants = () => {
           const customerId = loan.customer;
           if (customerId) {
             const customerResponse = await fetch(
-              `https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/customers/${customerId}`
+              `https://eaglevision.onrender.com/api/v1/customers/${customerId}`
             );
             const customerData = await customerResponse.json();
             return customerData.data;
@@ -77,7 +77,7 @@ const LoanApplicants = () => {
   const deleteLoan = async (loanId) => {
     try {
       const response = await fetch(
-        `https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/loans/${loanId}`,
+        `https://eaglevision.onrender.com/api/v1/loans/${loanId}`,
         {
           method: "DELETE",
           headers: {
@@ -183,7 +183,7 @@ const LoanApplicants = () => {
                     <strong>Amt Approved (&#8358;)</strong>
                   </th>
                   <th>
-                    <strong>Interest On Loan (&#8358;)</strong>
+                    <strong>Type</strong>
                   </th>
                   <th>
                     <strong>Total Loan + Interest(&#8358;)</strong>
@@ -231,7 +231,11 @@ const LoanApplicants = () => {
                       {loanitem.loanTitle}
                     </td>
                     <td>&#8358; {loanitem.amount}</td>
-                    <td>&#8358; {loanitem.interestRate}</td>
+                    <td>{loanitem.type === 'disbursement' || loanitem.balance === 'deposit' ? (
+                      <span className="text-success">Credit</span>
+                    ) : (
+                      <span className="text-danger">Debit</span>
+                    )}</td>
                     <td>
                       &#8358;
                       {safeSumAndFormat(loanitem.amount, loanitem.interestRate)}
@@ -279,9 +283,13 @@ const LoanApplicants = () => {
                           >
                             View Details
                           </Link>
-                          <a className="dropdown-item" href="#">
+                          <Link
+                            to={`/edit-loan/${loanitem._id}`}
+                            class="dropdown-item"
+                          >
                             Edit
-                          </a>
+                          </Link>
+                        
                           <a
                             className="dropdown-item"
                             onClick={() => deleteLoan(loanitem._id)}

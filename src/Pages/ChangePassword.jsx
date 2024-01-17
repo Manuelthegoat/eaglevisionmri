@@ -32,7 +32,7 @@ const ChangePassword = () => {
     setLoading(true);
 
     try {
-      const response = await fetch(`https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/register/change-password`, {
+      const response = await fetch(`https://eaglevision.onrender.com/api/v1/register/change-password`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

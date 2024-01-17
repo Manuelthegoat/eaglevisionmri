@@ -7,11 +7,12 @@ const LoanApplicantsDetails = () => {
   const [loading, setLoading] = useState(true);
 
   const [loanApplicantsDetails, setLoanApplicantsDetails] = useState(null);
+  const [repayments, setRepayments] = useState(null);
   const [customerDetails, setCustomerDetails] = useState(null);
 
   const { id } = useParams();
   useEffect(() => {
-    fetch(`https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/loans/${id}`)
+    fetch(`https://eaglevision.onrender.com/api/v1/loans/${id}`)
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -24,7 +25,7 @@ const LoanApplicantsDetails = () => {
 
         // fetch customer details using the id from loanApplicantsDetails.customer
         return fetch(
-          `https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/customers/${data.data.customer}`
+          `https://eaglevision.onrender.com/api/v1/customers/${data.data.customer}`
         );
       })
       .then((response) => {
@@ -43,6 +44,32 @@ const LoanApplicantsDetails = () => {
       })
       .finally(() => setLoading(false));
   }, [id]);
+
+  useEffect(() => {
+    // Fetch repayments using the customer id
+    if (customerDetails) {
+      fetch(`https://eaglevision.onrender.com/api/v1/loans/customer/${id}/loans`)
+        .then((response) => {
+          console.log(response)
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          return response.json();
+        })
+        .then((repaymentsData) => {
+          console.log("Fetched Repayments Data:", repaymentsData);
+          setRepayments(repaymentsData.data);
+        })
+        .catch((error) => {
+          console.log("Error fetching repayments data: ", error);
+          toast.error("Repayments Failed To Fetched");
+        });
+    }
+  }, [customerDetails]);
+
+  function capitalizeFirstLetter(word) {
+    return word?.charAt(0)?.toUpperCase() + word?.slice(1);
+}
 
   return (
     <>
@@ -65,21 +92,34 @@ const LoanApplicantsDetails = () => {
                 </div>
                 <div class="profile-details">
                   <div class="profile-name px-3 pt-2">
-                    <h4 class="text-primary mb-0">{customerDetails?.name}</h4>
+                  <h4 class="text-primary mb-0">
+                  Name: {capitalizeFirstLetter(customerDetails?.name)}
+                </h4>
                     <p>Phone: {customerDetails?.customersPhoneNo}</p>
+                    <p>Sex: {customerDetails?.sex}</p>
                   </div>
                   <div class="profile-email px-2 pt-2">
-                    <h4 class="text-muted mb-0">
-                      Account Officer: nmesonma Ezeh (08168184111)
-                    </h4>
-                    <h4 className="text-muted mb-0">
+                   
+                    <p className="text-muted mb-0">
                       Guarantor Name:{" "}
                       {loanApplicantsDetails?.firstGuarantorsName}
-                    </h4>
+                    </p>
                     <p>
                       Guarantor Phone:{" "}
                       {loanApplicantsDetails?.firstGuarantorsPhoneNumber}
                     </p>
+                    <p>
+                      Guarantor Occupation:{" "}
+                      {loanApplicantsDetails?.firstGuarantorsOccupation}
+                    </p>
+                  </div>
+                  <div class="profile-email px-2 pt-2">
+                   
+                    <h2 className="text-muted mb-0">
+                     Balance:{" "}
+                      {loanApplicantsDetails?.balance}
+                    </h2>
+                   
                   </div>
                   <div class="dropdown ms-auto">
                     <a
@@ -152,7 +192,7 @@ const LoanApplicantsDetails = () => {
                   Repay Loan
                 </a> */}
                 <Link to={`/repay-loan/${id}`} class="btn btn-primary mb-2">
-                  Repay Loan
+                  Add Loan/ Repay
                 </Link>
               </div>
             </div>
@@ -176,6 +216,7 @@ const LoanApplicantsDetails = () => {
                     </tr>
                   </thead>
                   <tbody>
+                  
                     <tr>
                       <td>AGU CHINWENDU SAMUEL</td>
 

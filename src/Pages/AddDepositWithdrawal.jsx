@@ -23,7 +23,7 @@ const AddDepositWithdrawal = () => {
   const { id } = useParams();
   useEffect(() => {
     fetch(
-      `https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/customers/${id}`
+      `https://eaglevision.onrender.com/api/v1/customers/${id}`
     )
       .then((response) => {
         if (!response.ok) {
@@ -41,7 +41,7 @@ const AddDepositWithdrawal = () => {
   }, [id]);
   useEffect(() => {
     fetch(
-      `https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/users/${cookies.userId}`
+      `https://eaglevision.onrender.com/api/v1/users/${cookies.userId}`
     )
       .then((response) => {
         if (!response.ok) {
@@ -82,7 +82,7 @@ const AddDepositWithdrawal = () => {
 
     try {
       const response = await fetch(
-        `https://cute-teal-clownfish-belt.cyclic.cloud/api/v1${postEndpoint}`,
+        `https://eaglevision.onrender.com/api/v1${postEndpoint}`,
         {
           method: "POST",
           headers: {
@@ -161,6 +161,7 @@ const AddDepositWithdrawal = () => {
                       onChange={(e) => setType(e.target.value)}
                       class="default-select form-control wide"
                     >
+                      <option value="">select one</option>
                       <option value="cash">Cash</option>
                       <option value="transfer">Transfer</option>
                       <option value="credit_card">Credit Card</option>

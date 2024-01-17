@@ -33,7 +33,7 @@ const AddNewUser = () => {
 
     try {
       const response = await fetch(
-        "https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/users/register",
+        "https://eaglevision.onrender.com/api/v1/users/register",
         {
           method: "POST",
           headers: {
@@ -144,7 +144,7 @@ const AddNewUser = () => {
                     >
                       <option selected>Select Role</option>
                       <option value={"accountOfficer"}>Account Officer</option>
-                      <option value={"manager"}>Manager</option>
+                      <option value={"Manager"}>Manager</option>
                       <option value={"assistantManager"}>
                         Assistant Manager
                       </option>

@@ -5,7 +5,7 @@ const Users = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/register")
+    fetch("https://eaglevision.onrender.com/api/v1/register")
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");

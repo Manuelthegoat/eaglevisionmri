@@ -12,7 +12,7 @@ const CustomerList = () => {
   const [displayedCustomers, setDisplayedCustomers] = useState([]); // stores data currently displayed in table
 
   useEffect(() => {
-    fetch("https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/customers")
+    fetch("https://eaglevision.onrender.com/api/v1/customers")
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -35,7 +35,7 @@ const CustomerList = () => {
   const deleteCustomer = (customerId) => {
     setDeleting(true);
     fetch(
-      `https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/customers/${customerId}`,
+      `https://eaglevision.onrender.com/api/v1/customers/${customerId}`,
       {
         method: "DELETE",
       }
@@ -142,8 +142,16 @@ const CustomerList = () => {
                 <tbody>
                   {displayedCustomers.map((customer, index) => (
                     <tr key={index}>
-                      <td>{index+1}</td>
-                      <td>{customer.name}</td>
+                      <td>{index + 1}</td>
+                      <td>
+                        {" "}
+                        <Link
+                          to={`/customer-available-balance/${customer._id}`}
+                          class="dropdown-item"
+                        >
+                          {customer.name}{" "}
+                        </Link>
+                      </td>
 
                       <td>EV{customer?._id?.substring(0, 9)}</td>
                       <td>{customer.customersPhoneNo}</td>

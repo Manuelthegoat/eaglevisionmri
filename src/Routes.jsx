@@ -22,6 +22,14 @@ import LoanApplicantsDetails from "./Pages/LoanApplicantsDetails";
 import CustomerAvailableBalance from "./Pages/CustomerAvailableBalance";
 import UsersDetails from "./Pages/UsersDetails";
 import RepayLoan from "./Pages/RepayLoan";
+import TransactionsByCash from "./Pages/TransactionsByCash";
+import AllTransactions from "./Pages/AllTransactions";
+import TransactionsByTransfer from "./Pages/TransactionsByTransfer";
+import CustomerDetails from "./Pages/CustomerDetails";
+import LoanInterests from "./Pages/LoanInterests";
+import Expenses from "./Pages/Expenses";
+import AddExpense from "./Pages/AddExpense";
+import EditLoan from "./Pages/EditLoan";
 
 const Routing = () => {
   return (
@@ -61,6 +69,14 @@ const Routing = () => {
         />
         <Route path="/change-password" element={<ChangePassword />} />
         <Route path="/loan-duration" element={<LoanDurations />} />
+        <Route path="/transactions-by-cash" element={<TransactionsByCash />} />
+        <Route path="/transactions-by-transfer" element={<TransactionsByTransfer />} />
+        <Route path="/transactions" element={<AllTransactions />} />
+        <Route path="/expenses" element={<Expenses />} />
+        <Route path="/add-expense" element={<AddExpense />} />
+        <Route path="/loan-interests" element={<LoanInterests />} />
+        <Route path="/edit-loan/:id" element={<EditLoan />} />
+        <Route path="/customer-details/:id" element={<CustomerDetails />} />
       </Routes>
     </>
   );

@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 const CustomerAvailableBalance = () => {
   const [customerDetails, setCustomerDetails] = useState(null);
 
   const { id } = useParams();
   useEffect(() => {
-    fetch(`https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/customers/${id}`)
+    fetch(
+      `https://eaglevision.onrender.com/api/v1/customers/${id}`
+    )
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -21,15 +23,15 @@ const CustomerAvailableBalance = () => {
         console.log("Error fetching specific customer data: ", error)
       );
   }, [id]);
+  function capitalizeFirstLetter(word) {
+    return word?.charAt(0)?.toUpperCase() + word?.slice(1);
+  }
   return (
     <>
       <div class="row">
         <div class="col-lg-12">
           <div class="profile card card-body px-3 pt-3 pb-0">
             <div class="profile-head">
-              {/* <div class="photo-content">
-                <div class="cover-photo rounded"></div>
-              </div> */}
               <div class="profile-info">
                 <div class="profile-photo">
                   <img
@@ -40,48 +42,44 @@ const CustomerAvailableBalance = () => {
                 </div>
                 <div class="profile-details">
                   <div class="profile-name px-3 pt-2">
-                    <h4 class="text-primary mb-0">{customerDetails?.name}</h4>
+                    <h4 class="text-primary mb-0">
+                      Name: {capitalizeFirstLetter(customerDetails?.name)}
+                    </h4>
                     <p>Phone: {customerDetails?.customersPhoneNo}</p>
                   </div>
                   <div class="profile-email px-2 pt-2">
-                    <h4 class="text-muted mb-0">
-                      Account Officer: nmesonma Ezeh (08168184111)
-                    </h4>
+                    <p class="text-muted mb-0">
+                      Account number: {customerDetails?.accountNumber}
+                    </p>
+                    <p className="text-muted mb-0">
+                      Sex: {customerDetails?.sex}
+                    </p>
+                  </div>
+                  <div class="profile-email px-2 pt-2">
+                    <p class="text-muted mb-0">
+                      Next of kin: {customerDetails?.nextOfKin}
+                    </p>
+                    <p className="text-muted mb-0">
+                      Next Of Kin Phone Number:{" "}
+                      {customerDetails?.nextOfKinPhone}
+                    </p>
                   </div>
                   <div class="dropdown ms-auto">
-                    <a
-                      href="#"
-                      class="btn btn-primary light sharp"
-                      data-bs-toggle="dropdown"
-                      aria-expanded="true"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="18px"
-                        height="18px"
-                        viewBox="0 0 24 24"
-                        version="1.1"
-                      >
-                        <g
-                          stroke="none"
-                          stroke-width="1"
-                          fill="none"
-                          fill-rule="evenodd"
-                        >
-                          <rect x="0" y="0" width="24" height="24"></rect>
-                          <circle fill="#000000" cx="5" cy="12" r="2"></circle>
-                          <circle fill="#000000" cx="12" cy="12" r="2"></circle>
-                          <circle fill="#000000" cx="19" cy="12" r="2"></circle>
-                        </g>
-                      </svg>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end">
-                      <li class="dropdown-item">
-                        <i class="fa fa-user-circle text-primary me-2"></i> View
-                        Customer Details
-                      </li>
-                    </ul>
-                  </div>
+                  <a
+                    href="#"
+                    class="btn btn-primary light sharp"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="true"
+                  >
+                View Profile <i class="fa fa-user-circle text-primary me-2"></i>
+                  </a>
+                  <ul class="dropdown-menu dropdown-menu-end">
+                    <Link to={`/customer-details/${id}`} class="dropdown-item">
+                      <i class="fa fa-user-circle text-primary me-2"></i> View
+                      Customer Details
+                    </Link>
+                  </ul>
+                </div>
                 </div>
               </div>
             </div>

@@ -1,16 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import Loader from "../Components/Loader/Loader";
+import * as XLSX from "xlsx";
 
 const CustomerProfile = () => {
   const [customerDetails, setCustomerDetails] = useState(null);
+  const [selectedMode, setSelectedMode] = useState("all");
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
+  
 
   const { id } = useParams();
   useEffect(() => {
     fetch(
-      `https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/customers/${id}`
+      `https://eaglevision.onrender.com/api/v1/customers/${id}`
     )
       .then((response) => {
         if (!response.ok) {
@@ -29,7 +32,7 @@ const CustomerProfile = () => {
   }, [id]);
   useEffect(() => {
     fetch(
-      `https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/customers/${id}/transactions`
+      `https://eaglevision.onrender.com/api/v1/customers/${id}/transactions`
     )
       .then((response) => {
         if (!response.ok) {
@@ -46,6 +49,16 @@ const CustomerProfile = () => {
       )
       .finally(() => setLoading(false));
   }, [id]);
+  const handleModeChange = (event) => {
+    setSelectedMode(event.target.value);
+  };
+  const filteredTransactions = transactions.filter((transact) => {
+    if (selectedMode === "all") {
+      return true;
+    } else {
+      return transact.modeOfPayment === selectedMode;
+    }
+  });
   return (
     <>
       {loading && <Loader />}
@@ -81,31 +94,13 @@ const CustomerProfile = () => {
                       data-bs-toggle="dropdown"
                       aria-expanded="true"
                     >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="18px"
-                        height="18px"
-                        viewBox="0 0 24 24"
-                        version="1.1"
-                      >
-                        <g
-                          stroke="none"
-                          stroke-width="1"
-                          fill="none"
-                          fill-rule="evenodd"
-                        >
-                          <rect x="0" y="0" width="24" height="24"></rect>
-                          <circle fill="#000000" cx="5" cy="12" r="2"></circle>
-                          <circle fill="#000000" cx="12" cy="12" r="2"></circle>
-                          <circle fill="#000000" cx="19" cy="12" r="2"></circle>
-                        </g>
-                      </svg>
+                  View Profile <i class="fa fa-user-circle text-primary me-2"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
-                      <li class="dropdown-item">
+                      <Link to={`/customer-details/${id}`} class="dropdown-item">
                         <i class="fa fa-user-circle text-primary me-2"></i> View
                         Customer Details
-                      </li>
+                      </Link>
                     </ul>
                   </div>
                 </div>
@@ -142,7 +137,22 @@ const CustomerProfile = () => {
           <div class="card">
             <div class="card-header">
               <h4 class="card-title">Deposits/Withdrawal</h4>
+              
               <div class="d-flex align-items-center flex-wrap flex-sm-nowrap">
+             
+              <select
+              className="form-control"
+              value={selectedMode}
+              onChange={handleModeChange}
+            >
+              <option value="all">Filter By Cash/Transfer</option>
+              <option value="cash">Cash</option>
+              <option value="transfer">Transfer</option>
+            </select>
+               
+              </div>
+              <div class="d-flex align-items-center flex-wrap flex-sm-nowrap">
+             
                 <Link
                   to={`/add-contribution/${customerDetails?._id}`}
                   class="btn btn-primary mb-2"
@@ -151,6 +161,7 @@ const CustomerProfile = () => {
                 </Link>
               </div>
             </div>
+          
             <div class="card-body p-0">
               <div class="table-responsive active-projects">
                 <div className="rowed"></div>
@@ -161,8 +172,8 @@ const CustomerProfile = () => {
                       <th>Payment Date</th>
                       <th>Desc.</th>
                       <th>Type</th>
-                      <th>Credit</th>
                       <th>Debit</th>
+                      <th>Credit</th>
                       <th>Avail Bal (N)</th>
                       <th>Old Bal (N)</th>
                       <th>Mode</th>
@@ -174,7 +185,7 @@ const CustomerProfile = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {transactions.map((transact) => (
+                    {filteredTransactions.map((transact) => (
                       <tr>
                         <td>
                           {transact.paymentDate
@@ -191,12 +202,26 @@ const CustomerProfile = () => {
                           </span>
                         </td>
                         <td>
-                          {transact.amount?.toLocaleString("en-US", {
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 2,
-                          })}
+                          {transact.choose === "Debit" ? (
+                            <>{transact.amount?.toLocaleString("en-US", {
+                              minimumFractionDigits: 2,
+                              maximumFractionDigits: 2,
+                            })}</>
+                          ) : (
+                            <>--------</>
+                          )}
                         </td>
-                        <td>--------</td>
+                        <td>
+                          {transact.choose === "credit" ? (
+                            <>{transact.amount?.toLocaleString("en-US", {
+                              minimumFractionDigits: 2,
+                              maximumFractionDigits: 2,
+                            })}</>
+                          ) : (
+                            <>--------</>
+                          )}
+                        </td>
+
                         <td>35,100.0</td>
                         <td>100.0</td>
                         <td>
@@ -205,7 +230,9 @@ const CustomerProfile = () => {
                             : "N/A"}
                         </td>
                         <td>
-                          {transact.collectedBy ? transact.collectedBy?.toUpperCase() : "N/A"}
+                          {transact.collectedBy
+                            ? transact.collectedBy?.toUpperCase()
+                            : "N/A"}
                         </td>
                         <td>--------</td>
                         <td>{new Date(transact.createdAt).toDateString()}</td>

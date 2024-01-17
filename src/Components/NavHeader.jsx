@@ -1,6 +1,14 @@
 import React from "react";
+import { useNavigate } from 'react-router-dom';
+
 
 const NavHeader = () => {
+  const navigate = useNavigate();
+
+  const handleGoBack = () => {
+    navigate(-1); // This will go back to the previous page in the history
+  };
+
   return (
     <div>
       <div class="nav-header">
@@ -9,7 +17,7 @@ const NavHeader = () => {
          <img src="./images/logo/logofull.png" class="brand-title" alt="" />
         </a>
         <div class="nav-control">
-          <div class="hamburger">
+          <div class="hamburger" onClick={handleGoBack}>
             <span class="line">
               <svg
                 width="21"

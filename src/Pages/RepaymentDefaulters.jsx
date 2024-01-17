@@ -10,7 +10,7 @@ const RepaymentDefaulters = () => {
 
   useEffect(() => {
     fetch(
-      "https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/loans/defaulters"
+      "https://eaglevision.onrender.com/api/v1/loans/defaulters"
     )
       .then((response) => {
         if (!response.ok) {

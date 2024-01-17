@@ -58,7 +58,7 @@ const AddCustomer = () => {
 
     try {
       const response = await fetch(
-        "https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/customers",
+        "https://eaglevision.onrender.com/api/v1/customers",
         {
           method: "POST",
           headers: {
@@ -87,7 +87,7 @@ const AddCustomer = () => {
   };
 
   useEffect(() => {
-    fetch("https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/users")
+    fetch("https://eaglevision.onrender.com/api/v1/users")
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");

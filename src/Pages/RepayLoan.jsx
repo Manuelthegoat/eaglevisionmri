@@ -19,7 +19,7 @@ const RepayLoan = () => {
   const deleteLoan = async () => {
     try {
       const response = await fetch(
-        `https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/loans/${id}`,
+        `https://eaglevision.onrender.com/api/v1/loans/${id}`,
         {
           method: "DELETE",
           headers: {
@@ -40,7 +40,7 @@ const RepayLoan = () => {
     }
   };
   useEffect(() => {
-    fetch(`https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/loans/${id}`)
+    fetch(`https://eaglevision.onrender.com/api/v1/loans/${id}`)
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -53,7 +53,7 @@ const RepayLoan = () => {
 
         // fetch customer details using the id from loanApplicantsDetails.customer
         return fetch(
-          `https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/customers/${data.data.customer}`
+          `https://eaglevision.onrender.com/api/v1/customers/${data.data.customer}`
         );
       })
       .then((response) => {
@@ -95,7 +95,7 @@ const RepayLoan = () => {
 
     try {
       const response = await fetch(
-        `https://cute-teal-clownfish-belt.cyclic.cloud/api/v1${postEndpoint}`,
+        `https://eaglevision.onrender.com/api/v1${postEndpoint}`,
         {
           method: "POST",
           headers: {
@@ -180,7 +180,7 @@ const RepayLoan = () => {
                     </select>
                   </div>
                   <div class="mb-3 col-md-6">
-                    <label class="form-label">Interest Rate</label>
+                    <label class="form-label">Interest Amount</label>
                     <input
                       type="number"
                       class="form-control"

@@ -12,7 +12,7 @@ const SavingsList = () => {
   const [displayedCustomers, setDisplayedCustomers] = useState([]); // stores data currently displayed in table
 
   useEffect(() => {
-    fetch("https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/customers")
+    fetch("https://eaglevision.onrender.com/api/v1/customers")
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -35,7 +35,7 @@ const SavingsList = () => {
   const deleteCustomer = (customerId) => {
     setDeleting(true);
     fetch(
-      `https://cute-teal-clownfish-belt.cyclic.cloud/api/v1/customers/${customerId}`,
+      `https://eaglevision.onrender.com/api/v1/customers/${customerId}`,
       {
         method: "DELETE",
       }
@@ -76,6 +76,8 @@ const SavingsList = () => {
     const options = { year: "numeric", month: "short", day: "numeric" };
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
+
+  
 
   return (
     <>
@@ -153,7 +155,7 @@ const SavingsList = () => {
                     <strong>Created At</strong>
                   </th>
                   <th>
-                    <strong>Updated At</strong>
+                    <strong>Payment Date</strong>
                   </th>
                   <th>Action</th>
                 </tr>
