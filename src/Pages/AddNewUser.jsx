@@ -30,6 +30,7 @@ const AddNewUser = () => {
       homeAddress: address,
       password: password,
     };
+    const token = localStorage.getItem("token"); // Replace 'your_token_key' with the actual key you use to store the token
 
     try {
       const response = await fetch(
@@ -38,6 +39,8 @@ const AddNewUser = () => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+
           },
           body: JSON.stringify(userData),
         }

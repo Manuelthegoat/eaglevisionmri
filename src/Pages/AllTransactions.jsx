@@ -41,8 +41,14 @@ const AllTransactions = () => {
   };
 
   useEffect(() => {
+    const token = localStorage.getItem("token"); // Replace 'your_token_key' with the actual key you use to store the token
+
     fetch(
-      "https://eaglevision.onrender.com/api/v1/transactions/transactions"
+      "https://eaglevision.onrender.com/api/v1/transactions/transactions", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
     )
       .then((response) => {
         if (!response.ok) {

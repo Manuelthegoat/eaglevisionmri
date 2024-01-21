@@ -9,8 +9,14 @@ const RepaymentDefaulters = () => {
 
 
   useEffect(() => {
+    const token = localStorage.getItem("token");
+
     fetch(
-      "https://eaglevision.onrender.com/api/v1/loans/defaulters"
+      "https://eaglevision.onrender.com/api/v1/loans/defaulters", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
     )
       .then((response) => {
         if (!response.ok) {

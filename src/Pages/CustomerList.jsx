@@ -12,7 +12,13 @@ const CustomerList = () => {
   const [displayedCustomers, setDisplayedCustomers] = useState([]); // stores data currently displayed in table
 
   useEffect(() => {
-    fetch("https://eaglevision.onrender.com/api/v1/customers")
+    const token = localStorage.getItem("token");
+
+    fetch("https://eaglevision.onrender.com/api/v1/customers", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -33,13 +39,15 @@ const CustomerList = () => {
       .finally(() => setLoading(false)); // Set loading to false here, after success or error
   }, []);
   const deleteCustomer = (customerId) => {
+    const token = localStorage.getItem("token");
+
     setDeleting(true);
-    fetch(
-      `https://eaglevision.onrender.com/api/v1/customers/${customerId}`,
-      {
-        method: "DELETE",
-      }
-    )
+    fetch(`https://eaglevision.onrender.com/api/v1/customers/${customerId}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");

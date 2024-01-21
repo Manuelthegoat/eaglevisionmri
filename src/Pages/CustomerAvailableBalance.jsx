@@ -6,8 +6,13 @@ const CustomerAvailableBalance = () => {
 
   const { id } = useParams();
   useEffect(() => {
+    const token = localStorage.getItem("token"); 
     fetch(
-      `https://eaglevision.onrender.com/api/v1/customers/${id}`
+      `https://eaglevision.onrender.com/api/v1/customers/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
     )
       .then((response) => {
         if (!response.ok) {

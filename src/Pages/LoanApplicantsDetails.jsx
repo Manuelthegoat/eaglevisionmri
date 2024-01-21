@@ -13,7 +13,12 @@ const LoanApplicantsDetails = () => {
 
   const { id } = useParams();
   useEffect(() => {
-    fetch(`https://eaglevision.onrender.com/api/v1/loans/${id}`)
+    const token = localStorage.getItem("token");
+    fetch(`https://eaglevision.onrender.com/api/v1/loans/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -26,7 +31,11 @@ const LoanApplicantsDetails = () => {
 
         // fetch customer details using the id from loanApplicantsDetails.customer
         return fetch(
-          `https://eaglevision.onrender.com/api/v1/customers/${data.data.customer}`
+          `https://eaglevision.onrender.com/api/v1/customers/${data.data.customer}`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
       })
       .then((response) => {
@@ -47,10 +56,15 @@ const LoanApplicantsDetails = () => {
   }, [id]);
 
   useEffect(() => {
+    const token = localStorage.getItem("token");
     // Fetch repayments using the customer id
     if (customerDetails) {
       fetch(
-        `https://eaglevision.onrender.com/api/v1/loans/customer/${loanApplicantsDetails?.customer}/loans`
+        `https://eaglevision.onrender.com/api/v1/loans/customer/${loanApplicantsDetails?.customer}/loans`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       )
         .then((response) => {
           console.log(response);
@@ -129,7 +143,7 @@ const LoanApplicantsDetails = () => {
     XLSX.writeFile(wb, "Eagle Vision Loan Repayments.xlsx");
   };
   function addCommas(number) {
-    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return number?.toString()?.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
   return (
     <>
@@ -174,7 +188,7 @@ const LoanApplicantsDetails = () => {
                   </div>
                   <div class="profile-email px-2 pt-2">
                     <h2 className="text-muted mb-0">
-                      Loan Balance: {loanApplicantsDetails?.balance}
+                      Loan Balance: {addCommas(loanApplicantsDetails?.balance)}
                     </h2>
                   </div>
                   <div class="dropdown ms-auto">

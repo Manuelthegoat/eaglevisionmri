@@ -8,10 +8,16 @@ const TransactionsByTransfer = () => {
   const [AllTransactionsByCash, setAllTransactionsByCash] = useState([]);
   const [selectedDate, setSelectedDate] = useState(null);
   const [displayedCustomers, setDisplayedCustomers] = useState([]);
+  const token = localStorage.getItem("token");
+
 
   useEffect(() => {
     fetch(
-      "https://eaglevision.onrender.com/api/v1/transactions/transactions/transfer"
+      "https://eaglevision.onrender.com/api/v1/transactions/transactions/transfer", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
     )
       .then((response) => {
         if (!response.ok) {

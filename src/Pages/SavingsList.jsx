@@ -10,9 +10,14 @@ const SavingsList = () => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [allCustomers, setAllCustomers] = useState([]); // stores all fetched data
   const [displayedCustomers, setDisplayedCustomers] = useState([]); // stores data currently displayed in table
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
-    fetch("https://eaglevision.onrender.com/api/v1/customers")
+    fetch("https://eaglevision.onrender.com/api/v1/customers", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -38,6 +43,7 @@ const SavingsList = () => {
       `https://eaglevision.onrender.com/api/v1/customers/${customerId}`,
       {
         method: "DELETE",
+        Authorization: `Bearer ${token}`,
       }
     )
       .then((response) => {

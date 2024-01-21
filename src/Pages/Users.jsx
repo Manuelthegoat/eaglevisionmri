@@ -3,9 +3,15 @@ import Loader from "../Components/Loader/Loader";
 const Users = () => {
   const [customers, setCustomers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const token = localStorage.getItem("token");
+
 
   useEffect(() => {
-    fetch("https://eaglevision.onrender.com/api/v1/register")
+    fetch("https://eaglevision.onrender.com/api/v1/register", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");

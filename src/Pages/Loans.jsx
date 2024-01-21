@@ -16,7 +16,13 @@ const Loans = () => {
   
     const startDate = today.toISOString().split('T')[0];
     const endDate = tomorrow.toISOString().split('T')[0];
-    fetch(`https://eaglevision.onrender.com/api/v1/loans/total-deposit-amount-by-cash?startDate=${startDate}&endDate=${endDate}`)
+    const token = localStorage.getItem("token");
+
+    fetch(`https://eaglevision.onrender.com/api/v1/loans/total-deposit-amount-by-cash?startDate=${startDate}&endDate=${endDate}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -35,7 +41,13 @@ const Loans = () => {
   }, []);
   useEffect(() => {
     // Fetching all loans data
-    fetch("https://eaglevision.onrender.com/api/v1/loans")
+    const token = localStorage.getItem("token");
+
+    fetch("https://eaglevision.onrender.com/api/v1/loans", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");

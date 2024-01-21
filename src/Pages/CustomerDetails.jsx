@@ -6,9 +6,13 @@ const CustomerDetails = () => {
 
   const { id } = useParams();
   useEffect(() => {
-    fetch(
-      `https://eaglevision.onrender.com/api/v1/customers/${id}`
-    )
+    const token = localStorage.getItem("token");
+
+    fetch(`https://eaglevision.onrender.com/api/v1/customers/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -28,77 +32,81 @@ const CustomerDetails = () => {
   }
   return (
     <>
-    <div className="row">
-      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
-        <div class="product-detail-content">
-          <div class="new-arrival-content pr">
-            <h4> Name: {capitalizeFirstLetter(customerDetails?.name)}</h4>
-            <p>
-              Phone Number:{" "}
-              <span class="item"> {customerDetails?.customersPhoneNo}</span>
-            </p>
-
-            <p>
-              Sex:{" "}
-              <span class="item">
-                {capitalizeFirstLetter(customerDetails?.sex)}
-              </span>{" "}
-            </p>
-            <p>
-              Occupation:{" "}
-              <span class="item">
-                {capitalizeFirstLetter(customerDetails?.occupation)}
-              </span>
-            </p>
-            <p>
-              Date Of Birth:{" "}
-              <span class="item">
-                {capitalizeFirstLetter(customerDetails?.dateOfBirth)}
-              </span>
-            </p>
-            <div class="d-table mb-2">
-              <p class="price float-start d-block">
-                Account Balance: {customerDetails?.accountBalance}
+      <div className="row">
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+          <div class="product-detail-content">
+            <div class="new-arrival-content pr">
+              <h4> Name: {capitalizeFirstLetter(customerDetails?.name)}</h4>
+              <p>
+                Phone Number:{" "}
+                <span class="item"> {customerDetails?.customersPhoneNo}</span>
               </p>
+
+              <p>
+                Sex:{" "}
+                <span class="item">
+                  {capitalizeFirstLetter(customerDetails?.sex)}
+                </span>{" "}
+              </p>
+              <p>
+                Occupation:{" "}
+                <span class="item">
+                  {capitalizeFirstLetter(customerDetails?.occupation)}
+                </span>
+              </p>
+              <p>
+                Date Of Birth:{" "}
+                <span class="item">
+                  {capitalizeFirstLetter(customerDetails?.dateOfBirth)}
+                </span>
+              </p>
+              <div class="d-table mb-2">
+                <p class="price float-start d-block">
+                  Account Balance: {customerDetails?.accountBalance}
+                </p>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
-        <div class="product-detail-content">
-          <div class="new-arrival-content pr">
-            <h4> Next Of Kin Name: {capitalizeFirstLetter(customerDetails?.nextOfKin)}</h4>
-            <p>
-              Next Of Kin Phone Number:{" "}
-              <span class="item"> {customerDetails?.nextOfKinPhone}</span>
-            </p>
-
-            <p>
-              Contact Address:{" "}
-              <span class="item">
-                {capitalizeFirstLetter(customerDetails?.contactAddress)}
-              </span>{" "}
-            </p>
-            <p>
-              Bank Name:{" "}
-              <span class="item">
-                {capitalizeFirstLetter(customerDetails?.bankName)}
-              </span>
-            </p>
-            <p>
-              Bank Account Number:{" "}
-              <span class="item">
-                {capitalizeFirstLetter(customerDetails?.bankAccountNo)}
-              </span>
-            </p>
-            <div class="d-table mb-2">
-              <p class="price float-start d-block">
-                Account number: {customerDetails?.accountNumber}
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+          <div class="product-detail-content">
+            <div class="new-arrival-content pr">
+              <h4>
+                {" "}
+                Next Of Kin Name:{" "}
+                {capitalizeFirstLetter(customerDetails?.nextOfKin)}
+              </h4>
+              <p>
+                Next Of Kin Phone Number:{" "}
+                <span class="item"> {customerDetails?.nextOfKinPhone}</span>
               </p>
+
+              <p>
+                Contact Address:{" "}
+                <span class="item">
+                  {capitalizeFirstLetter(customerDetails?.contactAddress)}
+                </span>{" "}
+              </p>
+              <p>
+                Bank Name:{" "}
+                <span class="item">
+                  {capitalizeFirstLetter(customerDetails?.bankName)}
+                </span>
+              </p>
+              <p>
+                Bank Account Number:{" "}
+                <span class="item">
+                  {capitalizeFirstLetter(customerDetails?.bankAccountNo)}
+                </span>
+              </p>
+              <div class="d-table mb-2">
+                <p class="price float-start d-block">
+                  Account number: {customerDetails?.accountNumber}
+                </p>
+              </div>
             </div>
           </div>
         </div>
-      </div>
       </div>
     </>
   );

@@ -5,7 +5,6 @@ import "react-toastify/dist/ReactToastify.css";
 import Loader from "../Components/Loader/Loader";
 import { CookiesProvider, useCookies } from "react-cookie";
 
-
 const AddDepositWithdrawal = () => {
   const [customerDetails, setCustomerDetails] = useState(null);
   const [amount, setAmount] = useState("");
@@ -18,13 +17,17 @@ const AddDepositWithdrawal = () => {
   const [paymentDate, setPaymentDate] = useState("");
   const [description, setDescription] = useState("");
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const { id } = useParams();
   useEffect(() => {
-    fetch(
-      `https://eaglevision.onrender.com/api/v1/customers/${id}`
-    )
+    const token = localStorage.getItem("token"); // Replace 'your_token_key' with the actual key you use to store the token
+
+    fetch(`https://eaglevision.onrender.com/api/v1/customers/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -37,12 +40,18 @@ const AddDepositWithdrawal = () => {
       })
       .catch((error) =>
         console.log("Error fetching specific customer data: ", error)
-      ) .finally(() => setLoading(false));
+      )
+      .finally(() => setLoading(false));
   }, [id]);
+
   useEffect(() => {
-    fetch(
-      `https://eaglevision.onrender.com/api/v1/users/${cookies.userId}`
-    )
+    const token = localStorage.getItem("token"); // Replace 'your_token_key' with the actual key you use to store the token
+
+    fetch(`https://eaglevision.onrender.com/api/v1/users/${cookies.userId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -53,9 +62,8 @@ const AddDepositWithdrawal = () => {
         console.log("Fetched Logged In User Data:", data.data);
         setUser(data.data);
       })
-      .catch((error) =>
-        console.log("Error fetching Logged In data: ", error)
-      ) .finally(() => setLoading(false));
+      .catch((error) => console.log("Error fetching Logged In data: ", error))
+      .finally(() => setLoading(false));
   }, []);
 
   const handleSubmit = async (e) => {
@@ -70,15 +78,17 @@ const AddDepositWithdrawal = () => {
       description: description,
       modeOfPayment: type,
       paymentDate: paymentDate,
-      
     };
     if (debitCredit !== "debit") {
       formData.modeOfPayment = type;
     }
-    console.log(formData)
+    console.log(formData);
     setLoading(true);
-    const postEndpoint = debitCredit === "debit" ? "/transactions/withdrawal" : "/transactions/deposit";
-    
+    const postEndpoint =
+      debitCredit === "debit"
+        ? "/transactions/withdrawal"
+        : "/transactions/deposit";
+    const token = localStorage.getItem("token"); // Replace 'your_token_key' with the actual key you use to store the token
 
     try {
       const response = await fetch(
@@ -87,6 +97,8 @@ const AddDepositWithdrawal = () => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+
           },
           body: JSON.stringify(formData),
         }
@@ -98,10 +110,12 @@ const AddDepositWithdrawal = () => {
 
       const data = await response.json();
       console.log(data);
-      toast.success(`${debitCredit === "debit" ? "Withdrawal" : "Deposit"} added`);
+      toast.success(
+        `${debitCredit === "debit" ? "Withdrawal" : "Deposit"} added`
+      );
       setTimeout(() => {
-        navigate('/savings-list');
-    }, 1000);
+        navigate("/savings-list");
+      }, 1000);
     } catch (error) {
       console.error(
         "There was a problem with the fetch operation:",
@@ -131,8 +145,12 @@ const AddDepositWithdrawal = () => {
                       value={debitCredit}
                       onChange={(e) => {
                         setDebitCredit(e.target.value);
-                        console.log('Value after changing debitCredit:', e.target.value);
-                    }} class="default-select form-control wide"
+                        console.log(
+                          "Value after changing debitCredit:",
+                          e.target.value
+                        );
+                      }}
+                      class="default-select form-control wide"
                     >
                       <option value="">Select One</option>
                       <option value="credit">Credit</option>
@@ -174,9 +192,11 @@ const AddDepositWithdrawal = () => {
                       onChange={(e) => setCollectedBy(e.target.value)}
                       class="default-select form-control wide"
                     >
-                    
                       <option value="">Search and select agent</option>
-                      <option value={`${user.firstName}${user.lastName}`}>{user.firstName}{user.lastName}</option>
+                      <option value={`${user.firstName}${user.lastName}`}>
+                        {user.firstName}
+                        {user.lastName}
+                      </option>
                     </select>
                   </div>
                   <div class="mb-3 col-md-6">

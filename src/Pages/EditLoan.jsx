@@ -43,7 +43,13 @@ const EditLoan = () => {
 
   
   useEffect(() => {
-    fetch(`https://eaglevision.onrender.com/api/v1/loans/${id}`)
+    const token = localStorage.getItem("token");
+  
+    fetch(`https://eaglevision.onrender.com/api/v1/loans/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -54,9 +60,13 @@ const EditLoan = () => {
         console.log("Fetched Sing:", data.data);
         toast.success("Loan Details Fetched Successfully");
         setLoan(data.data);
-        
+  
         // Now, fetch customer data using the loan.customer value
-        return fetch(`https://eaglevision.onrender.com/api/v1/customers/${data.data.customer}`);
+        return fetch(`https://eaglevision.onrender.com/api/v1/customers/${data.data.customer}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
       })
       .then((response) => {
         if (!response.ok) {
@@ -75,6 +85,7 @@ const EditLoan = () => {
       })
       .finally(() => setLoading(false)); // Set loading to false here, after success or error
   }, [id]);
+  
   function capitalizeFirstLetter(word) {
     return word?.charAt(0)?.toUpperCase() + word?.slice(1);
   }
@@ -115,6 +126,7 @@ if (guarantor2Phone !== "") payload.secondGuarantorsPhoneNumber = guarantor2Phon
 if (guarantor2Occupation !== "") payload.secondGuarantorsOccupation = guarantor2Occupation;
 if (guarantor2HouseAddress !== "") payload.secondGuarantorsHouseAddress = guarantor2HouseAddress;
 if (guarantor2OfficeAddress !== "") payload.secondGuarantorsOfficeAddress = guarantor2OfficeAddress;
+const token = localStorage.getItem("token");
 
     try {
         const response = await fetch(
@@ -123,6 +135,8 @@ if (guarantor2OfficeAddress !== "") payload.secondGuarantorsOfficeAddress = guar
             method: "PATCH",
             headers: {
               "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+
             },
             body: JSON.stringify(payload),
           }

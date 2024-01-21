@@ -17,11 +17,17 @@ const CustomerProfile = () => {
   const { id } = useParams();
   useEffect(() => {
     const fetchData = async () => {
+      const token = localStorage.getItem("token");
+
       try {
         setLoading(true);
 
         const response = await fetch(
-          "https://eaglevision.onrender.com/api/v1/loans"
+          "https://eaglevision.onrender.com/api/v1/loans", {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
         const data = await response.json();
 
@@ -29,8 +35,14 @@ const CustomerProfile = () => {
         const promises = data.data?.map(async (loan) => {
           const customerId = loan.customer;
           if (customerId) {
+            const token = localStorage.getItem("token");
+
             const customerResponse = await fetch(
-              `https://eaglevision.onrender.com/api/v1/customers/${customerId}`
+              `https://eaglevision.onrender.com/api/v1/customers/${customerId}`, {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              }
             );
             const customerData = await customerResponse.json();
             return customerData.data;
@@ -54,7 +66,12 @@ const CustomerProfile = () => {
   }, []);
 
   useEffect(() => {
-    fetch(`https://eaglevision.onrender.com/api/v1/customers/${id}`)
+    const token = localStorage.getItem("token");
+    fetch(`https://eaglevision.onrender.com/api/v1/customers/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -71,8 +88,14 @@ const CustomerProfile = () => {
       .finally(() => setLoading(false));
   }, [id]);
   useEffect(() => {
+    const token = localStorage.getItem("token");
+
     fetch(
-      `https://eaglevision.onrender.com/api/v1/customers/${id}/transactions`
+      `https://eaglevision.onrender.com/api/v1/customers/${id}/transactions`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
     )
       .then((response) => {
         if (!response.ok) {
@@ -167,6 +190,9 @@ const CustomerProfile = () => {
     XLSX.writeFile(wb, "Eagle Vision Loan Repayments.xlsx");
   };
 
+  function addCommas(number) {
+    return number?.toString()?.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
   return (
     <>
       {loading && <Loader />}
@@ -237,7 +263,7 @@ const CustomerProfile = () => {
                   </div>
                   <div class="col">
                     <a class="btn btn-primary mb-1 me-1">
-                      Available Balance: {customerDetails?.accountBalance}
+                      Available Balance: {addCommas(customerDetails?.accountBalance)}
                     </a>{" "}
                   </div>
                 </div>
@@ -293,7 +319,6 @@ const CustomerProfile = () => {
                     <tr>
                       <th>Payment Date</th>
                       <th>Desc.</th>
-                      <th>Type</th>
                       <th>Debit</th>
                       <th>Credit</th>
                       <th>Mode</th>
@@ -317,11 +342,7 @@ const CustomerProfile = () => {
                         <td>
                           {transact.description ? transact.description : "N/A"}
                         </td>
-                        <td>
-                          <span class="badge light badge-success">
-                            {transact.type?.toUpperCase()}
-                          </span>
-                        </td>
+                       
                         <td>
                           {transact.choose === "Debit" ? (
                             <>

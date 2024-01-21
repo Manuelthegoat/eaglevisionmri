@@ -41,7 +41,13 @@ const LoanApplication = () => {
   const [interestRate, setinterestRate] = useState("");
 
   useEffect(() => {
-    fetch("https://eaglevision.onrender.com/api/v1/customers")
+    const token = localStorage.getItem("token");
+
+    fetch("https://eaglevision.onrender.com/api/v1/customers", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -100,14 +106,18 @@ const LoanApplication = () => {
       secondGuarantorsHouseAddress: guarantor2HouseAddress,
       secondGuarantorsOfficeAddress: guarantor2OfficeAddress,
     };
+    const token = localStorage.getItem("token");
 
     try {
+
       const response = await fetch(
         "https://eaglevision.onrender.com/api/v1/loans/disbursement",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+
           },
           body: JSON.stringify(payload), // Convert the JavaScript object to a JSON string
         }

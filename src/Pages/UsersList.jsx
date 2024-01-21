@@ -5,9 +5,15 @@ import { Link } from "react-router-dom";
 const UsersList = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const token = localStorage.getItem("token");
+
 
   useEffect(() => {
-    fetch("https://eaglevision.onrender.com/api/v1/users")
+    fetch("https://eaglevision.onrender.com/api/v1/users", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");

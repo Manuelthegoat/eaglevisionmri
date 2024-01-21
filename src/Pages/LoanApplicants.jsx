@@ -12,7 +12,7 @@ const LoanApplicants = () => {
   const [customerData, setCustomerData] = useState(null);
 
   function addCommas(number) {
-    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return number?.toString()?.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
 
   useEffect(() => {
@@ -30,7 +30,13 @@ const LoanApplicants = () => {
           apiUrl = "https://eaglevision.onrender.com/api/v1/loans";
         }
 
-        const response = await fetch(apiUrl);
+        const token = localStorage.getItem("token");
+
+        const response = await fetch(apiUrl, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         const data = await response.json();
 
         const uniqueLoans = data.data.reduceRight((unique, loan) => {
@@ -50,9 +56,17 @@ const LoanApplicants = () => {
         const promises = uniqueLoans?.map(async (loan) => {
           const customerId = loan.customer;
           if (customerId) {
+            const token = localStorage.getItem("token"); // Replace 'your_token_key' with the actual key you use to store the token
+
             const customerResponse = await fetch(
-              `https://eaglevision.onrender.com/api/v1/customers/${customerId}`
+              `https://eaglevision.onrender.com/api/v1/customers/${customerId}`,
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              }
             );
+
             const customerData = await customerResponse.json();
             return customerData.data;
           }
@@ -83,15 +97,16 @@ const LoanApplicants = () => {
   function safeSumAndFormat(a, b) {
     const numberA = parseFloat(a);
     const numberB = parseFloat(b);
-  
+
     if (!isNaN(numberA) && !isNaN(numberB)) {
       const sum = (numberA + numberB).toFixed(2);
       return addCommas(sum);
     }
-  
+
     return "N/A"; // or some other default value if the conversion fails
   }
   const deleteLoan = async (loanId) => {
+    const token = localStorage.getItem("token"); // Replace 'your_token_key' with the actual key you use to store the token
     try {
       const response = await fetch(
         `https://eaglevision.onrender.com/api/v1/loans/${loanId}`,
@@ -99,6 +114,7 @@ const LoanApplicants = () => {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`, 
           },
         }
       );
@@ -124,24 +140,40 @@ const LoanApplicants = () => {
   const exportToExcel = () => {
     const formattedData = loans.map((loanitem, index) => [
       index + 1,
-      customerData ? `${customerData[index]?.name}\n${customerData[index]?.customersPhoneNo}` : "Loading customer data...",
+      customerData
+        ? `${customerData[index]?.name}\n${customerData[index]?.customersPhoneNo}`
+        : "Loading customer data...",
       `₦ ${loanitem.amount}`,
       `₦ ${loanitem.interestRate}`,
       `₦ ${safeSumAndFormat(loanitem.amount, loanitem.interestRate)}`,
       // ... (add more columns as needed)
       loanitem.balance,
-      loanitem.paymentDate ? new Date(loanitem.paymentDate).toDateString() : "N/A",
+      loanitem.paymentDate
+        ? new Date(loanitem.paymentDate).toDateString()
+        : "N/A",
       loanitem.loanStartDate,
       loanitem.loanEndDate,
     ]);
 
-    const ws = XLSX.utils.aoa_to_sheet([["#", "Name", "Amt Approved (₦)", "Interest On Loan (₦)", "Total Loan + Interest (₦)", "Balance", "Payment Date", "Approved Date", "Loan Due Date"], ...formattedData]);
+    const ws = XLSX.utils.aoa_to_sheet([
+      [
+        "#",
+        "Name",
+        "Amt Approved (₦)",
+        "Interest On Loan (₦)",
+        "Total Loan + Interest (₦)",
+        "Balance",
+        "Payment Date",
+        "Approved Date",
+        "Loan Due Date",
+      ],
+      ...formattedData,
+    ]);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Loan Data");
     XLSX.writeFile(wb, "Eagle Vision Loan Report.xlsx");
   };
- 
-  
+
   return (
     <>
       {loading && <Loader />}
@@ -149,7 +181,7 @@ const LoanApplicants = () => {
       <div className="card">
         <div className="card-header">
           <h4 className="card-title">Loan Application List</h4>
-          
+
           <button
             type="button"
             className="btn btn-primary mb-2"
@@ -159,7 +191,6 @@ const LoanApplicants = () => {
           >
             EXPORT AS EXCEL
           </button>
-         
 
           <form
             className="d-flex align-items-center flex-wrap flex-sm-nowrap"
@@ -200,15 +231,13 @@ const LoanApplicants = () => {
                   <th>
                     <strong>Amt Approved (&#8358;)</strong>
                   </th>
+
                   <th>
-                    <strong>Type</strong>
+                    <strong>Interest</strong>
                   </th>
                   <th>
-                    <strong>Total Loan + Interest(&#8358;)</strong>
-                  </th>
-                  {/* <th>
                     <strong>Repayment (&#8358;)</strong>
-                  </th> */}
+                  </th>
                   <th>
                     <strong>Balance</strong>
                   </th>
@@ -248,17 +277,13 @@ const LoanApplicants = () => {
                       )}
                       {loanitem.loanTitle}
                     </td>
-                    <td>&#8358; {addCommas(loanitem.amount)}</td>
-                    <td>{loanitem.type === 'disbursement' || loanitem.balance === 'deposit' ? (
-                      <span className="text-danger">Topup Loan</span>
-                    ) : (
-                      <span className="text-success">Repayed Loan</span>
-                    )}</td>
+                    <td>&#8358; {addCommas(loanitem.loanRequestedAmount)}</td>
+
                     <td>
                       &#8358;
-                      {safeSumAndFormat(loanitem.amount, loanitem.interestRate)}
+                      {addCommas(loanitem.interestRate)}
                     </td>
-                    {/* <td>&#8358;{loanitem.repaymentAmount}</td> */}
+                    <td>&#8358; {addCommas(loanitem.amount)}</td>
                     <td>&#8358;{addCommas(loanitem.balance)}</td>
                     <td>
                       {" "}
@@ -307,7 +332,7 @@ const LoanApplicants = () => {
                           >
                             Edit
                           </Link>
-                        
+
                           <a
                             className="dropdown-item"
                             onClick={() => deleteLoan(loanitem._id)}

@@ -13,19 +13,17 @@ function App() {
   const [authenticated, setAuthenticated] = useState(false);
   const [cookies2] = useCookies(["userToken"]);
 
-  // useEffect(() => {
-  //   let token = "token";
-  //   if (token != "token") {
-  //     setAuthenticated(false);
-  //   } else if (token === "token") {
-  //     setAuthenticated(true);
-  //   }
-  // }, []);
+ 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (token === "undefined") {
+
+    if (token === undefined) {
+      // Token is undefined, delete it
+      localStorage.removeItem("token");
       setAuthenticated(false);
-    } else if (token) {
+      window.location.reload()
+    } else {
+      // Token is defined, user is authenticated
       setAuthenticated(true);
     }
   }, []);

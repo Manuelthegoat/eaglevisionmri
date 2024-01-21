@@ -55,7 +55,7 @@ const AddCustomer = () => {
       passport: "null",
     };
     setLoading(true);
-
+    const token = localStorage.getItem("token");
     try {
       const response = await fetch(
         "https://eaglevision.onrender.com/api/v1/customers",
@@ -63,6 +63,7 @@ const AddCustomer = () => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify(formData),
         }
@@ -87,7 +88,13 @@ const AddCustomer = () => {
   };
 
   useEffect(() => {
-    fetch("https://eaglevision.onrender.com/api/v1/users")
+    const token = localStorage.getItem("token"); // Replace 'your_token_key' with the actual key you use to store the token
+  
+    fetch("https://eaglevision.onrender.com/api/v1/users", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -101,6 +108,7 @@ const AddCustomer = () => {
       .catch((error) => console.log("Error fetching data: ", error))
       .finally(() => setLoading(false)); // Set loading to false here, after success or error
   }, []);
+  
   const filteredUsers = users.filter((user) => user.roles === "accountOfficer");
   console.log(filteredUsers)
 

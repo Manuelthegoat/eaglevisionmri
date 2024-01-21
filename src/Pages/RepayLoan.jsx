@@ -41,7 +41,13 @@ const RepayLoan = () => {
   //   }
   // };
   useEffect(() => {
-    fetch(`https://eaglevision.onrender.com/api/v1/loans/${id}`)
+    const token = localStorage.getItem("token");
+
+    fetch(`https://eaglevision.onrender.com/api/v1/loans/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -54,7 +60,11 @@ const RepayLoan = () => {
 
         // fetch customer details using the id from loanApplicantsDetails.customer
         return fetch(
-          `https://eaglevision.onrender.com/api/v1/customers/${data.data.customer}`
+          `https://eaglevision.onrender.com/api/v1/customers/${data.data.customer}`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
       })
       .then((response) => {
@@ -94,6 +104,7 @@ const RepayLoan = () => {
     console.log(formData);
     setLoading(true);
     const postEndpoint = debitCredit === "debit" ? "/loans/withdrawals" : "/loans/deposits";
+    const token = localStorage.getItem("token");
 
     try {
       const response = await fetch(
@@ -102,6 +113,7 @@ const RepayLoan = () => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify(formData),
         }

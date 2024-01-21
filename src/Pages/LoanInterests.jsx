@@ -9,20 +9,32 @@ const LoanInterests = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      const token = localStorage.getItem("token");
+
       try {
         setLoading(true);
 
         const response = await fetch(
-          "https://eaglevision.onrender.com/api/v1/loans"
+          "https://eaglevision.onrender.com/api/v1/loans", {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
         const data = await response.json();
 
         setLoans(data.data);
         const promises = data.data?.map(async (loan) => {
+          const token = localStorage.getItem("token");
+
           const customerId = loan.customer;
           if (customerId) {
             const customerResponse = await fetch(
-              `https://eaglevision.onrender.com/api/v1/customers/${customerId}`
+              `https://eaglevision.onrender.com/api/v1/customers/${customerId}`, {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              }
             );
             const customerData = await customerResponse.json();
             return customerData.data;
