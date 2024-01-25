@@ -89,7 +89,7 @@ const AddCustomer = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("token"); // Replace 'your_token_key' with the actual key you use to store the token
-  
+
     fetch("https://eaglevision.onrender.com/api/v1/users", {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -108,9 +108,9 @@ const AddCustomer = () => {
       .catch((error) => console.log("Error fetching data: ", error))
       .finally(() => setLoading(false)); // Set loading to false here, after success or error
   }, []);
-  
+
   const filteredUsers = users.filter((user) => user.roles === "accountOfficer");
-  console.log(filteredUsers)
+  console.log(filteredUsers);
 
   return (
     <div>
@@ -350,20 +350,14 @@ const AddCustomer = () => {
                   </div>
                   <div class="mb-3 col-md-6">
                     <label class="form-label">Officer in charge</label>
-                    <select
+
+                    <input
+                      type="text"
                       value={accountOfficer}
                       onChange={(e) => setAccountOfficer(e.target.value)}
-                      className="default-select form-control wide"
-                    >
-                      <option value="" disabled>
-                        Select Account Officer In Charge
-                      </option>
-                      {filteredUsers.map((item) => (
-                        <option key={item.id} value={item.firstName + item.lastName}>
-                          {item.firstName} {item.lastName}
-                        </option>
-                      ))}
-                    </select>
+                      placeholder="Officer In charge"
+                      className="form-control"
+                    />
                   </div>
                 </div>
 

@@ -132,7 +132,6 @@ const LoanApplicantsDetails = () => {
         "Credit",
         "interest Amount",
         "Balance",
-        "Uploaded By",
         "Created At",
         "Updated At",
       ],
@@ -337,7 +336,7 @@ const LoanApplicantsDetails = () => {
                           </td>
                           <td>&#8358;{addCommas(repayment.interestRate)}</td>
                           <td>&#8358;{addCommas(repayment.balance)}</td>
-                          <td>{repayment.uploadedBy}</td>
+                          <td>{repayment.collectedBy}</td>
                           <td>
                             {new Date(repayment.createdAt).toLocaleString()}
                           </td>

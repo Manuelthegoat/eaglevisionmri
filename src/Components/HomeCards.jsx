@@ -380,9 +380,15 @@ const HomeCards = () => {
   const [totalDepositTf, setTotalDepositTf] = useState([]);
   const [totalWitdrawal, setTotalWithdrawal] = useState([]);
   const [totalWitdrawalssss, setTotalWithdrawalssss] = useState([]);
+  const token = localStorage.getItem("token");
+
 
   useEffect(() => {
-    fetch("https://eaglevision.onrender.com/api/v1/customers")
+    fetch("https://eaglevision.onrender.com/api/v1/customers", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -405,7 +411,11 @@ const HomeCards = () => {
   }, []);
   useEffect(() => {
     fetch(
-      "https://eaglevision.onrender.com/api/v1/transactions/withdrawalsByPaymentDate?startDate=2000-10-01&endDate=2099-10-31"
+      "https://eaglevision.onrender.com/api/v1/transactions/withdrawalsByPaymentDate?startDate=2000-10-01&endDate=2099-10-31", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
     )
       .then((response) => {
         if (!response.ok) {
@@ -429,7 +439,11 @@ const HomeCards = () => {
   }, []);
   useEffect(() => {
     fetch(
-      "https://eaglevision.onrender.com/api/v1/transactions/totalDepositByCashByPaymentDate?startDate=2023-01-01&endDate=2023-12-31"
+      "https://eaglevision.onrender.com/api/v1/transactions/totalDepositByCashByPaymentDate?startDate=2023-01-01&endDate=2023-12-31", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
     )
       .then((response) => {
         if (!response.ok) {
@@ -448,7 +462,11 @@ const HomeCards = () => {
   }, []);
   useEffect(() => {
     fetch(
-      "https://eaglevision.onrender.com/api/v1/transactions/totalDepositByTransferByPaymentDate?startDate=2023-01-01&endDate=2023-12-31"
+      "https://eaglevision.onrender.com/api/v1/transactions/totalDepositByTransferByPaymentDate?startDate=2023-01-01&endDate=2023-12-31", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
     )
       .then((response) => {
         if (!response.ok) {

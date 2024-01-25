@@ -114,7 +114,7 @@ const LoanApplicants = () => {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`, 
+            Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -236,11 +236,15 @@ const LoanApplicants = () => {
                     <strong>Interest</strong>
                   </th>
                   <th>
-                    <strong>Repayment (&#8358;)</strong>
+                  <strong>TYPE</strong>
+                </th>
+                  <th>
+                    <strong>Payments (&#8358;)</strong>
                   </th>
                   <th>
                     <strong>Balance</strong>
                   </th>
+                 
                   <th>
                     <strong>Payment Date</strong>
                   </th>
@@ -259,7 +263,6 @@ const LoanApplicants = () => {
                     <td>
                       <strong>{index + 1}</strong>
                     </td>
-
                     <td>
                       {customerData ? (
                         <>
@@ -274,15 +277,21 @@ const LoanApplicants = () => {
                         </>
                       ) : (
                         "Loading customer data..."
-                      )}
+                      )}<br/>
                       {loanitem.loanTitle}
                     </td>
-                    <td>&#8358; {addCommas(loanitem.loanRequestedAmount)}</td>
-
+                    <td>&#8358; {addCommas(loanitem.totalLoanRecieved)}</td>
                     <td>
                       &#8358;
                       {addCommas(loanitem.interestRate)}
                     </td>
+                    <td>
+                      {loanitem.status === "deposited"
+                        ? "+"
+                        : loanitem.status === "withdrawn"
+                        ? "-"
+                        : ""}
+                    </td>{" "}
                     <td>&#8358; {addCommas(loanitem.amount)}</td>
                     <td>&#8358;{addCommas(loanitem.balance)}</td>
                     <td>

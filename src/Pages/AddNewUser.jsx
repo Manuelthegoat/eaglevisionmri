@@ -40,7 +40,6 @@ const AddNewUser = () => {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
-
           },
           body: JSON.stringify(userData),
         }
@@ -49,7 +48,7 @@ const AddNewUser = () => {
       const data = await response.json();
       if (response.ok) {
         console.log("User added successfully", data);
-        navigate('/users-list')
+        navigate("/users-list");
         // Further actions on successful addition of user
       } else {
         console.error("Failed to add user", data.message);
@@ -147,10 +146,9 @@ const AddNewUser = () => {
                     >
                       <option selected>Select Role</option>
                       <option value={"accountOfficer"}>Account Officer</option>
-                      <option value={"Manager"}>Manager</option>
-                      <option value={"assistantManager"}>
-                        Assistant Manager
-                      </option>
+                      <option value={"superAdmin"}>Super Admin</option>
+                      <option value={"manager"}>Manager</option>
+                      <option value={"accountManager"}>Account Manager</option>
                       <option value={"dpo"}>DPO</option>
                     </select>
                   </div>

@@ -5,8 +5,9 @@ import Loader from "../Components/Loader/Loader";
 const UsersDetails = () => {
   const [userDetails, setUserDetails] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [transactData, setTransactData] = useState(null);
   const token = localStorage.getItem("token");
-
+  const [customerDetails, setCustomerDetails] = useState(null);
 
   const { id } = useParams();
   useEffect(() => {
@@ -22,14 +23,36 @@ const UsersDetails = () => {
         return response.json();
       })
       .then((data) => {
-        console.log("Fetched Specific Customer Data:", data.data);
+        console.log("Fetched Specific User Data:", data.data);
         setUserDetails(data.data);
+
+        fetch(
+          `https://eaglevision.onrender.com/api/v1/transactions/getAllTransactionsByCollector?collectedBy=${data.data.firstName}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
+          .then((transactionsResponse) => {
+            if (!transactionsResponse.ok) {
+              throw new Error("Network response was not ok");
+            }
+            return transactionsResponse.json();
+          })
+          .then((transactionsData) => {
+            console.log("Fetched Transactions Data:", transactionsData);
+            setTransactData(transactionsData); // Set the transactions data to the state
+          })
+          .catch((error) =>
+            console.log("Error fetching transactions data: ", error)
+          );
       })
       .catch((error) =>
-        console.log("Error fetching specific customer data: ", error)
+        console.log("Error fetching specific User data: ", error)
       )
       .finally(() => setLoading(false));
-  }, [id]);
+  }, [id, token]);
   return (
     <>
       {loading && <Loader />}
@@ -87,6 +110,7 @@ const UsersDetails = () => {
 
                 <table id="projects-tbl" class="table">
                   <thead>
+
                     <tr>
                       <th>Customer</th>
                       <th>Payment Date</th>
@@ -104,62 +128,32 @@ const UsersDetails = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td>ABUBAKAR SULAIMAN</td>
-
-                      <td>Jan. 13, 2023</td>
-                      <td>DEPOSIT</td>
-                      <td>
-                        <span class="badge light badge-success">Credit</span>
-                      </td>
-                      <td>2,000.0</td>
-                      <td>-----</td>
-                      <td>146,000.0</td>
-                      <td>144,000.0</td>
-                      <td>CASH</td>
-                      <td>Esther Komolafe</td>
-                      <td>Jan. 1, 2023, 5:27 p.m.</td>
-                      <td>Jan. 1, 2023, 5:27 p.m.</td>
-                      <td>
-                        <div class="dropdown">
-                          <button
-                            type="button"
-                            class="btn btn-success light sharp"
-                            data-bs-toggle="dropdown"
-                          >
-                            <svg
-                              width="20px"
-                              height="20px"
-                              viewBox="0 0 24 24"
-                              version="1.1"
-                            >
-                              <g
-                                stroke="none"
-                                stroke-width="1"
-                                fill="none"
-                                fill-rule="evenodd"
-                              >
-                                <rect x="0" y="0" width="24" height="24" />
-                                <circle fill="#000000" cx="5" cy="12" r="2" />
-                                <circle fill="#000000" cx="12" cy="12" r="2" />
-                                <circle fill="#000000" cx="19" cy="12" r="2" />
-                              </g>
-                            </svg>
-                          </button>
-                          <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#">
-                              View Details
-                            </a>
-                            <a class="dropdown-item" href="#">
-                              Edit
-                            </a>
-                            <a class="dropdown-item" href="#">
-                              Delete
-                            </a>
+                  {transactData &&
+                    transactData.data.map((transaction) => (
+                      <tr key={transaction._id}>
+                        <td>{transaction.customer}</td>
+                        <td>{new Date(transaction.paymentDate).toLocaleDateString()}</td>
+                        <td>{transaction.description}</td>
+                        <td>
+                          <span className={`badge light badge-${transaction.choose === 'credit' ? 'success' : 'danger'}`}>
+                            {transaction.choose}
+                          </span>
+                        </td>
+                        <td>{transaction.amount}</td>
+                        <td>{transaction.type === 'withdrawal' ? transaction.amount : '-----'}</td>
+                        <td>{transaction.balance}</td>
+                        <td>{transaction.balance - transaction.amount}</td>
+                        <td>{transaction.modeOfPayment}</td>
+                        <td>{transaction.collectedBy}</td>
+                        <td>{new Date(transaction.createdAt).toLocaleString()}</td>
+                        <td>{new Date(transaction.updatedAt).toLocaleString()}</td>
+                        <td>
+                          <div className="dropdown">
+                            {/* Your existing dropdown button and menu */}
                           </div>
-                        </div>
-                      </td>
-                    </tr>
+                        </td>
+                      </tr>
+                    ))}
                   </tbody>
                 </table>
               </div>

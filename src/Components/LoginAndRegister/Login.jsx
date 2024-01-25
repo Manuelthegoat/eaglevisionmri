@@ -122,6 +122,9 @@ const Login = () => {
                               <option value={"assistantManager"}>
                                 Assistant Manager
                               </option>
+                              <option value={"superAdmin"}>
+                                Super Admin
+                              </option>
                             </select>
                           </div>
                           <div class="text-center mt-4">

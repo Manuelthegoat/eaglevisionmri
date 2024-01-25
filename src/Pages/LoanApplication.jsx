@@ -390,6 +390,7 @@ const LoanApplication = () => {
                       value={guarantor1Sex}
                       onChange={(e) => setGuarantor1Sex(e.target.value)}
                     >
+                      <option value={""}>Select sex</option>
                       <option value={"male"}>Male</option>
                       <option value={"female"}>Female</option>
                     </select>
@@ -471,6 +472,7 @@ const LoanApplication = () => {
                       value={guarantor2Sex}
                       onChange={(e) => setGuarantor2Sex(e.target.value)}
                     >
+                      <option value={""}>SELECT SEX</option>
                       <option value={"male"}>Male</option>
                       <option value={"female"}>Female</option>
                     </select>

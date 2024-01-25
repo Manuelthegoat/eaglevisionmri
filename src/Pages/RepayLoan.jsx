@@ -12,7 +12,7 @@ const RepayLoan = () => {
   const [repaymentDate, setRepaymentDate] = useState("");
   const [paymentDate, setPaymentDate] = useState("");
   const [interestRate, setInterestRate] = useState("");
-  const [uploadedBy, setUploadedBy] = useState("");
+  const [collectedBy, setcollectedBy] = useState("");
   const [type, setType] = useState("");
 
   const { id } = useParams();
@@ -97,6 +97,7 @@ const RepayLoan = () => {
       loanEndDate: loanApplicantsDetails?.loanEndDate,
       repaymentDate: repaymentDate,
       modeOfPayment: type,
+      collectedBy: collectedBy,
       paymentDate: paymentDate,
       // uploadedBy: uploadedBy,
     };
@@ -213,6 +214,16 @@ const RepayLoan = () => {
                       placeholder={loanApplicantsDetails?.interestRate}
                       value={interestRate}
                       onChange={(e) => setInterestRate(e.target.value)}
+                    />
+                  </div>
+                  <div class="mb-3 col-md-6">
+                    <label class="form-label">Collected By</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="Collected By"
+                      value={collectedBy}
+                      onChange={(e) => setcollectedBy(e.target.value)}
                     />
                   </div>
                   <div class="mb-3 col-md-6">
