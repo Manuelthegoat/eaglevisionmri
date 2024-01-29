@@ -98,7 +98,6 @@ const AddDepositWithdrawal = () => {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
-
           },
           body: JSON.stringify(formData),
         }
@@ -187,17 +186,14 @@ const AddDepositWithdrawal = () => {
                   </div>
                   <div class="mb-3 col-md-6">
                     <label class="form-label">Collected By</label>
-                    <select
+
+                    <input
+                      type="text"
                       value={collectedBy}
                       onChange={(e) => setCollectedBy(e.target.value)}
-                      class="default-select form-control wide"
-                    >
-                      <option value="">Search and select agent</option>
-                      <option value={`${user.firstName}${user.lastName}`}>
-                        {user.firstName}
-                        {user.lastName}
-                      </option>
-                    </select>
+                      class="form-control"
+                      placeholder="Input Agent"
+                    />
                   </div>
                   <div class="mb-3 col-md-6">
                     <label class="form-label">Payment Date</label>

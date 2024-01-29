@@ -8,6 +8,7 @@ const UsersDetails = () => {
   const [transactData, setTransactData] = useState(null);
   const token = localStorage.getItem("token");
   const [customerDetails, setCustomerDetails] = useState(null);
+  const [totalAmount, setTotalAmount] = useState(0);
 
   const { id } = useParams();
   useEffect(() => {
@@ -27,7 +28,7 @@ const UsersDetails = () => {
         setUserDetails(data.data);
 
         fetch(
-          `https://eaglevision.onrender.com/api/v1/transactions/getAllTransactionsByCollector?collectedBy=${data.data.firstName}`,
+          `https://eaglevision.onrender.com/api/v1/transactions/getAllTransactionsByCollector?collectedBy=${data.data.lastName}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -44,6 +45,7 @@ const UsersDetails = () => {
             console.log("Fetched Transactions Data:", transactionsData);
             setTransactData(transactionsData); // Set the transactions data to the state
           })
+
           .catch((error) =>
             console.log("Error fetching transactions data: ", error)
           );
@@ -53,6 +55,18 @@ const UsersDetails = () => {
       )
       .finally(() => setLoading(false));
   }, [id, token]);
+  useEffect(() => {
+    // ... (your existing useEffect code)
+
+    // Calculate the sum of 'amount'
+    const calculatedTotalAmount = transactData?.data.reduce(
+      (sum, transaction) => sum + transaction.amount,
+      0
+    );
+
+    // Set the total amount in the state
+    setTotalAmount(calculatedTotalAmount);
+  }, [transactData]);
   return (
     <>
       {loading && <Loader />}
@@ -76,7 +90,7 @@ const UsersDetails = () => {
             <div class="card-header border-0 pt-15"></div>
             <div class="card-body">
               <div class="crm-cart-data">
-                <p class="text-white">&#8358; 5,941,000.0</p>
+                <p class="text-white">&#8358; {totalAmount?.toFixed(2)}</p>
                 <span class="d-block mb-3 text-white">Total Savings</span>
               </div>
             </div>
